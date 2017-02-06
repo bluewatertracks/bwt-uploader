@@ -1,0 +1,36 @@
+{
+  "name": "pdfjs-bower",
+  "version": "1.0.233",
+  "homepage": "https://github.com/joseym/pdfjs-bower",
+  "authors": [
+    "Josey Morton <me@joseymorton.com>"
+  ],
+  "description": "Bower build for mozilla/pdf.js.",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "pdf",
+    "mozilla",
+    "viewer"
+  ],
+  "license": "BSD-2-Clause",
+  "ignore": [
+    "**/.*",
+    "pdfjs",
+    "Gruntfile.js",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "1.0.233",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.233",
+    "commit": "2df1ebdd2e0598d91f5c83060ae4e6baed176060"
+  },
+  "_source": "https://github.com/joseym/pdfjs-bower.git",
+  "_target": "^1.0.233",
+  "_originalSource": "pdfjs-bower"
+}

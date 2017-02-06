@@ -1,0 +1,96 @@
+<dom-module id="bw-image-preview">
+  <template>
+    <style include="bw-image-preview">
+    .template-div-droptext>span {
+        text-align: center;
+    }
+
+    .template-div-droptext .template-span-button,.template-div-delete, iron-icon  {
+      color: #1976d3;
+      cursor: pointer;
+    }
+
+    .template-div-delete, .template-div-delete iron-icon{
+      height: 42px;
+      line-height: 43px;
+      color: #9b9b9b;
+    }
+
+    .template-div-droptext span:nth-child(2){
+      text-align: left;
+      font-weight: 400;
+    }
+
+    .imageCircleContainer,.imageSquareContainer{
+      order: 1;
+      flex: wrap;
+      border: 1px dashed #dbdbdb;
+      overflow: hidden;
+      width: 250px;
+      height: 250px;
+    }
+
+    .largeImageContainer {
+      height: 800px;
+      width: 800px;
+    }
+
+    .img {
+      height:inherit;
+      width:inherit;
+      display: block;
+    }
+
+    .imageCircleContainer {
+      border-radius: 100%;
+    }
+
+    .imageCircleContainer>div {
+      background-size:cover !important;
+    }
+
+    </style>
+    <template is="dom-if" if="{{ _checkTheme(theme) }}">
+      <div class="imageCircleContainer">
+         <div class="img" style="background: url('[[image]]') no-repeat center center;"></div>
+      </div>
+    </template>
+    <template is="dom-if" if="{{ _checkTheme(theme) }}">
+      <div class$="{{_getClassName(path,placeholder)}}">
+         <div class="img"  style="background: url('[[image]]') no-repeat left top;"></div>
+      </div>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'bw-image-preview',
+      properties: {
+        image: {
+          type:String,
+          value: ''
+        },
+        theme: {
+          type:String,
+          value: 'circle',
+          notify:true
+        },
+        path: {
+          type:String,
+          value:'',
+          notify:true
+        },
+        placeholder: {
+          type:String,
+          value:'',
+          notify:true
+        }
+      },
+      _checkTheme: function(theme){
+        return (theme === 'square') ? false : true;
+      },
+      _getClassName: function(path,placeholder){
+
+      }
+    });
+  </script>
+</dom-module>

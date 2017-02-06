@@ -1,0 +1,159 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="bwt-pdf-sniffer.html">
+<link rel="import" href="bwt-progress.html">
+<link rel="import" href="bwt-image-downsampler.html">
+<link rel="import" href="bwt-image-preview.html">
+
+<dom-module id="bwt-uploader">
+  <template>
+    <style>
+    :host {
+        display: flex;
+        font: normal 14px/20px "Helvetica Neue","Helvetica","Arial","Microsoft YaHei New","Microsoft Yahei","SimSun","STXihei",sans-serif;
+        color: #464440;
+    }
+
+    .template-div-droptext{
+      align-self:center;
+      order: 2;
+      padding: .43em .57em;
+      margin: 0 1em;
+      color: #9b9b9b;
+      font-size: 1.0em;
+    }
+
+    #UploadBorder {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    </style>
+    <iron-ajax id="ajaxElement" url$="[[target]]" method$="[[method]]" handle-as="json" headers$='[[header]]' on-response="handleResponse">
+    </iron-ajax>
+    <div id="UploadBorder">
+          <bwt-pdf-sniffer image="{{image}}" file="[[file]]"></bw-pdf-sniffer>
+          <bwt-image-downsampler image="{{image}}" file="[[file]]"></bw-image-downsampler>
+          <bwt-image-preview image="[[image]]" path="[[placeholder]]" image="[[image]]" theme="[[theme]]"></bw-image-preview>
+          <div class="template-div-droptext">
+              <span>[[uploadText]] or<span class="template-span-button" class="indigo" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
+              <div class="template-div-delete" on-click="confirm" hidden$="[[imageUploaded]]"><iron-icon icon="icons:clear" title="Remove Item"></iron-icon><span> Delete Item</span></div>
+              <bwt-progress progress="[[file]]"></bw-progress>
+          </div>
+          <input type="file" id="fileInput" on-change="_fileChange" hidden accept="[[acceptedFileTypes]]">
+      </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'bwt-uploader',
+      properties: {
+        /**
+         * Ajax end point where the file should upload to eg: /api/image/upload
+         **/
+        target: {
+          type:String,
+          value: ''
+        },
+        /**
+        * Request type, there is a choice between POST and PUT
+        **/
+        method: {
+          type:String,
+          value: 'POST',
+          notify:true,
+          reflectToAttribute:true
+        },
+        /**
+        * Additional Headers, empty by default
+        **/
+        headers: {
+          type:String,
+          value: ''
+        },
+        image: {
+          type: String,
+          value: 'bw-uploader',
+        },
+        /** Plceholder text **/
+        uploadText: {
+          type:String,
+          value:'Drag your file to this area',
+          notify:true
+        },
+        /**Accepted File Types, The uploader is meant only for images and documents */
+        acceptedFileTypes: {
+          type:String,
+          value:'image/jpg,image/jpeg,image/png,image/gif,image/bmp'
+        }
+     },
+     ready:function() {
+       var uploadBorder = this.$.UploadBorder;
+       this.toggleClass('enabled', true, uploadBorder);
+       this.ondragover = function(e) {
+           e.stopPropagation();
+           this.toggleClass('hover', true, uploadBorder);
+           // Workaround for allowgin drop from Chome's download footer on OSX
+           // See https://bugs.chromium.org/p/chromium/issues/detail?id=234931
+           var effect = e.dataTransfer && e.dataTransfer.dropEffect;
+           var effectAllowed = e.dataTransfer && e.dataTransfer.effectAllowed;
+           if (effect === 'none' && effectAllowed !== 'none') {
+               e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy'
+           }
+           // end of workaround
+           return false;
+       }
+
+       this.ondragleave = function() {
+           this.toggleClass('hover', false, uploadBorder);
+           return false;
+       }
+       this.ondrop = function(event) {
+           this.clear();
+           this.toggleClass('hover', false, uploadBorder);
+           event.preventDefault();
+           this.validateFile(event.dataTransfer.files);
+           this.uploadFile(event.dataTransfer.files[0]);
+       }
+     },
+     validateFile:function(files){
+        if(files.length>0) {
+          this.errorMessage = 'You can only upload one file at a time';
+          return;
+        }
+        if(this.hasWrongMimeType(files[0])) {
+          this.errorMessage = 'Invalid file type, please upload an accepted file type';
+          return;
+        }
+        return true;
+     },
+     hasWrongMimeType:function(file){
+       var acceptedFileTypes = this.acceptedFileTypes.split(',');
+       if ( acceptedFileTypes.indexOf(file.type) == -1 ) return false;
+       return true;
+     },
+     uploadFile: function(file){
+       file.progress = 10;
+       file.error = false;
+       file.complete = false;
+       this.set('file', file);
+       //this.$ajaxElement.generateRequest();
+     }
+    });
+  </script>
+</dom-module>
+
+<!-- /// image
+// pdf  -->

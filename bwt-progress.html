@@ -1,0 +1,79 @@
+<dom-module id="bwt-progress-bar">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .progress-details {
+        display: flex;
+      }
+
+      .file {
+        display:flex;
+      }
+
+      .file .progress-details {
+        order:2;
+        width:15%;
+      }
+
+      .file .progress-bar {
+        order:1;
+        width:85%;
+        margin-top: 8px;
+      }
+
+      paper-progress {
+          --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
+          --paper-progress-height: var(--progress-bar-height, 8px);
+          width: var(--progress-bar-width:100%);
+          color:#ffffff;
+      }
+
+      .error {
+        color: var(--progress-error-color,#D60000);
+      }
+    </style>
+    <div class="progress-bars" hidden$="[[showHide]]">
+        <div hidden$="[[!errorMessage]]" class="error">[[errorMessage]]</div>
+        <span class="name" hidden$="[[file.error]]">[[file.name]]</span>
+        <div class="file">
+            <div class="progress-details">
+                <div class="commands">
+                    <iron-icon icon="file-upload-icons:autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="[[!file.error]]"></iron-icon>
+                    <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
+                </div>
+            </div>
+            <div class="progress-bar" error hidden$="[[!file.progress]]">
+                <paper-progress value$="[[file.progress]]" error$="[[file.error]]"></paper-progress>
+            </div>
+        </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'bwt-progress-bar',
+      properties: {
+        showHide: {
+          type:Boolean,
+          value:false,
+          notify:true,
+          reflectToAttribute:true
+        },
+        errorMessage: {
+          type:String,
+          value: '',
+          notify:true,
+          reflectToAttribute:true
+        },
+        file: {
+          type: Object,
+          value:{},
+          notify:true,
+          computed: ''
+        }
+      }
+    });
+  </script>
+</dom-module>
