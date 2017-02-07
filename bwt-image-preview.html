@@ -68,23 +68,7 @@
   <script>
     Polymer({
       is: 'bwt-image-preview',
-      properties: {
-        image: {
-          type:String,
-          value: '',
-          notify:true
-        },
-        theme: {
-          type:String,
-          value: 'circle',
-          notify:true
-        },
-        placeholder: {
-          type:String,
-          value:'/images/placeholder.png',
-          notify:true
-        }
-      },
+      behaviors: [BwtUploadBehavior],
       observers: ['updateImage(placeholder,image)'],
       _checkTheme: function(theme,shape){
         return (theme === shape) ? true : false;

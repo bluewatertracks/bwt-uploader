@@ -36,7 +36,7 @@
       }
     </style>
     <div class="progress-bars" hidden$="[[showHide]]">
-        <div hidden$="[[!errorMessage]]" class="error">[[errorMessage]]</div>
+        <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
         <span class="name" hidden$="[[file.error]]">[[file.name]]</span>
         <div class="file">
             <div class="progress-details">
@@ -54,26 +54,7 @@
   <script>
     Polymer({
       is: 'bwt-progress-bar',
-      properties: {
-        showHide: {
-          type:Boolean,
-          value:false,
-          notify:true,
-          reflectToAttribute:true
-        },
-        errorMessage: {
-          type:String,
-          value: '',
-          notify:true,
-          reflectToAttribute:true
-        },
-        file: {
-          type: Object,
-          value:{},
-          notify:true,
-          computed: ''
-        }
-      }
+      behaviors: [BwtUploadBehavior]
     });
   </script>
 </dom-module>

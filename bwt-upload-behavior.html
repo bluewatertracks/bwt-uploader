@@ -1,0 +1,92 @@
+<script src="./bower_components/pdfjs-dist/build/pdf.min.js"></script>
+<script>
+    BwtUploadBehavior = {
+        properties: {
+            error: {
+                type: Object,
+                value: {
+                    val: false,
+                    msg: ''
+                },
+                notify: true,
+                reflectToAttribute: true
+            },
+
+            file: {
+                type: Object,
+                value: {},
+                notify: true,
+                observer: '_getDocumentPreview'
+            },
+            /**
+             * The type of placeholder, accepts either one of two arguments; square or circle
+             **/
+            theme: {
+                type: String,
+                value: 'circle',
+                notify: true
+            },
+
+            image: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            /**
+             * location of the placeholder image
+             **/
+            placeholder: {
+                type: String,
+                value: '/images/placeholder.png',
+                notify: true
+            },
+        },
+        hasWrongMimeType: function(file, acceptedFileTypes) {
+            acceptedFileTypes = acceptedFileTypes.split(',');
+            if (acceptedFileTypes.indexOf(file.type) == -1) return true;
+            this.error = {
+                      msg: 'Invalid file type, please upload an accepted file type',
+                      val: true
+                    };
+        },
+        validateFile: function(files) {
+            if (files.length > 0) {
+              this.error = {  msg: 'You can only upload one file at a time',
+                              val: true
+                            };
+            }
+        },
+        uploadFile: function(file) {
+            console.log(file);
+            console.log(this.error);
+            file.progress = 10;
+            file.error = false;
+            file.complete = false;
+            this.set('file', file);
+            //this.$ajaxElement.generateRequest();
+        },
+        _getDocumentPreview: function(file){
+          if(this.hasWrongMimeType([file], 'application/pdf')) return; // exits if file is not a valid file type
+
+          PDFJS.workerSrc = './bower_components/pdfjs-dist/build/pdf.worker.js';
+          PDFJS.getDocument(file).then(function (pdf) {
+             pdf.getPage(1).then(function(page) {
+
+                var scale = 1.5;
+                var viewport = page.getViewport(scale);
+                var canvas = document.getElementById('pdfcanvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                var task = page.render({canvasContext: context, viewport: viewport});
+
+                task.promise.then(function(){
+                  this.image = canvas.toDataURL('image/jpeg');
+                }.bind(this));
+             }.bind(this))
+          }.bind(this));
+        }
+
+    };
+</script>

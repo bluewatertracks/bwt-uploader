@@ -7,7 +7,8 @@
     "pdfjs-bower": "^1.0.233",
     "iron-icon": "^1.0.12",
     "pdfjs-dist": "^1.7.246",
-    "paper-progress": "^1.0.11"
+    "paper-progress": "^1.0.11",
+    "paper-dialog": "^1.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

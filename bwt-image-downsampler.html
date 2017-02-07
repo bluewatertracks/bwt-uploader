@@ -1,13 +1,4 @@
-<<dom-module id="bwt-image-downsampler">
-  <template>
-    <style>
-      :host {
-        display: none;
-      }
-    </style>
-
-  </template>
-  <script>
+<script>
     var resizer = (function() {
       var applyScale, scaleDown, stepDown, stepScale, scaleData;
       var preview,ctx;
@@ -56,9 +47,4 @@
           scaleImage: applyScale
       }
     })();
-
-    Polymer({
-      is: 'bwt-image-downsampler'
-    });
-  </script>
-</dom-module>
+</script>
