@@ -1,9 +1,12 @@
-<link rel="import" href="../pdfjs-dist/build/pdf.worker.min.js">
+<link rel="import" href="./bower_components/pdfjs-dist/build/pdf.worker.min.js">
 <dom-module id="bwt-pdf-sniffer">
+  <style>
+    :host {
+      display: none;
+    }
+  </style>
   <template>
-    <div>
       <canvas id="pdfcanvas"></canvas>
-    </div>
   </template>
   <script>
     Polymer({

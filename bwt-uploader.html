@@ -8,9 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-progress/paper-progress.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link rel="import" href="./bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="./bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="bwt-pdf-sniffer.html">
 <link rel="import" href="bwt-progress.html">
 <link rel="import" href="bwt-image-downsampler.html">
@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="bwt-uploader">
   <template>
-    <style>
+    <style type="text/css" is="custom-style">
     :host {
         display: flex;
         font: normal 14px/20px "Helvetica Neue","Helvetica","Arial","Microsoft YaHei New","Microsoft Yahei","SimSun","STXihei",sans-serif;
@@ -39,21 +39,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: flex;
       flex-wrap: wrap;
     }
-
     </style>
     <iron-ajax id="ajaxElement" url$="[[target]]" method$="[[method]]" handle-as="json" headers$='[[header]]' on-response="handleResponse">
     </iron-ajax>
     <div id="UploadBorder">
-          <bwt-pdf-sniffer image="{{image}}" file="[[file]]"></bw-pdf-sniffer>
-          <bwt-image-downsampler image="{{image}}" file="[[file]]"></bw-image-downsampler>
-          <bwt-image-preview image="[[image]]" path="[[placeholder]]" image="[[image]]" theme="[[theme]]"></bw-image-preview>
+          <bwt-image-preview image="[[image]]" path="[[placeholder]]" image="[[image]]" theme="[[theme]]"></bwt-image-preview>
           <div class="template-div-droptext">
-              <span>[[uploadText]] or<span class="template-span-button" class="indigo" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
-              <div class="template-div-delete" on-click="confirm" hidden$="[[imageUploaded]]"><iron-icon icon="icons:clear" title="Remove Item"></iron-icon><span> Delete Item</span></div>
+              <span>[[uploadText]] or <span class="template-span-button" class="indigo" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
+              <div class="template-div-delete" on-click="deleteItem">
+                  <iron-icon icon="icons:clear" title="Remove Item"></iron-icon>
+                  <span> Delete Item</span>
+              </div>
               <bwt-progress progress="[[file]]"></bw-progress>
           </div>
           <input type="file" id="fileInput" on-change="_fileChange" hidden accept="[[acceptedFileTypes]]">
-      </div>
+    </div>
+    <bwt-pdf-sniffer image="{{image}}" file="[[file]]"></bw-pdf-sniffer>
+    <bwt-image-downsampler image="{{image}}" file="[[file]]"></bw-image-downsampler>
   </template>
 
   <script>
@@ -85,7 +87,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         image: {
           type: String,
-          value: 'bw-uploader',
+          value: '',
+          notify:true
         },
         /** Plceholder text **/
         uploadText: {
@@ -150,6 +153,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        file.complete = false;
        this.set('file', file);
        //this.$ajaxElement.generateRequest();
+     },
+     _fileClick: function(){
+       //this.clear();
+       var elem = this.$.fileInput;
+       if (elem && document.createEvent) {
+           var evt = document.createEvent('MouseEvents');
+           evt.initEvent('click', true, false);
+           elem.dispatchEvent(evt);
+       }
      }
     });
   </script>

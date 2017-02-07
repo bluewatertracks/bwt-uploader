@@ -1,6 +1,10 @@
-<dom-module id="bw-image-preview">
+<dom-module id="bwt-image-preview">
   <template>
-    <style include="bw-image-preview">
+    <style is="custom-style">
+    :host {
+      display: block;
+    }
+
     .template-div-droptext>span {
         text-align: center;
     }
@@ -50,46 +54,43 @@
     }
 
     </style>
-    <template is="dom-if" if="{{ _checkTheme(theme) }}">
+    <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
       <div class="imageCircleContainer">
          <div class="img" style="background: url('[[image]]') no-repeat center center;"></div>
       </div>
     </template>
-    <template is="dom-if" if="{{ _checkTheme(theme) }}">
-      <div class$="{{_getClassName(path,placeholder)}}">
-         <div class="img"  style="background: url('[[image]]') no-repeat left top;"></div>
+    <template is="dom-if" if="{{ _checkTheme(theme,'square') }}">
+      <div class="imageSquareContainer">
+         <div class="img" style="background: url('[[image]]') no-repeat left top;"></div>
       </div>
     </template>
   </template>
   <script>
     Polymer({
-      is: 'bw-image-preview',
+      is: 'bwt-image-preview',
       properties: {
         image: {
           type:String,
-          value: ''
+          value: '',
+          notify:true
         },
         theme: {
           type:String,
           value: 'circle',
           notify:true
         },
-        path: {
-          type:String,
-          value:'',
-          notify:true
-        },
         placeholder: {
           type:String,
-          value:'',
+          value:'/images/placeholder.png',
           notify:true
         }
       },
-      _checkTheme: function(theme){
-        return (theme === 'square') ? false : true;
+      observers: ['updateImage(placeholder,image)'],
+      _checkTheme: function(theme,shape){
+        return (theme === shape) ? true : false;
       },
-      _getClassName: function(path,placeholder){
-
+      updateImage: function(placeholder,image){
+        this.image = (placeholder && image) ? image : placeholder;
       }
     });
   </script>
