@@ -16,6 +16,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="bwt-image-preview.html">
 <link rel="import" href="bwt-upload-behavior.html">
 
+
+<!--
+
+`<bwt-uploader>` is a component based on Polymer that provides user to upload an image or pdf file. 
+
+   <bwt-uploader target="https://api.imgur.com/3/image" method="POST"> </bwt-uploader>
+
+### Styling
+
+The following custom properties are available for styling:
+
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--preview-border` | Border of preview | `1px dahsed #dbdbdb`
+`--preview-width` | Width of preview area | `250px`
+`--preview-height` | Height of preview area | `250px`
+
+### Installation
+
+Install with bower
+
+    bower install bwt-uploader
+
+If you want to save it in bower.json file, remember to add flag --save
+
+    bower install --save bwt-uploader
+
+@element bwt-uploader
+@demo demo/index.html
+-->
+
+
 <dom-module id="bwt-uploader">
   <template>
     <style type="text/css" is="custom-style">
