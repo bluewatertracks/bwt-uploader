@@ -70,6 +70,12 @@
     Polymer({
       is: 'bwt-image-preview',
       behaviors: [BwtUploadBehavior],
+      properties: {
+          height: {
+              value:null,
+              notify:true
+          }
+      },
       observers: ['updateImage(placeholder,image)'],
       _checkTheme: function(theme,shape){
         return (theme === shape) ? true : false;
@@ -86,13 +92,12 @@
           var image = e.target.result;
           this.image = image;
           var canvas = document.createElement('canvas');
-          canvas.setAttribute('height','800'); // need to add as an option
-          canvas.setAttribute('width','800');
+          this.setCanvasSize(canvas);
 
           this.createBase64Image(image)
              .then(function(img) {
-               var resizedImage = ( img.height > canvas.height || img.width > canvas.width || file.size > 1000000 ) ? resizer.scaleImage(img,canvas) : image;
-               return { image: resizedImage, sizes: [Math.max(img.height,img.width), 100 ] };
+              //  var resizedImage = ( img.height > canvas.height || img.width > canvas.width || file.size > 1000000 ) ? resizer.scaleImage(img,canvas) : image;
+              //  return { image: resizedImage, sizes: [Math.max(img.height,img.width), 100 ] };
              }.bind(this));
 
         }.bind(this);
@@ -105,6 +110,11 @@
         return new Promise( function(resolve,reject) {
           img.onload = resolve(img);
         });
+      },
+      setCanvasSize(canvas){
+        canvas.setAttribute('height',this.height);
+        canvas.setAttribute('width','800');
+
       }
     });
   </script>

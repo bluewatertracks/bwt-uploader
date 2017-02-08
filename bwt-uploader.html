@@ -94,7 +94,7 @@ If you want to save it in bower.json file, remember to add flag --save
          </div>
      </paper-dialog>
     <div id="UploadBorder">
-          <bwt-image-preview id="preview"></bwt-image-preview>
+          <bwt-image-preview id="preview" height="[[height]]"></bwt-image-preview>
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
               <div class="template-div-delete" on-click="deleteItem" hidden$="[[image]]">
@@ -149,6 +149,14 @@ If you want to save it in bower.json file, remember to add flag --save
         maxFileSize: {
           type:Number,
           value:1000
+        },
+        /**
+        *
+          Height of resized image in pixels, width will be adjusted proptionally
+        **/
+        height: {
+          type:Number,
+          value: null
         }
      },
      behaviors: [BwtUploadBehavior],
