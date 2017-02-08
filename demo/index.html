@@ -46,5 +46,20 @@
       You could also add an optional  `header` with the necessary code if required
     </div>
 
+    <div class="vertical-section-container centered">
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          #uploader {
+            --preview-border: 1px dashed green;
+            --preview-width: 300px;
+            --preview-height: 300px;
+          }
+        </style>
+        <bwt-uploader id="uploader" target="https://api.imgur.com/3/image" method="POST"> </bwt-uploader>
+      </template>
+    </demo-snippet>
+  </div>
+
   </body>
 </html>
