@@ -1,53 +1,45 @@
 <!doctype html>
 <html>
-  <head>
-    <title>bw-uploader demo</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
 
-    <link rel="import" href="../bwt-uploader.html">
-
-    <style is="custom-style" include="demo-pages-shared-styles">
+<head>
+  <title>bw-uploader demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../bwt-uploader.html">
+  <style is="custom-style" include="demo-pages-shared-styles">
     .centered:not([style-scope]):not(.style-scope) {
-        max-width: 702px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="vertical-section-container centered">
-      <h3>Basic uploader with config for uploading an image</h3>
-      <demo-snippet>
-        <template>
-          <bwt-uploader target="https://api.imgur.com/3/image"
-                        method="POST"
-          >
-          </bwt-uploader>
-        </template>
-      </demo-snippet>
-      You could also add an optional  `header` with the necessary code if required
-    </div>
+      max-width: 702px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
 
-    <div class="vertical-section-container centered">
-      <h3>Basic uploader with config for uploading a pdf file</h3>
-      <demo-snippet>
-        <template>
-          <bwt-uploader target="https://api.imgur.com/3/image"
-                        method="POST"
-                        accepted-file-types="application/pdf"
-          >
-          </bwt-uploader>
-        </template>
-      </demo-snippet>
-      You could also add an optional  `header` with the necessary code if required
-    </div>
-
-    <div class="vertical-section-container centered">
-<<<<<<< Updated upstream
+<body>
+  <div class="vertical-section-container centered">
+    <h3>Basic uploader with config for uploading an image</h3>
+    <demo-snippet>
+      <template>
+        <bwt-uploader target="https://api.imgur.com/3/image" method="POST">
+        </bwt-uploader>
+      </template>
+    </demo-snippet>
+    You could also add an optional `header` with the necessary code if required
+  </div>
+  <div class="vertical-section-container centered">
+    <h3>Basic uploader with config for uploading a pdf file</h3>
+    <demo-snippet>
+      <template>
+        <bwt-uploader target="https://api.imgur.com/3/image" method="POST" accepted-file-types="application/pdf">
+        </bwt-uploader>
+      </template>
+    </demo-snippet>
+    You could also add an optional `header` with the necessary code if required
+  </div>
+  <div class="vertical-section-container centered">
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -61,20 +53,15 @@
       </template>
     </demo-snippet>
   </div>
-=======
-      <h3>Config to upload an image with resizing</h3>
-      <demo-snippet>
-        <template>
-          <bwt-uploader target="https://api.imgur.com/3/image"
-                        method="POST"
-                        height="200"
-          >
-          </bwt-uploader>
-        </template>
-      </demo-snippet>
-      You can further restrict the image type to a jpeg or any of the supported image types by changing the acceptedFileType
-    </div>
->>>>>>> Stashed changes
+  <h3>Config to upload an image with resizing</h3>
+  <demo-snippet>
+    <template>
+      <bwt-uploader target="https://api.imgur.com/3/image" method="POST" height="200">
+      </bwt-uploader>
+    </template>
+  </demo-snippet>
+  You can further restrict the image type to a jpeg or any of the supported image types by changing the acceptedFileType
+  </div>
+</body>
 
-  </body>
 </html>
