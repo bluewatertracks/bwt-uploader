@@ -1,0 +1,148 @@
+<script src="./bower_components/pdfjs-dist/build/pdf.min.js"></script>
+<script>
+    var resizer = (function() {
+      var applyScale, scaleDown, stepDown, stepScale, scaleData;
+      var preview,ctx;
+      var scaledData;
+      stepScale = 0.9;
+      scaleDown = function(image, targetScale) {
+          var currentScale = 1;
+          while (currentScale * stepScale > targetScale) {
+              currentScale *= stepScale;
+              image = stepDown(image);
+          }
+          return {
+              image: image,
+              remainingScale: targetScale / currentScale
+          };
+      };
+      stepDown = function(image) {
+          var temp;
+          temp = {};
+          temp.canvas = document.createElement('canvas');
+          temp.ctx = temp.canvas.getContext('2d');
+          temp.canvas.width = image.width * stepScale + 1;
+          temp.canvas.height = image.height * stepScale + 1;
+          temp.ctx.scale(stepScale, stepScale);
+          temp.ctx.drawImage(image, 0, 0);
+          return temp.canvas;
+      };
+      applyScale = function(img,canvas) {
+        var scale;
+        if(img.width > img.height) {
+          canvas.width = 800; // final image proportions
+          canvas.height = (800/img.width)*img.height;
+          scale = (800/img.width).toFixed(2);
+        }else {
+          canvas.height = 800; // final image proportions
+          canvas.width = (800/img.height)*img.width;
+          scale = (800/img.height).toFixed(2);
+        }
+        var ctx = canvas.getContext('2d');
+        scaledData = scaleDown(img, scale);
+        ctx.scale(scaledData.remainingScale, scaledData.remainingScale);
+        ctx.drawImage(scaledData.image, 2, 2);
+        return canvas.toDataURL();
+      };
+      return {
+          scaleImage: applyScale
+      }
+    })();
+
+    BwtUploadBehavior = {
+        properties: {
+            error: {
+                type: Object,
+                value: {
+                    val: false,
+                    msg: ''
+                },
+                notify: true,
+                reflectToAttribute: true
+            },
+
+            file: {
+                type: Object,
+                value: {},
+                notify: true
+            },
+            /**
+             * The type of placeholder, accepts either one of two arguments; square or circle
+             **/
+            theme: {
+                type: String,
+                value: 'circle',
+                notify: true
+            },
+
+            image: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            /**
+             * location of the placeholder image
+             **/
+            placeholder: {
+                type: String,
+                value: '/images/placeholder.png',
+                notify: true
+            },
+        },
+        hasWrongMimeType: function(file, acceptedFileTypes) {
+            acceptedFileTypes = acceptedFileTypes.split(',');
+            if (acceptedFileTypes.indexOf(file.type) == -1)
+            this.error = { msg: 'Invalid file type, please upload an accepted file type',
+                            val: true
+                        };
+        },
+        validateFile: function(files) {
+            if (files.length > 1) {
+              this.error = {  msg: 'You can only upload one file at a time',
+                              val: true
+                            };
+            }
+            this.hasWrongMimeType(files[0],this.acceptedFileTypes);
+        },
+        uploadFile: function(files) {
+            this.validateFile(files);
+            if(this.error.val) return;
+
+            this.set('file', files[0]);
+            this.file.progress = 10;
+            this.file.error = false;
+            this.file.complete = false;
+            this.startPreviewAndAjax(this.file);
+        },
+        startPreviewAndAjax: function(file){
+          if(file.type === 'application/pdf') {
+            this.getDocumentPreview(file);
+          }
+          else {
+           this.downSampleImage(file);
+          }
+          //this.$ajaxElement.generateRequest();
+        },
+        getDocumentPreview: function(file){
+          return;
+          PDFJS.workerSrc = './bower_components/pdfjs-dist/build/pdf.worker.js';
+          PDFJS.getDocument(file).then(function (pdf) {
+             pdf.getPage(1).then(function(page) {
+
+                var scale = 1.5;
+                var viewport = page.getViewport(scale);
+                var canvas = document.getElementById('pdfcanvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                var task = page.render({canvasContext: context, viewport: viewport});
+
+                task.promise.then(function(){
+                  this.image = canvas.toDataURL('image/jpeg');
+                }.bind(this));
+             }.bind(this))
+          }.bind(this));
+        },
+    };
+</script>
