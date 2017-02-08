@@ -92,7 +92,7 @@
           var image = e.target.result;
           this.image = image;
           var canvas = document.createElement('canvas');
-          this.setCanvasSize(canvas);
+          canvas = this.setCanvasSize(canvas);
 
           this.createBase64Image(image)
              .then(function(img) {
@@ -114,7 +114,7 @@
       setCanvasSize(canvas){
         canvas.setAttribute('height',this.height);
         canvas.setAttribute('width','800');
-
+        return canvas;
       }
     });
   </script>
