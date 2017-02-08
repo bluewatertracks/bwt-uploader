@@ -13,7 +13,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="./bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bwt-progress.html">
-<link rel="import" href="bwt-image-downsampler.html">
 <link rel="import" href="bwt-image-preview.html">
 <link rel="import" href="bwt-upload-behavior.html">
 
@@ -53,6 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <iron-ajax id="ajaxElement" url$="[[target]]" method$="[[method]]" handle-as="json" headers$='[[header]]' on-response="handleResponse">
     </iron-ajax>
+    <canvas id="pdfcanvas"></canvas>
     <paper-dialog id="dialog" modal>
          <h2>Are you sure ?</h2>
          <div class="buttons">
@@ -68,12 +68,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <iron-icon icon="icons:clear" title="Remove Item"></iron-icon>
                   <span> Delete Item</span>
               </div>
-              <bwt-progress file="[[file]]" error="[[error]]"></bw-progress>
+              <bwt-progress-bar file="[[file]]" error="[[error]]"></bwt-progress-bar>
           </div>
           <input type="file" id="fileInput" on-change="_fileChange" hidden accept="[[acceptedFileTypes]]">
     </div>
-    <bwt-pdf-sniffer></bw-pdf-sniffer>
-    <bwt-image-downsampler image="{{image}}" file="[[file]]" file-type="[[acceptedFileTypes]]"></bw-image-downsampler>
   </template>
 
   <script>
@@ -113,6 +111,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         acceptedFileTypes: {
           type:String,
           value:'image/jpg,image/jpeg,image/png,image/gif,image/bmp'
+        },
+        /** Maximum accepted File size in Kilo Bytes **/
+        maxFileSize: {
+          type:Number,
+          value:1000
         }
      },
      behaviors: [BwtUploadBehavior],
@@ -140,8 +143,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        this.ondrop = function(event) {
            this.clear();
            this.toggleClass('hover', false, uploadBorder);
-           event.preventDefault();
-           this.validateFile(event.dataTransfer.files);
            this.uploadFile(event.dataTransfer.files[0]);
        }
      },
