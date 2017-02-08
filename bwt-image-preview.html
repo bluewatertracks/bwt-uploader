@@ -77,9 +77,11 @@
       updateImage: function(placeholder,image){
         this.image = (placeholder && image) ? image : placeholder;
       },
-      downSampleImage:function() {
-        this.set('file.progress',20);
+      downSampleImage:function(file) {
+        file.progress = 20;
+
         var fr = new FileReader();
+
         fr.onload = function(e) {
           var image = e.target.result;
           this.image = image;
@@ -94,6 +96,7 @@
              }.bind(this));
 
         }.bind(this);
+
         fr.readAsDataURL(file);
       },
       createBase64Image: function(image){
