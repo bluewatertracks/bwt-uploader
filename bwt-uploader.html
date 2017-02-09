@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--
 
-`<bwt-uploader>` is a component based on Polymer that provides user to upload an image or pdf file. 
+`<bwt-uploader>` is a component based on Polymer that provides user to upload an image or pdf file.
 
    <bwt-uploader target="https://api.imgur.com/3/image" method="POST"> </bwt-uploader>
 
@@ -85,7 +85,6 @@ If you want to save it in bower.json file, remember to add flag --save
     </style>
     <iron-ajax id="ajaxElement" url$="[[target]]" method$="[[method]]" handle-as="json" headers$='[[header]]' on-response="handleResponse">
     </iron-ajax>
-    <canvas id="pdfcanvas"></canvas>
     <paper-dialog id="dialog" modal>
          <h2>Are you sure ?</h2>
          <div class="buttons">
@@ -151,6 +150,14 @@ If you want to save it in bower.json file, remember to add flag --save
           value:1000
         },
         /**
+        *  Set to true if the image uploaded is to be resized if the height is found to be greater than the height property below
+        **/
+        resize : {
+            type:Boolean,
+            value:false,
+            notify:true
+        },
+        /**
         *
           Height of resized image in pixels, width will be adjusted proptionally
         **/
@@ -184,7 +191,7 @@ If you want to save it in bower.json file, remember to add flag --save
        this.ondrop = function(event) {
            this.clear();
            this.toggleClass('hover', false, uploadBorder);
-           this.uploadFile(event.dataTransfer.files[0]);
+           this._uploadFile(event.dataTransfer.files[0]);
        }
      },
      _fileClick: function(){
@@ -204,7 +211,7 @@ If you want to save it in bower.json file, remember to add flag --save
      },
      _fileChange: function(e) {
        var files = e.target.files;
-       this.uploadFile(files);
+       this._uploadFile(files);
      }
     });
   </script>

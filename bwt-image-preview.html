@@ -1,6 +1,6 @@
 <link rel="import" href="bwt-upload-behavior.html">
 <dom-module id="bwt-image-preview">
-  <template>
+    <template>
     <style is="custom-style">
     :host {
       display: block;
@@ -65,57 +65,38 @@
          <div class="img" style="background: url('[[image]]') no-repeat left top;"></div>
       </div>
     </template>
-  </template>
-  <script>
-    Polymer({
-      is: 'bwt-image-preview',
-      behaviors: [BwtUploadBehavior],
-      properties: {
-          height: {
-              value:null,
-              notify:true
-          }
-      },
-      observers: ['updateImage(placeholder,image)'],
-      _checkTheme: function(theme,shape){
-        return (theme === shape) ? true : false;
-      },
-      updateImage: function(placeholder,image){
-        this.image = (placeholder && image) ? image : placeholder;
-      },
-      downSampleImage:function(file) {
-        file.progress = 20;
-
-        var fr = new FileReader();
-
-        fr.onload = function(e) {
-          var image = e.target.result;
-          this.image = image;
-          var canvas = document.createElement('canvas');
-          canvas = this.setCanvasSize(canvas);
-
-          this.createBase64Image(image)
-             .then(function(img) {
-              //  var resizedImage = ( img.height > canvas.height || img.width > canvas.width || file.size > 1000000 ) ? resizer.scaleImage(img,canvas) : image;
-              //  return { image: resizedImage, sizes: [Math.max(img.height,img.width), 100 ] };
-             }.bind(this));
-
-        }.bind(this);
-
-        fr.readAsDataURL(file);
-      },
-      createBase64Image: function(image){
-        var img = new Image();
-        img.src = image;
-        return new Promise( function(resolve,reject) {
-          img.onload = resolve(img);
+    </template>
+    <script>
+        Polymer({
+            is: 'bwt-image-preview',
+            behaviors: [BwtUploadBehavior],
+            properties: {
+                height: {
+                    value: null,
+                    notify: true
+                }
+            },
+            observers: ['_updateImage(placeholder,image)'],
+            _checkTheme: function(theme, shape) {
+                return (theme === shape) ? true : false;
+            },
+            _updateImage: function(placeholder, image) {
+                this.image = (placeholder && image) ? image : placeholder;
+            },
+            _createImagePreview: function(file) {
+                file.progress = 30;
+                var fr = new FileReader();
+                return new Promise(function(resolve, reject) {
+                    fr.onload = function(e) {
+                        var image = e.target.result;
+                        this.image = image;
+                        var img = new Image();
+                        img.src = image;
+                        resolve(image);
+                    }.bind(this);
+                    fr.readAsDataURL(file);
+                }.bind(this));
+            },
         });
-      },
-      setCanvasSize(canvas){
-        canvas.setAttribute('height',this.height);
-        canvas.setAttribute('width','800');
-        return canvas;
-      }
-    });
-  </script>
+    </script>
 </dom-module>
