@@ -1,63 +1,80 @@
 <link rel="import" href="bwt-upload-behavior.html">
-
 <dom-module id="bwt-progress-bar">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
       }
-
+      
       .progress-details {
         display: flex;
       }
-
+      
       .file {
-        display:flex;
+        display: flex;
       }
-
+      
       .file .progress-details {
-        order:2;
-        width:15%;
+        order: 2;
+        width: 15%;
       }
-
+      
       .file .progress-bar {
-        order:1;
-        width:85%;
+        order: 1;
+        width: 85%;
         margin-top: 8px;
       }
-
-      paper-progress {
+      /*paper-progress {
           --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
           --paper-progress-height: var(--progress-bar-height, 8px);
           width: var(--progress-bar-width:100%);
           color:#ffffff;
+      }*/
+      
+      paper-progress.slow {
+        --paper-progress-indeterminate-cycle-duration: 3s;
       }
-
+      
       .error {
-        color: var(--progress-error-color,#D60000);
+        color: var(--progress-error-color, #D60000);
       }
     </style>
     <div class="progress-bars">
-        <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
-        <span class="name" hidden$="[[file.error]]">[[file.name]]</span>
-        <div class="file">
-            <div class="progress-details">
-                <div class="commands">
-                    <iron-icon icon="file-upload-icons:autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="[[!file.error]]"></iron-icon>
-                    <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
-                </div>
-            </div>
-            <div class="progress-bar" error hidden$="[[!file.progress]]">
-                <paper-progress value$="[[file.progress]]" error$="[[file.error]]"></paper-progress>
-            </div>
+      <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
+      <span class="name" hidden$="[[file.error]]">[[file.name]]</span>
+      <div class="file">
+        <div class="progress-details">
+          <div class="commands">
+            <iron-icon icon="file-upload-icons:autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="[[!file.error]]"></iron-icon>
+            <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
+          </div>
         </div>
+        <div class="progress-bar" id="progressbar" error hidden$="[[!file.name]]">
+          <paper-progress indeterminate class="slow"></paper-progress>
+          <!--<paper-progress value$="[[file.progress]]" error$="[[file.error]]"></paper-progress>-->
+        </div>
+      </div>
     </div>
   </template>
   <script>
     Polymer({
       is: 'bwt-progress-bar',
-      behaviors: [BwtUploadBehavior]
+      properties: {
+        primary: 10,
+        secondary: 30
+      },
+      behaviors: [BwtUploadBehavior],
+      observers: ['attribueChange(file,error)'],
+      attribueChange: function (file) {
+        if (file.name) {
+          this.$.progressbar.hidden = false;
+          setTimeout(
+            function () {
+              this.$.progressbar.hidden = true;
+            }.bind(this), 2000);
+        }
 
+      }
     });
   </script>
 </dom-module>
