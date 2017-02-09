@@ -83,14 +83,14 @@
                 notify: true
             },
             /**
-             * value to be databinded, this will give the value of the output url 
+             * value to be databinded, this will give the value of the output url
              **/
             value: {
                 type: String,
                 value: ''
             }
         },
-        hasWrongMimeType: function(file, acceptedFileTypes) {
+        _hasWrongMimeType: function(file, acceptedFileTypes) {
             acceptedFileTypes = acceptedFileTypes.split(',');
             if (acceptedFileTypes.indexOf(file.type) == -1)
                 this.error = {
@@ -98,17 +98,17 @@
                     val: true
                 };
         },
-        validateFile: function(files) {
+        _validateFile: function(files) {
             if (files.length > 1) {
                 this.error = {
                     msg: 'You can only upload one file at a time',
                     val: true
                 };
             }
-            this.hasWrongMimeType(files[0], this.acceptedFileTypes);
-            this.hasExceededMaximumFileSize(files[0]);
+            this._hasWrongMimeType(files[0], this.acceptedFileTypes);
+            this._hasExceededMaximumFileSize(files[0]);
         },
-        hasExceededMaximumFileSize: function(file) {
+        _hasExceededMaximumFileSize: function(file) {
             if ( file.size > (this.maxFileSize*1024) )
                 this.error = {
                     msg: 'The uploaded file exceeds ' + this.maxFileSize + ' KB',
@@ -116,18 +116,19 @@
                 };
         },
         _uploadFile: function(files) {
-            this.validateFile(files);
+            this._validateFile(files);
             if (this.error.val) return;
 
             this.set('file', files[0]);
             this.file.progress = 10;
             this.file.error = false;
             this.file.complete = false;
-            this.startPreviewAndAjax(this.file);
+            this._startPreviewAndAjax(this.file);
         },
-        startPreviewAndAjax: function(file) {
+        _startPreviewAndAjax: function(file) {
             if (file.type === 'application/pdf') {
                 this._getDocumentPreview(file);
+                //this._uploadDocument() ;
             } else {
                 this.$.preview._createImagePreview(file)
                     .then(function(img) {
@@ -135,38 +136,41 @@
                     }.bind(this))
                     .then(function(image) {
                         var newImage = image.src;
-                        //if (this.resize && image.height > this.height) {
+                        if (this.resize && image.height > this.height) {
                             newImage = resizer.scaleImage(image, this.height);
                             // checking if file size of new image is bigger than the original
                             newImage = (newImage.length > img.length) ? image.src : newImage;
-                        //}
+                        }
                         this._uploadImage(newImage);
                     }.bind(this));
             }
         },
         _getDocumentPreview: function(file) {
-            return;
-            PDFJS.workerSrc = '../pdfjs-dist/build/pdf.worker.js';
-            PDFJS.getDocument(file).then(function(pdf) {
-                pdf.getPage(1).then(function(page) {
+            PDFJS.workerSrc = '/bower_components/pdfjs-dist/build/pdf.worker.js';
+            this._createArrayBufferFie(file)
+                .then(function (buffer) {
+                  PDFJS.getDocument(buffer).then(function(pdf) {
+                      pdf.getPage(1).then(function(page) {
 
-                    var scale = 1.5;
-                    var viewport = page.getViewport(scale);
-                    var canvas = document.createElement('canvas');
-                    var context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                          var scale = 1.5;
+                          var viewport = page.getViewport(scale);
+                          var canvas = document.createElement('canvas');
+                          var context = canvas.getContext('2d');
+                          canvas.height = viewport.height;
+                          canvas.width = viewport.width;
 
-                    var task = page.render({
-                        canvasContext: context,
-                        viewport: viewport
-                    });
+                          var task = page.render({
+                              canvasContext: context,
+                              viewport: viewport
+                          });
 
-                    task.promise.then(function() {
-                        this.image = canvas.toDataURL('image/jpeg');
-                    }.bind(this));
-                }.bind(this))
-            }.bind(this));
+                          task.promise.then(function() {
+                              this.image = canvas.toDataURL('image/jpeg');
+                              console.log(this.image);
+                          }.bind(this));
+                      }.bind(this))
+                  }.bind(this));
+                }.bind(this));
         },
         _createImageFile: function(image) {
             var img = new Image();
@@ -175,7 +179,22 @@
                 img.onload = resolve(img);
             });
         },
+        _createArrayBufferFie: function(file) {
+          var  fileReader = new FileReader();
+          return new Promise(function (resolve,reject) {
+            fileReader.onload = function(ev) {
+                resolve(fileReader.result);
+            }
+            fileReader.readAsArrayBuffer(file);
+          });
+        },
         _uploadImage: function(image) {
+          // increase this.file prgoress
+          // set body
+          // file , extra data
+          // { file: , extradata }
+          // handle the response of this
+          // error as well the success
             //this.$ajaxElement.generateRequest();
         }
     };
