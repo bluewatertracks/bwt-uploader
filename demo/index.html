@@ -23,8 +23,8 @@
   <div class="vertical-section-container centered">
     <h3>Basic uploader with config for uploading an image</h3>
     <demo-snippet>
-      <template>
-        <bwt-uploader target="https://api.imgur.com/3/image" method="POST">
+      <template is="dom-bind" id="app">
+        <bwt-uploader target="http://httpbin.org/post" method="POST" body="[[body]]">
         </bwt-uploader>
       </template>
     </demo-snippet>
@@ -80,6 +80,17 @@
     </demo-snippet>
   </div>
 
+<script>
+    (function () {
+      var scope = document.querySelector('#app');
+      document.addEventListener('WebComponentsReady', function () {
+        scope.body = {
+          userId: "123456",
+          username:"xyz"  
+        };
+      });
+    })();
+  </script>
 </body>
 
 </html>

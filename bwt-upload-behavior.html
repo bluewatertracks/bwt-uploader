@@ -89,6 +89,7 @@
                 type: String,
                 value: ''
             }
+
         },
         _hasWrongMimeType: function(file, acceptedFileTypes) {
             acceptedFileTypes = acceptedFileTypes.split(',');
@@ -128,7 +129,7 @@
         _startPreviewAndAjax: function(file) {
             if (file.type === 'application/pdf') {
                 this._getDocumentPreview(file);
-                //this._uploadDocument() ;
+                this._uploadDocument() ;
             } else {
                 this.$.preview._createImagePreview(file)
                     .then(function(img) {
@@ -195,7 +196,12 @@
           // { file: , extradata }
           // handle the response of this
           // error as well the success
-            //this.$ajaxElement.generateRequest();
-        }
+            var ajax = this.$.ajaxElement;
+            ajax.body=this.body;
+            ajax.body.file = image;
+            console.log( ajax.body );
+            this.$.ajaxElement.generateRequest();
+        },
+      
     };
 </script>
