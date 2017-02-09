@@ -15,8 +15,10 @@
       margin-left: auto;
       margin-right: auto;
     }
+
   </style>
 </head>
+
 <body>
   <div class="vertical-section-container centered">
     <h3>Basic uploader with config for uploading an image</h3>
@@ -62,6 +64,22 @@
   </demo-snippet>
   You can further restrict the image type to a jpeg or any of the supported image types by changing the acceptedFileType
   </div>
+
+  <div class="vertical-section-container centered">
+    <demo-snippet>
+      <template>
+         <style is="custom-style">
+          #uploader2 {
+            --preview-border: 1px dashed green;
+            --preview-width: 800px;
+            --preview-height: 800px;
+          }
+        </style>
+        <bwt-uploader theme="square" target="https://api.imgur.com/3/image" method="POST"> </bwt-uploader>
+      </template>
+    </demo-snippet>
+  </div>
+
 </body>
 
 </html>
