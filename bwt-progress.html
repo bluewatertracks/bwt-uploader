@@ -37,7 +37,7 @@
         color: var(--progress-error-color,#D60000);
       }
     </style>
-    <div class="progress-bars" hidden$="[[showHide]]">
+    <div class="progress-bars">
         <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
         <span class="name" hidden$="[[file.error]]">[[file.name]]</span>
         <div class="file">
@@ -57,6 +57,7 @@
     Polymer({
       is: 'bwt-progress-bar',
       behaviors: [BwtUploadBehavior]
+
     });
   </script>
 </dom-module>
