@@ -35,8 +35,8 @@ Custom property | Description | Default
 `--preview-height` | Height of preview area | `250px`
 `--progress-bar-color` | Progress bar color | `#03a9f4`
 `--progress-bar-height` | Progress bar color | `5px`
-`--primary-text-color` | Description text color | `green`
-`--secondary-text-color`| Browse text color | `black`
+`--primary-text-color` | Description text color | `#9b9b9b`
+`--secondary-text-color`| Browse text color | `#1976d3`
 
 ### Installation
 
@@ -59,6 +59,8 @@ If you want to save it in bower.json file, remember to add flag --save
     :host {
         display: flex;
         font: normal 14px/20px "Helvetica Neue","Helvetica","Arial","Microsoft YaHei New","Microsoft Yahei","SimSun","STXihei",sans-serif;
+        --primary-text-color:#9b9b9b;
+        --secondary-text-color:#1976d3; 
         color: #464440;
     }
 
@@ -78,11 +80,11 @@ If you want to save it in bower.json file, remember to add flag --save
     }
 
     span.placeholder-text {
-      color: var(--primary-text-color);
+      color: var(--primary-text-color,var(--primary-text-color));
     }
     span.template-span-button {
       cursor: pointer;
-      color: var(--secondary-text-color);
+      color: var(--secondary-text-color,var(--secondary-text-color));
     }
     div.template-div-delete:hover {
       cursor: pointer;
