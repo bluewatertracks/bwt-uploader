@@ -229,6 +229,11 @@ If you want to save it in bower.json file, remember to add flag --save
      _removeImg: function() {
        this.$.preview.image="";
        this.file = null;
+       this.error = {
+          val: false,
+          msg: ''
+       };
+       this.notifyPath('error');
        this._deleteFlag=true;
      },
      _fileChange: function(e) {
