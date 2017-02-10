@@ -15,15 +15,15 @@
       margin-left: auto;
       margin-right: auto;
     }
-
   </style>
 </head>
+
 <body>
   <div class="vertical-section-container centered">
     <h3>Basic uploader with config for uploading an image</h3>
     <demo-snippet>
       <template is="dom-bind" id="app">
-        <bwt-uploader target="http://httpbin.org/post" method="POST" body="[[body]]">
+        <bwt-uploader id="imgUploader" target="http://httpbin.org/post" method="POST" body="[[body]]">
         </bwt-uploader>
       </template>
     </demo-snippet>
@@ -47,6 +47,9 @@
             --preview-border: 1px dashed green;
             --preview-width: 300px;
             --preview-height: 300px;
+            --progress-bar-color: red;
+            --primary-text-color:green;
+            --secondary-text-color:brown;
           }
         </style>
         <bwt-uploader id="uploader" target="https://api.imgur.com/3/image" method="POST"> </bwt-uploader>
@@ -54,20 +57,19 @@
     </demo-snippet>
   </div>
   <div class="vertical-section-container centered">
-  <h3>Config to upload an image with resizing</h3>
-  <demo-snippet>
-    <template>
-      <bwt-uploader target="https://api.imgur.com/3/image" method="POST" height="200">
-      </bwt-uploader>
-    </template>
-  </demo-snippet>
-  You can further restrict the image type to a jpeg or any of the supported image types by changing the acceptedFileType
+    <h3>Config to upload an image with resizing</h3>
+    <demo-snippet>
+      <template>
+        <bwt-uploader target="https://api.imgur.com/3/image" method="POST" height="200">
+        </bwt-uploader>
+      </template>
+    </demo-snippet>
+    You can further restrict the image type to a jpeg or any of the supported image types by changing the acceptedFileType
   </div>
-
   <div class="vertical-section-container centered">
     <demo-snippet>
       <template>
-         <style is="custom-style">
+        <style is="custom-style">
           #uploader2 {
             --preview-border: 1px dashed green;
             --preview-width: 800px;
@@ -78,14 +80,13 @@
       </template>
     </demo-snippet>
   </div>
-
-<script>
+  <script>
     (function () {
       var scope = document.querySelector('#app');
       document.addEventListener('WebComponentsReady', function () {
         scope.body = {
           userId: "123456",
-          username:"xyz"
+          username: "xyz"
         };
       });
     })();
