@@ -21,9 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--
 
-`<bwt-uploader>` is a component based on Polymer that provides user to upload an image or pdf file.
-
-   <bwt-uploader target="https://api.imgur.com/3/image" method="POST"> </bwt-uploader>
+`<bwt-uploader>` is an upload compoent for images and pdf file with support for preview.
 
 ### Styling
 
@@ -150,7 +148,7 @@ If you want to save it in bower.json file, remember to add flag --save
         /**Accepted File Types, The uploader is meant only for images and documents */
         acceptedFileTypes: {
           type:String,
-          value:'image/jpg,image/jpeg,image/png,image/gif,image/bmp'
+          value:'image/jpg,image/jpeg,image/png,image/bmp'
         },
         /** Maximum accepted File size in Kilo Bytes **/
         maxFileSize: {
@@ -193,6 +191,7 @@ If you want to save it in bower.json file, remember to add flag --save
        this.toggleClass('enabled', true, uploadBorder);
        this.ondragover = function(e) {
            e.stopPropagation();
+           e.preventDefault();
            this.toggleClass('hover', true, uploadBorder);
            // Workaround for allowgin drop from Chome's download footer on OSX
            // See https://bugs.chromium.org/p/chromium/issues/detail?id=234931
@@ -205,14 +204,15 @@ If you want to save it in bower.json file, remember to add flag --save
            return false;
        }
 
-       this.ondragleave = function() {
+       this.ondragleave = function(e) {
            this.toggleClass('hover', false, uploadBorder);
-           return false;
+           e.preventDefault();
        }
        this.ondrop = function(event) {
-           this.clear();
+           event.preventDefault();
+           this._removeImg();
            this.toggleClass('hover', false, uploadBorder);
-           this._uploadFile(event.dataTransfer.files[0]);
+           this._uploadFile(event.dataTransfer.files);
        }
      },
      _fileClick: function(){
@@ -233,6 +233,7 @@ If you want to save it in bower.json file, remember to add flag --save
      },
      _fileChange: function(e) {
        var files = e.target.files;
+       this._removeImg();
        this._uploadFile(files);
      },
      handleResponse:function(e){

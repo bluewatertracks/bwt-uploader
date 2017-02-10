@@ -42,7 +42,7 @@
             scaleImage: applyScale
         }
     })();
-
+    /** @polymerBehavior BwtUploadBehavior */
     BwtUploadBehavior = {
         properties: {
             error: {
@@ -156,7 +156,7 @@
         _getDocumentPreview: function(file) {
             this.set('file.progress',60);
             this.notifyPath('file.progress');
-            PDFJS.workerSrc = '/bower_components/pdfjs-dist/build/pdf.worker.js';
+            PDFJS.workerSrc = '/pdf.worker.min.js';
             this._createArrayBufferFie(file)
                 .then(function (buffer) {
                   PDFJS.getDocument(buffer).then(function(pdf) {
@@ -176,8 +176,6 @@
 
                           task.promise.then(function() {
                               this.image = canvas.toDataURL("image/jpeg");
-                              this.notifyPath('image');
-                              this.$.preview._getDocumentPreview(this.image,true);
                           }.bind(this));
                       }.bind(this))
                   }.bind(this));
@@ -208,12 +206,12 @@
             fileReader.readAsArrayBuffer(file);
           });
         },
-        _upload: function(image) {
+        _upload: function(file) {
             this.set('file.progress',80);
             this.notifyPath('file.progress');
             var ajax = this.$.ajaxElement;
             ajax.body=this.body;
-            ajax.body.file = image;
+            ajax.body.file = file;
             this.$.ajaxElement.generateRequest();
         },
         _checkUploadStatus: function(val){
