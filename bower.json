@@ -1,7 +1,25 @@
 {
   "name": "bwt-uploader",
+  "version": "0.9.1",
+  "homepage": "https://github.com/bluewatertracks/bwt-uploader",
+  "authors": [
+    "Raju Maisnam",
+    "Dmytro Hrytsenko",
+    "Bhargav Konkathi",
+    "Blue Water Tracks Team"
+  ],
   "description": "Polymer component that allows uploading of images and documents",
   "main": "bwt-uploader.html",
+  "keywords": [
+    "polymer",
+    "web-component",
+    "web-components",
+    "bwt-uploader",
+    "image uploader",
+    "pdf uploader",
+    "uploader"
+  ],
+  "license": "MIT",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "iron-icon": "^1.0.12",
