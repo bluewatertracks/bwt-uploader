@@ -88,7 +88,7 @@ If you want to save it in bower.json file, remember to add flag --save
       cursor: pointer;
     }
     </style>
-    <iron-ajax id="ajaxElement" url$="[[target]]" content-type="application/json" method$="[[method]]" handle-as="json" on-error="handleError" headers$='[[header]]' body$="[[body]]" on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="ajaxElement" url$="[[target]]" content-type="application/json" method$="[[method]]" handle-as="json" on-error="_handleError" headers$='[[header]]' body$="[[body]]" on-response="_handleResponse"></iron-ajax>
     <paper-dialog id="dialog" modal>
          <h2>Are you sure ?</h2>
          <div class="buttons">
@@ -246,18 +246,20 @@ If you want to save it in bower.json file, remember to add flag --save
        this._removeImg();
        this._uploadFile(files);
      },
-     handleResponse:function(e){
+     _handleResponse:function(e){
         this.file.progress = 100;
         this.notifyPath('file.progress');
+        this.error = {
+            val: false,
+            msg: ''
+        };
         this._deleteFlag=false;
-        console.log(e.detail.response); //Logic needs to be updated
       },
-      handleError:function(e){
+      _handleError:function(e){
         this.file.progress = 0;
         this.file.error = true;
         this.notifyPath('file.progress');
         this.notifyPath('file.error');
-        console.log(e.detail.response);         //Logic needs to be updated
       }
     });
   </script>

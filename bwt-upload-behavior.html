@@ -73,8 +73,7 @@
                 type: String,
                 value: '',
                 notify: true,
-                reflectToAttribute:true,
-                observer: '_checkUploadStatus'
+                reflectToAttribute:true
             },
             /**
              * location of the placeholder image
@@ -157,6 +156,7 @@
             this.set('file.progress',60);
             this.notifyPath('file.progress');
             PDFJS.workerSrc = '/pdf.worker.min.js';
+            console.log(PDFJS.workerSrc);
             this._createArrayBufferFie(file)
                 .then(function (buffer) {
                   PDFJS.getDocument(buffer).then(function(pdf) {
@@ -176,6 +176,7 @@
 
                           task.promise.then(function() {
                               this.image = canvas.toDataURL("image/jpeg");
+                              debugger;
                           }.bind(this));
                       }.bind(this))
                   }.bind(this));
@@ -213,9 +214,6 @@
             ajax.body=this.body;
             ajax.body.file = file;
             this.$.ajaxElement.generateRequest();
-        },
-        _checkUploadStatus: function(val){
-          console.log(val);
         }
     };
 </script>

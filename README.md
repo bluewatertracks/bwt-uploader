@@ -2,6 +2,7 @@
 `bwt-uploader` is a file uploader with support for pdf files, jpeg, png and bmp images written in Polymer. It follows a plug and play model with a few configurations needed to enable certain features. It is partially inspired by the vaadin uploader and came out as a result of a component we built at Blue Water Tracks. Images are converted to base64 images which might increase the size of the file by a small percentage.  
 
 ## Features
+- Simple Drag and Drop along with browse option
 - Ability to upload images and pdf files
 - Down sample and resize images (optional)
 - Ability to upload pdf files
@@ -33,10 +34,10 @@ A simple example of an Image upload
  Both are welcome, feel free to create an issue and we will try to come up with fixes or added features for requests.
 
 ## Contributors
-  
+
   |||
 |----------|:-------------:|------:|
-| ![@maisnamraju](https://avatars2.githubusercontent.com/u/2786378?v=3&s=80) |  Javascript Ninja; saving the world with one line of javascript at a time. ;) 
+| ![@maisnamraju](https://avatars2.githubusercontent.com/u/2786378?v=3&s=80) |  Javascript Ninja; saving the world with one line of javascript at a time. ;)
 | ![@bhargavkonkathi](https://avatars2.githubusercontent.com/u/24550636?v=3&u=ddd3f64f6888100d6eebd283768b61dabc6f495d&s=80) |  Programming is like playing chess; each line is as important as each step to determine what kind of player or programmer you are. When ever not playing chess, it's Javascript, Java and mongodb.
 | ![@dhrytsenko](https://avatars0.githubusercontent.com/u/12988041?v=3&s=80) | What is my opinion about JavaScript, NodeJS, MongoDB and Polymer? Building blocks to the future! Allowing me to help make the world a better place.
 |
