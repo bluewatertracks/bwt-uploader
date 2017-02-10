@@ -5,20 +5,20 @@
        :host {
         display: block;
       }
-      
+
       .progress-details {
         display: flex;
       }
-      
+
       .file {
         display: flex;
       }
-      
+
       .file .progress-details {
         order: 2;
         width: 15%;
       }
-      
+
       .file .progress-bar {
         order: 1;
         width: 85%;
@@ -30,11 +30,11 @@
           width: var(--progress-bar-width:100%);
           color:#ffffff;
       }*/
-      
+
       paper-progress.slow {
         --paper-progress-indeterminate-cycle-duration: 3s;
       }
-      
+
       .error {
         color: var(--progress-error-color, #D60000);
       }
@@ -49,9 +49,8 @@
             <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
           </div>
         </div>
-        <div class="progress-bar" id="progressbar" error hidden$="[[!file.name]]">
-          <paper-progress indeterminate class="slow"></paper-progress>
-          <!--<paper-progress value$="[[file.progress]]" error$="[[file.error]]"></paper-progress>-->
+        <div class="progress-bar" id="progressbar" error hidden$="[[!file.progress]]">
+          <paper-progress value$="[[file.progress]]" error$="[[file.error]]"></paper-progress>
         </div>
       </div>
     </div>
@@ -64,16 +63,9 @@
         secondary: 30
       },
       behaviors: [BwtUploadBehavior],
-      observers: ['attribueChange(file,error)'],
-      attribueChange: function (file) {
-        if (file.name) {
-          this.$.progressbar.hidden = false;
-          setTimeout(
-            function () {
-              this.$.progressbar.hidden = true;
-            }.bind(this), 2000);
-        }
-
+      observers: ['_showHideProgress(file,error)'],
+      _showHideProgress: function (file,error) {
+        return (file.progress < 100 || error.val ) ? true : false;
       }
     });
   </script>

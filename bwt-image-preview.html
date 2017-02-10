@@ -70,12 +70,6 @@
         Polymer({
             is: 'bwt-image-preview',
             behaviors: [BwtUploadBehavior],
-            properties: {
-                height: {
-                    value: null,
-                    notify: true
-                }
-            },
             observers: ['_updateImage(placeholder,image)'],
             _checkTheme: function(theme, shape) {
                 return (theme === shape) ? true : false;
