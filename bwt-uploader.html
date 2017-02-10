@@ -35,6 +35,10 @@ Custom property | Description | Default
 `--preview-border` | Border of preview | `1px dahsed #dbdbdb`
 `--preview-width` | Width of preview area | `250px`
 `--preview-height` | Height of preview area | `250px`
+`--progress-bar-color` | Progress bar color | `#03a9f4`
+`--progress-bar-height` | Progress bar color | `5px`
+`--primary-text-color` | Description text color | `green`
+`--secondary-text-color`| Browse text color | `black`
 
 ### Installation
 
@@ -76,10 +80,11 @@ If you want to save it in bower.json file, remember to add flag --save
     }
 
     span.placeholder-text {
-      color: green;
+      color: var(--primary-text-color);
     }
     span.template-span-button {
-      color:black;
+      cursor: pointer;
+      color: var(--secondary-text-color);
     }
     div.template-div-delete:hover {
       cursor: pointer;
