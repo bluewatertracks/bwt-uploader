@@ -33,13 +33,13 @@ A simple example of an Image upload
  Both are welcome, feel free to create an issue and we will try to come up with fixes or added features for requests.
 
 ## Contributors
-
+  
   |||
-  |----------|:-------------:|------:|
-  | [![@bhargavkonkathi](https://avatars2.githubusercontent.com/u/24550636?v=3&u=ddd3f64f6888100d6eebd283768b61dabc6f495d&s=80)](https://github.com/bhargavkonkathi) |  Programming is like playing chess; each line is as important as each step to determine what kind of player or programmer you are. When ever not playing chess, it's Javascript, Java and mongodb.
-  | [![@maisnamraju](https://avatars2.githubusercontent.com/u/2786378?v=3&s=80)](https://github.com/maisnamraju) |  Javascript Ninja; saving the world with one line of javascript at a time. ;)
-  | [![@dhrytsenko](https://avatars0.githubusercontent.com/u/12988041?v=3&s=80)](https://github.com/dhrytsenko) | What is my opinion about JavaScript, NodeJS, MongoDB and Polymer? Building blocks to the future! Allowing me to help make the world a better place.
-  |
+|----------|:-------------:|------:|
+| ![@maisnamraju](https://avatars2.githubusercontent.com/u/2786378?v=3&s=80) |  Javascript Ninja; saving the world with one line of javascript at a time. ;) 
+| ![@bhargavkonkathi](https://avatars2.githubusercontent.com/u/24550636?v=3&u=ddd3f64f6888100d6eebd283768b61dabc6f495d&s=80) |  Programming is like playing chess; each line is as important as each step to determine what kind of player or programmer you are. When ever not playing chess, it's Javascript, Java and mongodb.
+| ![@dhrytsenko](https://avatars0.githubusercontent.com/u/12988041?v=3&s=80) | What is my opinion about JavaScript, NodeJS, MongoDB and Polymer? Building blocks to the future! Allowing me to help make the world a better place.
+|
 
 ## LICENSE
 This project is licensed under the terms of the MIT license.
