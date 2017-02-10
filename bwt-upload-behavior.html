@@ -174,11 +174,16 @@
                           });
 
                           task.promise.then(function() {
-                              this.set('image',canvas.toDataURL());
+                              this.image = canvas.toDataURL("image/jpeg");
+                              this.notifyPath('image');
+                              console.log(this.image);
                           }.bind(this));
                       }.bind(this))
                   }.bind(this));
-                }.bind(this));
+                }.bind(this))
+                .catch( function(error) {
+                  console.log(error);
+                });
         },
         _createImageFile: function(image) {
             var img = new Image();

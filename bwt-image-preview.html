@@ -77,7 +77,7 @@
             _updateImage: function(placeholder, image) {
                 this.image = (placeholder && image) ? image : placeholder;
             },
-            _createImagePreview: function(file) {
+            _createImagePreview: function(file,b64) {
                 file.progress = 30;
                 var fr = new FileReader();
                 return new Promise(function(resolve, reject) {

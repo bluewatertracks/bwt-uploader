@@ -34,7 +34,7 @@
     <h3>Basic uploader with config for uploading a pdf file</h3>
     <demo-snippet>
       <template>
-        <bwt-uploader target="https://api.imgur.com/3/image" method="POST" accepted-file-types="application/pdf">
+        <bwt-uploader target="http://httpbin.org/post" method="POST" accepted-file-types="application/pdf">
         </bwt-uploader>
       </template>
     </demo-snippet>
@@ -86,7 +86,7 @@
       document.addEventListener('WebComponentsReady', function () {
         scope.body = {
           userId: "123456",
-          username:"xyz"  
+          username:"xyz"
         };
       });
     })();
