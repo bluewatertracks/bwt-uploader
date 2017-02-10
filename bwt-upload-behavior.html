@@ -145,7 +145,7 @@
                         if (this.resize && image.height > this.height) {
                             newImage = resizer.scaleImage(image, this.height);
                             // checking if file size of new image is bigger than the original
-                            newImage = (newImage.length > img.length) ? image.src : newImage;
+                            newImage = (newImage.length > image.length) ? image.src : newImage;
                         }
                         this.set('file.progress',60);
                         this.notifyPath('file.progress');
