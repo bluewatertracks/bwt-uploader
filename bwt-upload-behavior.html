@@ -73,6 +73,7 @@
                 type: String,
                 value: '',
                 notify: true,
+                observer: '_checkUploadStatus'
             },
             /**
              * location of the placeholder image
@@ -121,15 +122,18 @@
             if (this.error.val) return;
 
             this.set('file', files[0]);
-            this.file.progress = 10;
+            this.set('file.progress', 20);
+            this.notifyPath('file.progress');
             this.file.error = false;
             this.file.complete = false;
             this._startPreviewAndAjax(this.file);
         },
         _startPreviewAndAjax: function(file) {
             if (file.type === 'application/pdf') {
+                this.set('file.progress', 40);
+                this.notifyPath('file.progress');
                 this._getDocumentPreview(file);
-                this._uploadDocument() ;
+                this._upload(file);
             } else {
                 this.$.preview._createImagePreview(file)
                     .then(function(img) {
@@ -142,11 +146,15 @@
                             // checking if file size of new image is bigger than the original
                             newImage = (newImage.length > img.length) ? image.src : newImage;
                         }
-                        this._uploadImage(newImage);
+                        this.set('file.progress',60);
+                        this.notifyPath('file.progress');
+                        this._upload(newImage);
                     }.bind(this));
             }
         },
         _getDocumentPreview: function(file) {
+            this.set('file.progress',60);
+            this.notifyPath('file.progress');
             PDFJS.workerSrc = '/bower_components/pdfjs-dist/build/pdf.worker.js';
             this._createArrayBufferFie(file)
                 .then(function (buffer) {
@@ -188,19 +196,16 @@
             fileReader.readAsArrayBuffer(file);
           });
         },
-        _uploadImage: function(image) {
-          // increase this.file prgoress
-          // set body
-          // file , extra data
-          // { file: , extradata }
-          // handle the response of this
-          // error as well the success
+        _upload: function(image) {
+            this.set('file.progress',80);
+            this.notifyPath('file.progress');
             var ajax = this.$.ajaxElement;
             ajax.body=this.body;
             ajax.body.file = image;
-            console.log( ajax.body );
             this.$.ajaxElement.generateRequest();
         },
-      
+        _checkUploadStatus: function(val){
+          console.log(val.progress);
+        }
     };
 </script>

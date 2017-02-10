@@ -134,6 +134,12 @@ If you want to save it in bower.json file, remember to add flag --save
           notify:true,
           reflectToAttribute:true
         },
+
+        body:{
+          type:Object,
+          value:{},
+          notify:true
+        },
         /** Plceholder text, not a lot to do but we thought it might be nice to have something just in case **/
         uploadText: {
           type:String,
@@ -166,10 +172,12 @@ If you want to save it in bower.json file, remember to add flag --save
           type:Number,
           value: null
         },
-        body:{
-          type:Object,
-          value:{},
-          notify:true
+        /**
+        * a value that the uploader expects to be data binded to
+        **/
+        value: {
+          type:String,
+          value: ''
         }
      },
      behaviors: [BwtUploadBehavior],
@@ -220,6 +228,8 @@ If you want to save it in bower.json file, remember to add flag --save
        this._uploadFile(files);
      },
      handleResponse:function(e){
+        this.file.progress = 100;
+        this.notifyPath('file.progress');
         console.log(e.detail.response); //Logic needs to be updated
       },
       handleError:function(e){
