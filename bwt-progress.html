@@ -1,7 +1,7 @@
 <link rel="import" href="bwt-upload-behavior.html">
 <dom-module id="bwt-progress-bar">
   <template>
-    <style>
+    <style is="custom-style">
        :host {
         display: block;
       }
@@ -24,17 +24,14 @@
         width: 85%;
         margin-top: 8px;
       }
-      /*paper-progress {
-          --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
-          --paper-progress-height: var(--progress-bar-height, 8px);
-          width: var(--progress-bar-width:100%);
-          color:#ffffff;
-      }*/
+     
 
-      paper-progress.slow {
+      paper-progress {
+        --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
+        --paper-progress-height: var(--progress-bar-height, 4px);
         --paper-progress-indeterminate-cycle-duration: 3s;
+        @apply(--bwt-progress-bar);
       }
-
       .error {
         color: var(--progress-error-color, #D60000);
       }
@@ -58,9 +55,6 @@
   <script>
     Polymer({
       is: 'bwt-progress-bar',
-      properties: {
-        hidden:true
-      },
       behaviors: [BwtUploadBehavior], 
       _showHideProgress: function (progress) {
         return (progress < 100) ? false : true;
