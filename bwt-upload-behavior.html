@@ -155,13 +155,11 @@
         _getDocumentPreview: function(file) {
             this.set('file.progress',60);
             this.notifyPath('file.progress');
-            PDFJS.workerSrc = '/pdf.worker.min.js';
-            console.log(PDFJS.workerSrc);
+            PDFJS.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.7.246/pdf.worker.min.js'; // there is no proper way to load this thing other than a cdn
             this._createArrayBufferFie(file)
                 .then(function (buffer) {
                   PDFJS.getDocument(buffer).then(function(pdf) {
                       pdf.getPage(1).then(function(page) {
-
                           var scale = 1.5;
                           var viewport = page.getViewport(scale);
                           var canvas = document.createElement('canvas');
@@ -176,7 +174,7 @@
 
                           task.promise.then(function() {
                               this.image = canvas.toDataURL("image/jpeg");
-                              debugger;
+                              this.$.preview._updateImage(this.placeholder,this.image); // hacky but it works, need to figure out why image wont update on binding
                           }.bind(this));
                       }.bind(this))
                   }.bind(this));
