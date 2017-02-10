@@ -41,7 +41,7 @@
     </style>
     <div class="progress-bars">
       <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
-      <span class="name" hidden$="[[file.error]]">[[file.name]]</span>
+      <span class="name" hidden$="[[file.error]]">[[file.name]][[file.progress]]</span>
       <div class="file">
         <div class="progress-details">
           <div class="commands">
@@ -49,7 +49,7 @@
             <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
           </div>
         </div>
-        <div class="progress-bar" id="progressbar">
+        <div class="progress-bar" id="progressbar" hidden$="[[_showHideProgress(file.progress)]]">
           <paper-progress value$="[[file.progress]]" error$="[[file.error]]"></paper-progress>
         </div>
       </div>
@@ -59,11 +59,11 @@
     Polymer({
       is: 'bwt-progress-bar',
       properties: {
+        hidden:true
       },
-      behaviors: [BwtUploadBehavior],
-      observers: ['_showHideProgress(file,error)'],
-      _showHideProgress: function (file,error) {
-        return (file.progress < 100 || error.val ) ? true : false;
+      behaviors: [BwtUploadBehavior], 
+      _showHideProgress: function (progress) {
+        return (progress < 100) ? false : true;
       }
     });
   </script>

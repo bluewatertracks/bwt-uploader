@@ -8,7 +8,8 @@
     "pdfjs-dist": "^1.7.246",
     "paper-progress": "^1.0.11",
     "paper-dialog": "^1.1.0",
-    "iron-ajax": "^1.4.3"
+    "iron-ajax": "^1.4.3",
+    "paper-button": "^1.0.14"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

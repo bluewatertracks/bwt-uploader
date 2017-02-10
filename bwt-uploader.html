@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="bwt-progress.html">
 <link rel="import" href="bwt-image-preview.html">
 <link rel="import" href="bwt-upload-behavior.html">
@@ -96,7 +97,7 @@ If you want to save it in bower.json file, remember to add flag --save
           <bwt-image-preview id="preview" height="[[height]]"></bwt-image-preview>
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
-              <div class="template-div-delete" on-click="deleteItem" hidden$="[[image]]">
+              <div class="template-div-delete" on-click="_deleteItem" hidden$="[[_deleteFlag]]">
                   <iron-icon icon="icons:clear" title="Remove Item"></iron-icon>
                   <span> Delete Item</span>
               </div>
@@ -178,7 +179,13 @@ If you want to save it in bower.json file, remember to add flag --save
         value: {
           type:Object,
           value: {}
+        },
+
+        _deleteFlag:{
+          type:Boolean,
+          value:true
         }
+
      },
      behaviors: [BwtUploadBehavior],
      ready:function() {
@@ -219,9 +226,10 @@ If you want to save it in bower.json file, remember to add flag --save
      _deleteItem: function(){
        this.$.dialog.open();
      },
-     _confirmDelete: function() {
-       this.image = '';
+     _removeImg: function() {
+       this.$.preview.image="";
        this.file = null;
+       this._deleteFlag=true;
      },
      _fileChange: function(e) {
        var files = e.target.files;
@@ -230,6 +238,7 @@ If you want to save it in bower.json file, remember to add flag --save
      handleResponse:function(e){
         this.file.progress = 100;
         this.notifyPath('file.progress');
+        this._deleteFlag=false;
         console.log(e.detail.response); //Logic needs to be updated
       },
       handleError:function(e){
