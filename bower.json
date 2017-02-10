@@ -1,7 +1,7 @@
 {
-  "name": "bw-uploader",
+  "name": "bwt-uploader",
   "description": "Polymer component that allows uploading of images and documents",
-  "main": "bw-uploader.html",
+  "main": "bwt-uploader.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "iron-icon": "^1.0.12",

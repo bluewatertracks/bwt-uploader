@@ -78,18 +78,17 @@
                 this.image = (placeholder && image) ? image : placeholder;
             },
             _createImagePreview: function(file,b64) {
-                file.progress = 30;
-                var fr = new FileReader();
-                return new Promise(function(resolve, reject) {
-                    fr.onload = function(e) {
-                        var image = e.target.result;
-                        this.image = image;
-                        var img = new Image();
-                        img.src = image;
-                        resolve(image);
-                    }.bind(this);
-                    fr.readAsDataURL(file);
-                }.bind(this));
+                file.progress = 40;
+                this.notifyPath('file.progress');
+                  var fr = new FileReader();
+                  return new Promise(function(resolve, reject) {
+                      fr.onload = function(e) {
+                          var image = e.target.result;
+                          this.image = image;
+                          resolve(image);
+                      }.bind(this);
+                      fr.readAsDataURL(file);
+                  }.bind(this));
             },
         });
     </script>

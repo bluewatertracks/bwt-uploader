@@ -73,6 +73,7 @@
                 type: String,
                 value: '',
                 notify: true,
+                reflectToAttribute:true,
                 observer: '_checkUploadStatus'
             },
             /**
@@ -176,14 +177,20 @@
                           task.promise.then(function() {
                               this.image = canvas.toDataURL("image/jpeg");
                               this.notifyPath('image');
-                              console.log(this.image);
+                              this.$.preview._getDocumentPreview(this.image,true);
                           }.bind(this));
                       }.bind(this))
                   }.bind(this));
                 }.bind(this))
                 .catch( function(error) {
-                  console.log(error);
-                });
+                  this.set('file.error', true);
+                  this.notifyPath('file.error');
+                  this.error = {
+                    msg: 'File Couldn\'t be uploaded',
+                    val: true
+                  };
+                  this.notifyPath('error');
+                }.bind(this));
         },
         _createImageFile: function(image) {
             var img = new Image();
@@ -210,7 +217,7 @@
             this.$.ajaxElement.generateRequest();
         },
         _checkUploadStatus: function(val){
-          console.log(val.progress);
+          console.log(val);
         }
     };
 </script>
