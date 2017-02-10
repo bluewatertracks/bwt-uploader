@@ -233,6 +233,10 @@ If you want to save it in bower.json file, remember to add flag --save
         console.log(e.detail.response); //Logic needs to be updated
       },
       handleError:function(e){
+        this.file.progress = 0;
+        this.file.error = true;
+        this.notifyPath('file.progress');
+        this.notifyPath('file.error');
         console.log(e.detail.response);         //Logic needs to be updated
       }
     });
