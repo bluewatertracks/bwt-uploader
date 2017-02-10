@@ -23,7 +23,7 @@
     <h3>Basic uploader with config for uploading an image</h3>
     <demo-snippet>
       <template is="dom-bind" id="app">
-        <bwt-uploader id="imgUploader" target="http://httpbin.org/post"
+        <bwt-uploader id="imgUploader" target="https://httpbin.org/post"
                                        body="[[body]]"
                                        header="[[header]]"
                                        method="PUT"
@@ -37,7 +37,7 @@
     <h3>Uploading a pdf file and changing the theme</h3>
     <demo-snippet>
       <template>
-        <bwt-uploader target="http://httpbin.org/post"
+        <bwt-uploader target="https://httpbin.org/post"
                       method="POST"
                       accepted-file-types="application/pdf"
         >
@@ -64,7 +64,7 @@
             --preview-height: 150px;
           }
         </style>
-        <bwt-uploader id="uploader" target="http://httpbin.org/post" method="POST" ></bwt-uploader>
+        <bwt-uploader id="uploader" target="https://httpbin.org/post" method="POST" ></bwt-uploader>
       </template>
     </demo-snippet>
   </div>
@@ -72,7 +72,7 @@
     <h3>Resizing an image</h3>
     <demo-snippet>
       <template>
-        <bwt-uploader target="http://httpbin.org/post" method="POST" height="200"  resize="true">
+        <bwt-uploader target="https://httpbin.org/post" method="POST" height="200"  resize="true">
         </bwt-uploader>
       </template>
     </demo-snippet>
