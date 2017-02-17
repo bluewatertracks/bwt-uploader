@@ -1,5 +1,3 @@
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/bluewatertracks/bwt-uploader)
-
 ## About
 `bwt-uploader` is a file uploader with support for pdf files, jpeg, png and bmp images written in Polymer. It follows a plug and play model with a few configurations needed to enable certain features. It is partially inspired by the vaadin uploader and came out as a result of a component we built at Blue Water Tracks. Images are converted to base64 images which might increase the size of the file by a small percentage.  
 

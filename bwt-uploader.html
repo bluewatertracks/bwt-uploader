@@ -90,7 +90,7 @@ If you want to save it in bower.json file, remember to add flag --save
       cursor: pointer;
     }
     </style>
-    <iron-ajax id="ajaxElement" url$="[[target]]" content-type="application/json" method$="[[method]]" handle-as="json" on-error="_handleError" headers$='[[header]]' body$="[[body]]" on-response="_handleResponse"></iron-ajax>
+    <iron-ajax id="ajaxElement" url$="[[target]]" content-type="application/json" method$="[[method]]" handle-as="json" on-error="_handleError" headers$='[[headers]]' body$="[[body]]" on-response="_handleResponse"></iron-ajax>
     <paper-dialog id="dialog" modal>
          <h2>Are you sure ?</h2>
          <div class="buttons">
@@ -99,7 +99,7 @@ If you want to save it in bower.json file, remember to add flag --save
          </div>
      </paper-dialog>
     <div id="UploadBorder">
-          <bwt-image-preview id="preview" height="[[height]]"></bwt-image-preview>
+          <bwt-image-preview id="preview" height$="[[height]]" image="[[image]]"></bwt-image-preview>
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
               <div class="template-div-delete" on-click="_deleteItem" hidden$="[[_deleteFlag]]">
@@ -140,7 +140,7 @@ If you want to save it in bower.json file, remember to add flag --save
           notify:true,
           reflectToAttribute:true
         },
-
+         // Object which contains the response as well as any other properties to be passed on to the api
         body:{
           type:Object,
           value:{},
@@ -189,7 +189,7 @@ If you want to save it in bower.json file, remember to add flag --save
         _deleteFlag:{
           type:Boolean,
           value:true
-        }
+        },
 
      },
      behaviors: [BwtUploadBehavior],
@@ -231,6 +231,7 @@ If you want to save it in bower.json file, remember to add flag --save
        }
      },
      _deleteItem: function(){
+       window.document.body.appendChild(this.$.dialog);
        this.$.dialog.open();
      },
      _removeImg: function() {
@@ -255,6 +256,8 @@ If you want to save it in bower.json file, remember to add flag --save
             val: false,
             msg: ''
         };
+        this.set('body.response',e.detail.response);
+        this.notifyPath('body.response');
         this._deleteFlag=false;
       },
       _handleError:function(e){

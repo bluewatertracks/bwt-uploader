@@ -67,7 +67,8 @@
             theme: {
                 type: String,
                 value: 'circle',
-                notify: true
+                notify: true,
+                reflectToAttribute:true
             },
             // url of the image to be displayed, this can be used mixed with the placeholder
             image: {
@@ -81,17 +82,9 @@
              **/
             placeholder: {
                 type: String,
-                value: '../images/placeholder.png',
+                value: '/bower_components/bwt-uploader/images/placeholder.png',
                 notify: true
-            },
-            /**
-             * value to be databinded, this will give the value of the output url
-             **/
-            value: {
-                type: String,
-                value: ''
             }
-
         },
         _hasWrongMimeType: function(file, acceptedFileTypes) {
             acceptedFileTypes = acceptedFileTypes.split(',');
