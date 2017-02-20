@@ -126,8 +126,10 @@
             if (file.type === 'application/pdf') {
                 this.set('file.progress', 40);
                 this.notifyPath('file.progress');
-                this._getDocumentPreview(file);
-                this._upload(file);
+                this._getDocumentPreview(file)
+                    .then( function(image){
+                      this._uploadPdf(file,image);
+                    }.bind(this));
             } else {
                 this.$.preview._createImagePreview(file)
                     .then(function(img) {
@@ -150,38 +152,42 @@
             this.set('file.progress',60);
             this.notifyPath('file.progress');
             PDFJS.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.7.246/pdf.worker.min.js'; // there is no proper way to load this thing other than a cdn
-            this._createArrayBufferFie(file)
-                .then(function (buffer) {
-                  PDFJS.getDocument(buffer).then(function(pdf) {
-                      pdf.getPage(1).then(function(page) {
-                          var scale = 1.5;
-                          var viewport = page.getViewport(scale);
-                          var canvas = document.createElement('canvas');
-                          var context = canvas.getContext('2d');
-                          canvas.height = 800;
-                          canvas.width = 800;
+            return new Promise( function(resolve,reject){
+                this._createArrayBufferFie(file)
+                    .then(function (buffer) {
+                      PDFJS.getDocument(buffer).then(function(pdf) {
 
-                          var task = page.render({
-                              canvasContext: context,
-                              viewport: viewport
-                          });
+                          pdf.getPage(1).then(function(page) {
+                              var scale = 1.5;
+                              var viewport = page.getViewport(scale);
+                              var canvas = document.createElement('canvas');
+                              var context = canvas.getContext('2d');
+                              canvas.height = 400;
+                              canvas.width = 400;
 
-                          task.promise.then(function() {
-                              this.image = canvas.toDataURL("image/jpeg");
-                              this.$.preview._updateImage(this.placeholder,this.image); // hacky but it works, need to figure out why image wont update on binding
-                          }.bind(this));
-                      }.bind(this))
-                  }.bind(this));
-                }.bind(this))
-                .catch( function(error) {
-                  this.set('file.error', true);
-                  this.notifyPath('file.error');
-                  this.error = {
-                    msg: 'File Couldn\'t be uploaded',
-                    val: true
-                  };
-                  this.notifyPath('error');
-                }.bind(this));
+                              var task = page.render({
+                                  canvasContext: context,
+                                  viewport: viewport
+                              });
+
+                              task.promise.then(function() {
+                                    this.image = canvas.toDataURL("image/jpeg");
+                                    this.$.preview._updateImage(this.placeholder,this.image); // hacky but it works, need to figure out why image wont update on binding
+                                    return resolve(this.image);
+                              }.bind(this));
+                          }.bind(this))
+                      }.bind(this));
+                    }.bind(this))
+                    .catch( function(error) {
+                      this.set('file.error', true);
+                      this.notifyPath('file.error');
+                      this.error = {
+                        msg: 'File Couldn\'t be uploaded',
+                        val: true
+                      };
+                      this.notifyPath('error');
+                    }.bind(this));
+            }.bind(this));
         },
         _createImageFile: function(image) {
             var img = new Image();
@@ -199,13 +205,25 @@
             fileReader.readAsArrayBuffer(file);
           });
         },
-        _upload: function(file) {
+        _upload: function(file,img) {
             this.set('file.progress',80);
             this.notifyPath('file.progress');
             var ajax = this.$.ajaxElement;
+
+            ajax.contentType="application/json";
             ajax.body=this.body;
             ajax.body.file = file;
+            if(img) ajax.body.thumbnail = img;
             this.$.ajaxElement.generateRequest();
+        },
+        _uploadPdf: function(file, img) {
+          var  fileReader = new FileReader();
+            fileReader.onload = function(ev) {
+              this._upload(ev.target.result,img);
+            }.bind(this);
+          fileReader.readAsDataURL(file);
+          this.set('file.progress',80);
+          this.notifyPath('file.progress');
         }
     };
 </script>
