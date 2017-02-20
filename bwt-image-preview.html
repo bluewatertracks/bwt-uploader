@@ -49,6 +49,14 @@
       background-size:cover !important;
     }
 
+    .largeSquareContainer {
+        height:600px;
+        width:600px;
+        order: 1;
+        flex: wrap;
+        border:  var(--preview-border,1px dashed #dbdbdb);
+        overflow: hidden;
+    }
     </style>
     <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
       <div class$="[[className]]">
