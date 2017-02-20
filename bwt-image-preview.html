@@ -26,18 +26,13 @@
       font-weight: 400;
     }
 
-     .imageCircleContainer,.imageSquareContainer{
+     .imageCircleContainer, .imageSquareContainer{
       order: 1;
       flex: wrap;
       border:  var(--preview-border,1px dashed #dbdbdb);
       overflow: hidden;
       width: var(--preview-width, 250px);
       height: var(--preview-height, 250px);
-    }
-
-    .largeImageContainer {
-      height: 800px;
-      width: 800px;
     }
 
     .img {
@@ -56,12 +51,12 @@
 
     </style>
     <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
-      <div class="imageCircleContainer">
+      <div class$="[[className]]">
          <div class="img" style="background: url('[[image]]') no-repeat center center;"></div>
       </div>
     </template>
     <template is="dom-if" if="{{ _checkTheme(theme,'square') }}">
-      <div class="imageSquareContainer">
+      <div class$="[[className]]">
          <div class="img" style="background: url('[[image]]') no-repeat left top;"></div>
       </div>
     </template>
@@ -69,13 +64,33 @@
     <script>
         Polymer({
             is: 'bwt-image-preview',
+            properties: {
+              className: {
+                type:String,
+                notify:true
+              }
+            },
             behaviors: [BwtUploadBehavior],
-            observers: ['_updateImage(placeholder,image)'],
+            observers: [
+                        '_updateImage(placeholder,image)',
+                        '_generateClassNames(theme,image)'
+                      ],
             _checkTheme: function(theme, shape) {
                 return (theme === shape) ? true : false;
             },
+            _generateClassNames: function(theme,image,placeholder){
+              if(theme === 'circle' && !this.customClass){
+                this.className = 'imageCircleContainer';
+              }
+              else if (theme === 'square' && !this.customClass) {
+                this.className = 'imageSquareContainer';
+              }
+              else if(this.customClass && this.image !== this.placeholder){
+                this.className = this.customClass;
+              }
+            },
             _updateImage: function(placeholder, image) {
-                this.image = (placeholder && image) ? image : placeholder;
+               this.image = (placeholder && image) ? image : placeholder;
             },
             _createImagePreview: function(file,b64) {
                 file.progress = 40;

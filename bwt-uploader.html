@@ -99,7 +99,7 @@ If you want to save it in bower.json file, remember to add flag --save
          </div>
      </paper-dialog>
     <div id="UploadBorder">
-          <bwt-image-preview id="preview" theme="[[theme]]" height$="[[height]]" image="[[image]]"></bwt-image-preview>
+          <bwt-image-preview id="preview" theme="[[theme]]" height$="[[height]]" image="[[image]]" file="[[file]]" custom-class="[[customClass]]"></bwt-image-preview>
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
               <div class="template-div-delete" on-click="_deleteItem" hidden$="[[_deleteFlag]]">
@@ -240,6 +240,8 @@ If you want to save it in bower.json file, remember to add flag --save
           val: false,
           msg: ''
        };
+       this.body = {};
+       this.notifyPath('body');
        this.notifyPath('error');
        this._deleteFlag=true;
      },
@@ -256,7 +258,7 @@ If you want to save it in bower.json file, remember to add flag --save
             msg: ''
         };
         this.set('body.response',e.detail.response);
-        this.notifyPath('body.response');
+        this.notifyPath('body');
         this._deleteFlag=false;
       },
       _handleError:function(e){
