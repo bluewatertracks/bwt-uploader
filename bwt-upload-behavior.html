@@ -91,13 +91,9 @@
               notify:true
             },
             customClass: {
-              type:String,
-              value:'',
+              type:Boolean,
+              value:false,
               notify:true
-            },
-            customCss:{
-              type:Object,
-              value:{}
             }
         },
         _hasWrongMimeType: function(file, acceptedFileTypes) {
@@ -172,7 +168,7 @@
                       PDFJS.getDocument(buffer).then(function(pdf) {
 
                           pdf.getPage(1).then(function(page) {
-                              var scale = 0.5;
+                              var scale = 0.36;
                               var viewport = page.getViewport(scale);
                               var canvas = document.createElement('canvas');
                               var context = canvas.getContext('2d');

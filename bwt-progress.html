@@ -24,7 +24,7 @@
         width: 85%;
         margin-top: 8px;
       }
-     
+
 
       paper-progress {
         --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
@@ -37,6 +37,7 @@
       }
     </style>
     <div class="progress-bars">
+      [[error.val]]
       <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
       <span class="name" hidden$="[[file.error]]">[[file.name]][[file.progress]]</span>
       <div class="file">
@@ -55,7 +56,7 @@
   <script>
     Polymer({
       is: 'bwt-progress-bar',
-      behaviors: [BwtUploadBehavior], 
+      behaviors: [BwtUploadBehavior],
       _showHideProgress: function (progress) {
         return (progress < 100) ? false : true;
       }

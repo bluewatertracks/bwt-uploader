@@ -49,13 +49,19 @@
       background-size:cover !important;
     }
 
-    .largeSquareContainer {
-        height:600px;
-        width:600px;
+    .customContainer {
+        width: var(--preview-width-custom-class, 250px);
+        height: var(--preview-height-custom-class, 250px);
         order: 1;
         flex: wrap;
         border:  var(--preview-border,1px dashed #dbdbdb);
         overflow: hidden;
+    }
+
+    .customContainer > .img {
+      width: var(--preview-width-custom-class, 250px);
+      height: var(--preview-height-custom-class, 250px);
+      background-size: var(--background-size-custom-class, 250px) !important;
     }
     </style>
     <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
@@ -95,20 +101,13 @@
                 if(theme == 'square') this.className = 'imageSquareContainer';
                 else this.className = 'imageCircleContainer';
               }else if(this.customClass) {
-                this.className = this.customClass;
+                this.className = 'customContainer';
               }
-              // if(!this.customClass && this.image === this.placeholder){
-              //   if(theme === 'circle')
-              //    this.className = 'imageCircleContainer';
-              //   else
-              //    this.className = 'imageSquareContainer';
-              //  }
-              // else if(this.customClass && this.image !== this.placeholder){
-              //   this.className = this.customClass;
-              // }
             },
             _updateImage: function(placeholder, image) {
                this.image = (placeholder && image) ? image : placeholder;
+               this.set('error',{ val: false, msg: '' });
+               this.notifyPath('error');
             },
             _createImagePreview: function(file,b64) {
                 file.progress = 40;
