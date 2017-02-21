@@ -81,21 +81,31 @@
             behaviors: [BwtUploadBehavior],
             observers: [
                         '_updateImage(placeholder,image)',
-                        '_generateClassNames(theme,image)'
+                        '_generateClassNames(theme,image,placeholder)'
                       ],
             _checkTheme: function(theme, shape) {
                 return (theme === shape) ? true : false;
             },
             _generateClassNames: function(theme,image,placeholder){
-              if(theme === 'circle' && !this.customClass){
-                this.className = 'imageCircleContainer';
+              if(image.length === placeholder.length) {
+                if(theme === 'square') this.className = 'imageSquareContainer';
+                else this.className = 'imageCircleContainer';
               }
-              else if (theme === 'square' && !this.customClass) {
-                this.className = 'imageSquareContainer';
-              }
-              else if(this.customClass && this.image !== this.placeholder){
+              else if(image == '') {
+                if(theme == 'square') this.className = 'imageSquareContainer';
+                else this.className = 'imageCircleContainer';
+              }else if(this.customClass) {
                 this.className = this.customClass;
               }
+              // if(!this.customClass && this.image === this.placeholder){
+              //   if(theme === 'circle')
+              //    this.className = 'imageCircleContainer';
+              //   else
+              //    this.className = 'imageSquareContainer';
+              //  }
+              // else if(this.customClass && this.image !== this.placeholder){
+              //   this.className = this.customClass;
+              // }
             },
             _updateImage: function(placeholder, image) {
                this.image = (placeholder && image) ? image : placeholder;
