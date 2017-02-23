@@ -283,8 +283,12 @@ If you want to save it in bower.json file, remember to add flag --save
       },
       reset: function(){
         this._hideDelete = true;
-        this.set('file', true);
+        this.set('file', {});
         this.image = '';
+        this.set('error', {
+           val: false,
+           msg: ''
+        });
       }
     });
   </script>

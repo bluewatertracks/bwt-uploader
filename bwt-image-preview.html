@@ -61,7 +61,6 @@
     .customContainer > .img {
       width: var(--preview-width-custom-class, 250px);
       height: var(--preview-height-custom-class, 250px);
-      background-size: var(--background-size-custom-class, 250px) !important;
     }
     </style>
     <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
@@ -106,7 +105,7 @@
             },
             _updateImage: function(placeholder, image) {
                this.image = (placeholder && image) ? image : placeholder;
-               this.set('error',{ val: false, msg: '' });               
+               this.set('error',{ val: false, msg: '' });
                this.notifyPath('error');
             },
             _createImagePreview: function(file,b64) {

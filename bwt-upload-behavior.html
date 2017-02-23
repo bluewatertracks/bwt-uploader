@@ -97,9 +97,8 @@
             }
         },
         _hasWrongMimeType: function(file, acceptedFileTypes) {
-            if(file.length == 0 || !file.hasOwnProperty('name')) return;
             acceptedFileTypes = acceptedFileTypes.split(',');
-            if (acceptedFileTypes.indexOf(file.type) == -1)
+            if (acceptedFileTypes.indexOf(file.type) <= -1)
                 this.error = {
                     msg: 'Invalid file type, please upload an accepted file type',
                     val: true
