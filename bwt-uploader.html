@@ -99,11 +99,19 @@ If you want to save it in bower.json file, remember to add flag --save
          </div>
      </paper-dialog>
     <div id="UploadBorder">
-          <bwt-image-preview id="preview" error="{{error}}" placeholder="[[placeholder]]" theme="[[theme]]" height$="[[height]]" image="[[image]]" file="[[file]]" custom-class="[[customClass]]" custom-css="[[customCss]]">
+          <bwt-image-preview id="preview"
+                  error="{{error}}"
+                  placeholder="[[placeholder]]"
+                  theme="[[theme]]"
+                  height$="[[height]]"
+                  image="[[image]]"
+                  file="[[file]]"
+                  custom-class="[[customClass]]"
+          >
           </bwt-image-preview>
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
-              <div class="template-div-delete" on-click="_deleteItem" hidden$="[[_deleteFlag]]">
+              <div  id="delete-button" class="template-div-delete" on-click="_deleteItem" hidden="[[_hideDelete]]">
                   <iron-icon icon="icons:clear" title="Remove Item"></iron-icon>
                   <span> Delete Item</span>
               </div>
@@ -186,16 +194,17 @@ If you want to save it in bower.json file, remember to add flag --save
           type:Object,
           value: {}
         },
-
-        _deleteFlag:{
+        _hideDelete: {
           type:Boolean,
+          reflectToAttribute:true,
+          notify:true,
           value:true
-        },
-
+        }
      },
      behaviors: [BwtUploadBehavior],
      ready:function() {
        var uploadBorder = this.$.UploadBorder;
+       this._hideDelete = true;
        this.toggleClass('enabled', true, uploadBorder);
        this.ondragover = function(e) {
            e.stopPropagation();
@@ -237,17 +246,19 @@ If you want to save it in bower.json file, remember to add flag --save
      },
      _removeImg: function() {
        this.$.preview.image="";
-       this.file = null;
+       this.file = {};
        this.error = {
           val: false,
           msg: ''
        };
        this.body = {};
+       this.notifyPath('file');
        this.notifyPath('body');
        this.notifyPath('error');
-       this._deleteFlag=true;
+       this._hideDelete = true;
      },
      _fileChange: function(e) {
+       this._hideDelete = true;
        var files = e.target.files;
        this._removeImg();
        this._uploadFile(files);
@@ -255,19 +266,25 @@ If you want to save it in bower.json file, remember to add flag --save
      _handleResponse:function(e){
         this.file.progress = 100;
         this.notifyPath('file.progress');
-        this.error = {
-            val: false,
-            msg: ''
-        };
         this.set('body.response',e.detail.response);
         this.notifyPath('body');
-        this._deleteFlag=false;
+        this.set('error', {
+            val: false,
+            msg: ''
+        });
+        this.set('file.complete', true);
+        this._hideDelete = false;
       },
       _handleError:function(e){
         this.file.progress = 0;
         this.file.error = true;
         this.notifyPath('file.progress');
         this.notifyPath('file.error');
+      },
+      reset: function(){
+        this._hideDelete = true;
+        this.set('file', true);
+        this.image = '';
       }
     });
   </script>

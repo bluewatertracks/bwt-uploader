@@ -106,7 +106,7 @@
             },
             _updateImage: function(placeholder, image) {
                this.image = (placeholder && image) ? image : placeholder;
-               this.set('error',{ val: false, msg: '' });
+               this.set('error',{ val: false, msg: '' });               
                this.notifyPath('error');
             },
             _createImagePreview: function(file,b64) {
