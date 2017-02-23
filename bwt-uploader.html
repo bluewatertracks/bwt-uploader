@@ -269,7 +269,7 @@ If you want to save it in bower.json file, remember to add flag --save
        var files = e.target.files;
        this._removeImg();
        if(files.length) this._uploadFile(files);
-       
+       this.$.fileInput.value = "";
      },
      _handleResponse:function(e){
         this.file.progress = 100;
