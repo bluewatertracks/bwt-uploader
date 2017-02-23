@@ -124,6 +124,13 @@ If you want to save it in bower.json file, remember to add flag --save
   <script>
     Polymer({
       is: 'bwt-uploader',
+      
+      /**
+     * Fired when a response is received.
+     *
+     * @event bwt-uploader-response
+     */
+      
       properties: {
         /**
          * Ajax end point where the file should upload to eg: /api/image/upload
@@ -261,7 +268,8 @@ If you want to save it in bower.json file, remember to add flag --save
        this._hideDelete = true;
        var files = e.target.files;
        this._removeImg();
-       this._uploadFile(files);
+       if(files.length) this._uploadFile(files);
+       
      },
      _handleResponse:function(e){
         this.file.progress = 100;
@@ -274,10 +282,12 @@ If you want to save it in bower.json file, remember to add flag --save
         });
         this.set('file.complete', true);
         this._hideDelete = false;
+        this.fire('bwt-uploader-response',e, e.detail.response);
       },
       _handleError:function(e){
         this.file.progress = 0;
         this.file.error = true;
+        this._hideDelete = false;
         this.notifyPath('file.progress');
         this.notifyPath('file.error');
       },
