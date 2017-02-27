@@ -36,7 +36,8 @@ Custom property | Description | Default
 `--progress-bar-color` | Progress bar color | `#03a9f4`
 `--progress-bar-height` | Progress bar color | `5px`
 `--primary-text-color` | Description text color | `#9b9b9b`
-`--secondary-text-color`| Browse text color | `#1976d3`
+`--secondary-text-color`| Browse text color | `#1976d3`,
+`--progress-error-color` | Progress bar error and error text color | `#f40303`
 
 ### Installation
 
@@ -266,7 +267,6 @@ If you want to save it in bower.json file, remember to add flag --save
        this.$.dialog.open();
      },
      _confirmDelete: function(e){
-       this.fire('bwt-uploader-delete',e);
        this._removeImg();
      },
      _removeImg: function(e) {
@@ -281,6 +281,7 @@ If you want to save it in bower.json file, remember to add flag --save
        this.notifyPath('body');
        this.notifyPath('error');
        this._hideDelete = true;
+        this.fire('delete',{"deleted":true});
      },
      _fileChange: function(e) {
        this._hideDelete = true;
@@ -302,14 +303,14 @@ If you want to save it in bower.json file, remember to add flag --save
         this._hideDelete = false;
         this.fire('bwt-uploader-response',e.detail.response);
       },
-      _handleError:function(e){
-        this.file.progress = 0;
-        this.file.error = true;
-        this._hideDelete = false;
+     _handleError:function(e){
+        this.file.progress = 80; // Means Error occured
         this.notifyPath('file.progress');
+        this.file.error = true;
         this.notifyPath('file.error');
+        this._hideDelete = false;
         this.set('error',{
-          msg: e.detail.request.xhr.response.msg,
+          msg:e.detail.request.xhr.response ? e.detail.request.xhr.response.msg : "Error occured",
           val:true
         });
         this.fire('bwt-uploader-error',e.detail.request.xhr.response);
