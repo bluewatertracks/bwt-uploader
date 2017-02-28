@@ -1,0 +1,78 @@
+<!--
+  @element bwt-progress-bar
+-->
+<link rel="import" href="bwt-upload-behavior.html">
+<dom-module id="bwt-progress-bar">
+  <template>
+    <style is="custom-style">
+       :host {
+        display: block;
+      }
+
+      .progress-details {
+        display: flex;
+      }
+
+      .file {
+        display: flex;
+      }
+
+      .file .progress-details {
+        order: 2;
+        width: 15%;
+      }
+
+      .file .progress-bar {
+        order: 1;
+        width: 85%;
+        margin-top: 8px;
+      }
+
+       paper-progress {
+        --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
+        --paper-progress-height: var(--progress-bar-height, 4px);
+        --paper-progress-indeterminate-cycle-duration: 3s;
+        @apply(--bwt-progress-bar-file-progress);
+      }
+      paper-progress[error] {
+        --paper-progress-active-color: var(--progress-error-color, #f40303);
+        --paper-progress-height: var(--progress-bar-height, 4px);
+        --paper-progress-indeterminate-cycle-duration: 3s;
+        @apply(--bwt-progress-bar-file-error);
+      }
+
+      .error {
+        color: var(--progress-error-color, #f40303);
+      }
+    </style>
+    <div class="progress-bars">
+      <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
+      <div class="file">
+        <div class="progress-details">
+          <div class="commands">
+            <iron-icon icon="file-upload-icons:autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="[[!file.error]]"></iron-icon>
+            <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
+          </div>
+        </div>
+        <div class="progress-bar" id="progressbar" hidden$="[[_showHideProgress(file.progress)]]">
+          <paper-progress  value$="[[file.progress]]" id="paperProgress" error$="[[file.error]]"></paper-progress>
+        </div>
+
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'bwt-progress-bar',
+      behaviors: [BwtUploadBehavior],
+      observers:['_onError(file.error)'],
+      _showHideProgress: function (progress) {
+        return (progress < 100) ? false : true;
+      },
+      _onError:function(error){
+         this.$.paperProgress.updateStyles();
+      }
+    
+    });
+  </script>
+</dom-module>

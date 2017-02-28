@@ -1,0 +1,241 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>bwt-uploader tests</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../bwt-uploader.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <bwt-uploader></bwt-uploader>
+      </template>
+    </test-fixture>
+
+    <template is="dom-bind" id="custom-properties">
+        <bwt-uploader id="uploader" resize="[[resize]]" headers="[[headers]]" upload-text="[[uploadText]]" method="[[method]]" max-file-size="[[maxFileSize]]" accepted-file-types="[[fileTypes]]" target="[[target]]" height="[[height]]"></bwt-uploader>
+    </template>
+
+    <template is="dom-bind" id="image-uploader">
+        <bwt-uploader id="uploader" target="http://httpbin.org/post"></bwt-uploader>
+    </template>
+
+    <template is="dom-bind" id="pdf-uploader">
+        <bwt-uploader id="uploader" target="http://httpbin.org/post" accepted-file-types="application/pdf"></bwt-uploader>
+    </template>
+
+    <test-fixture id="error-tests">
+      <template>
+        <bwt-uploader id="uploader" target="http://httpbin.org/post" max-file-size="100" accepted-file-types="application/pdf"></bwt-uploader>
+      </template>
+    </test-fixture>
+
+    <script>
+      var fileNumber = 0;
+      function createFile(fileSize, contentType) {
+        var array = [];
+        for (var i = 0; i < (fileSize || 999); i++) {
+          array.push('A');
+        }
+        var file = new Blob([new Uint8Array(array)], {type: contentType});
+        file.name = 'file-' + fileNumber++;
+        return file;
+      }
+
+      suite('bwt-uploader basic', function() {
+        var basicFixture;
+        setup(function() {
+          basicFixture = fixture('basic');
+        });
+        
+        test('instantiating the element works', function() {
+          assert.strictEqual(basicFixture.is, 'bwt-uploader');
+        });
+
+        test('default target value', function() {
+          assert.strictEqual(basicFixture.target, '');
+        });
+
+        test('default ajax method', function() {
+          assert.strictEqual(basicFixture.method, 'POST');
+        });
+
+        test('default headers value', function() {
+          assert.deepEqual(basicFixture.headers, {});
+        });
+
+        test('default body value', function() {
+          assert.deepEqual(basicFixture.body, {});
+        });
+
+        test('default upload text', function() {
+          assert.strictEqual(basicFixture.uploadText, 'Drag your file to this area');
+        });
+
+        test('default allowed file types', function() {
+          assert.strictEqual(basicFixture.acceptedFileTypes, 'image/jpg,image/jpeg,image/png,image/bmp');
+        });
+
+        test('default max file size', function() {
+          assert.strictEqual(basicFixture.maxFileSize, 1000);
+        });
+
+        test('default resize value', function() {
+          assert.isFalse(basicFixture.resize);
+        })
+
+        test('default height size', function() {
+          assert.isNull(basicFixture.height);
+        });
+
+      });
+
+      suite('bwt-uploader custom settings', function() {
+
+        test('custom target value', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.target = "http://path-to-some-server.com/api/upload";
+          assert.strictEqual(scope.$.uploader.target, scope.target);
+        });
+
+        test('custom method value', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.method = "PUT";
+          assert.strictEqual(scope.$.uploader.method, scope.method);
+        });
+
+        test('custom headers value', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.headers = { 
+            "Content-Type": "application/x-www-form-urlencoded"
+          };
+          assert.strictEqual(scope.$.uploader.headers, scope.headers);
+        });
+
+        test('custom upload text', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.uploadText = "Custom text";
+          assert.strictEqual(scope.$.uploader.uploadText, scope.uploadText);
+        });
+
+        test('custom file types', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.fileTypes = "image/jpeg";
+          assert.strictEqual(scope.$.uploader.acceptedFileTypes, scope.fileTypes);
+        });
+        
+        test('custom max file size', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.maxFileSize = 2000;
+          assert.strictEqual(scope.$.uploader.maxFileSize, scope.maxFileSize);
+        });
+
+        test('custom resize property', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.resize = true;
+          assert.isTrue(scope.$.uploader.resize);
+        });
+
+        test('custom height value', function() {
+          var scope = document.querySelector('#custom-properties');
+          scope.height = 750;
+          assert.strictEqual(scope.$.uploader.height, scope.height);
+        });
+      });
+
+      suite('bwt-uploader image upload', function() {
+        test('upload image file', function(done) {
+          var scope = document.querySelector('#image-uploader');
+          var file = createFile(256, 'image/jpg');
+          scope.$.uploader.$.ajaxElement.addEventListener('response', function(e) {
+            var responseBody = e.detail.response;
+            assert.isObject(responseBody);
+            assert.equal(responseBody.url, scope.$.uploader.target);
+            assert.isString(responseBody.data);
+            assert.isObject(responseBody.json);
+            assert.deepEqual(responseBody.json, scope.$.uploader.body);
+            done();
+          });
+          scope.$.uploader._uploadFile([file]);
+        });
+
+        test('image preview', function() {
+          var scope = document.querySelector('#image-uploader');
+          var imagePreview = scope.$.uploader.$.preview.querySelector('.img');
+          assert.isNotNull(imagePreview);
+          var matchImageUrl = imagePreview.style.background.indexOf(scope.$.uploader.body.file);
+          assert.isAbove(matchImageUrl, -1);
+        });
+
+      });
+
+      suite('bwt-uploader pdf upload', function() {
+        test('upload pdf file', function(done) {
+          var scope = document.querySelector('#pdf-uploader');
+          var pdfFile = createFile(900, 'application/pdf');
+          scope.$.uploader.$.ajaxElement.addEventListener('response', function(e) {
+            var responseBody = e.detail.response;
+            assert.isObject(responseBody);
+            assert.equal(responseBody.url, scope.$.uploader.target);
+            assert.isString(responseBody.data);
+            assert.isObject(responseBody.json);
+            done();
+          });
+          scope.$.uploader._uploadFile([pdfFile]);
+        });
+
+        test('pdf preview', function() {
+          var scope = document.querySelector('#image-uploader');
+          var imagePreview = scope.$.uploader.$.preview.querySelector('.img');
+          assert.isNotNull(imagePreview);
+          var matchImageUrl = imagePreview.style.background.indexOf(scope.$.uploader.image);
+          assert.isAbove(matchImageUrl, -1);
+        });
+      });
+
+      suite('bwt-uploader errors test', function() {
+        var errorFixture;
+        setup(function() {
+          errorFixture = fixture('error-tests');
+        });
+
+        test('upload file with wrong type', function() {
+          var pdfFile = createFile(90, 'application/unknown');
+          assert.isObject(errorFixture.error);
+          assert.isFalse(errorFixture.error.val);
+          assert.equal(errorFixture.error.msg, '');
+          errorFixture._uploadFile([pdfFile]);
+          assert.isTrue(errorFixture.error.val);
+          assert.equal(errorFixture.error.msg, 'Invalid file type, please upload an accepted file type');
+        });
+
+        test('upload file with big size', function() {
+          var pdfFile = createFile(1000000, 'application/pdf');
+          assert.isObject(errorFixture.error);
+          assert.isFalse(errorFixture.error.val);
+          assert.equal(errorFixture.error.msg, '');
+          errorFixture._uploadFile([pdfFile]);
+          assert.isTrue(errorFixture.error.val);
+          assert.equal(errorFixture.error.msg, 'The uploaded file exceeds 100 KB');
+        });
+
+        test('upload multiple files', function() {
+          var pdfFile = createFile(99, 'application/pdf');
+          assert.isObject(errorFixture.error);
+          assert.isFalse(errorFixture.error.val);
+          assert.equal(errorFixture.error.msg, '');
+          errorFixture._uploadFile([pdfFile, 2, 3]);
+          assert.isTrue(errorFixture.error.val);
+          assert.equal(errorFixture.error.msg, 'You can only upload one file at a time');
+        });
+      });
+
+    </script>
+  </body>
+</html>

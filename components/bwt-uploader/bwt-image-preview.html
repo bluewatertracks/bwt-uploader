@@ -1,0 +1,126 @@
+<link rel="import" href="bwt-upload-behavior.html">
+<dom-module id="bwt-image-preview">
+    <template>
+    <style is="custom-style">
+    :host {
+      display: block;
+    }
+
+    .template-div-droptext>span {
+        text-align: center;
+    }
+
+    .template-div-droptext .template-span-button,.template-div-delete, iron-icon  {
+      color: #1976d3;
+      cursor: pointer;
+    }
+
+    .template-div-delete, .template-div-delete iron-icon{
+      height: 42px;
+      line-height: 43px;
+      color: #9b9b9b;
+    }
+
+    .template-div-droptext span:nth-child(2){
+      text-align: left;
+      font-weight: 400;
+    }
+
+     .imageCircleContainer, .imageSquareContainer{
+      order: 1;
+      flex: wrap;
+      border:  var(--preview-border,1px dashed #dbdbdb);
+      overflow: hidden;
+      width: var(--preview-width, 250px);
+      height: var(--preview-height, 250px);
+    }
+
+    .img {
+      height:inherit;
+      width:inherit;
+      display: block;
+    }
+
+    .imageCircleContainer {
+      border-radius: 100%;
+    }
+
+    .imageCircleContainer>div {
+      background-size:cover !important;
+    }
+
+    .customContainer {
+        width: var(--preview-width-custom-class, 250px);
+        height: var(--preview-height-custom-class, 250px);
+        order: 1;
+        flex: wrap;
+        border:  var(--preview-border,1px dashed #dbdbdb);
+        overflow: hidden;
+    }
+
+    .customContainer > .img {
+      width: var(--preview-width-custom-class, 250px);
+      height: var(--preview-height-custom-class, 250px);
+    }
+    </style>
+    <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
+      <div class$="[[className]]">
+         <div class="img" style="background: url('[[image]]') no-repeat center center;"></div>
+      </div>
+    </template>
+    <template is="dom-if" if="{{ _checkTheme(theme,'square') }}">
+      <div class$="[[className]]">
+         <div class="img" style="background: url('[[image]]') no-repeat left top;"></div>
+      </div>
+    </template>
+    </template>
+    <script>
+        Polymer({
+            is: 'bwt-image-preview',
+            properties: {
+              className: {
+                type:String,
+                notify:true
+              }
+            },
+            behaviors: [BwtUploadBehavior],
+            observers: [
+                        '_updateImage(placeholder,image)',
+                        '_generateClassNames(theme,image,placeholder)'
+                      ],
+            _checkTheme: function(theme, shape) {
+                return (theme === shape) ? true : false;
+            },
+            _generateClassNames: function(theme,image,placeholder){
+              if(image.length === placeholder.length) {
+                if(theme === 'square') this.className = 'imageSquareContainer';
+                else this.className = 'imageCircleContainer';
+              }
+              else if(image == '') {
+                if(theme == 'square') this.className = 'imageSquareContainer';
+                else this.className = 'imageCircleContainer';
+              }else if(this.customClass) {
+                this.className = 'customContainer';
+              }
+            },
+            _updateImage: function(placeholder, image) {
+               this.image = (placeholder && image) ? image : placeholder;
+               this.set('error',{ val: false, msg: '' });
+               this.notifyPath('error');
+            },
+            _createImagePreview: function(file,b64) {
+                file.progress = 40;
+                this.notifyPath('file.progress');
+                  var fr = new FileReader();
+                  return new Promise(function(resolve, reject) {
+                      fr.onload = function(e) {
+                          var image = e.target.result;
+                          this.image = image;
+                          resolve(image);
+                      }.bind(this);
+                      fr.readAsDataURL(file);
+                  }.bind(this));
+            },
+        });
+    </script>
+</dom-module>

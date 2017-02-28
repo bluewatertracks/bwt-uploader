@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>bw-uploader demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../bwt-uploader.html">
+  <style is="custom-style" include="demo-pages-shared-styles">
+    .centered:not([style-scope]):not(.style-scope) {
+      max-width: 702px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vertical-section-container centered">
+    <h3>Basic uploader with config for uploading an image</h3>
+    <demo-snippet>
+      <template is="dom-bind" id="app">
+        <bwt-uploader id="imgUploader" target="https://httpbin.org/post"
+                                       body="[[body]]"
+                                       header="[[header]]"
+                                       method="POST"
+        >
+        </bwt-uploader>
+      </template>
+    </demo-snippet>
+    The header and method fields are optional, If the method field is not placed, the method would default to post. Also the header field is expected to be an object and is for authorization purposes.
+  </div>
+  <div class="vertical-section-container centered">
+    <h3>Uploading a pdf file and changing the theme</h3>
+    <demo-snippet>
+      <template>
+        <bwt-uploader target="https://httpbin.org/post"
+                      method="POST"
+                      accepted-file-types="application/pdf"
+        >
+        </bwt-uploader>
+      </template>
+    </demo-snippet>
+    The accepted-file-type field needs to be set to application/pdf for the uploader to upload a pdf document where as the theme field is an optional one. by default the theme is set to circlular preview area and the accepted file types are set to
+    the following images jpeg,jpg,png and bmp;
+  </div>
+  <div class="vertical-section-container centered">
+    <h3>Fields supported by custom style</h3>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          #uploader {
+            --preview-border: 1px dashed green;
+            --preview-width: 300px;
+            --preview-height: 300px;
+            --progress-bar-color: red;
+            --primary-text-color:green;
+            --secondary-text-color:brown;
+            --preview-border: 1px dashed green;
+            --preview-width: 150px;
+            --preview-height: 150px;
+          }
+        </style>
+        <bwt-uploader id="uploader" target="https://httpbin.org/post" method="POST" ></bwt-uploader>
+      </template>
+    </demo-snippet>
+  </div>
+  <div class="vertical-section-container centered">
+    <h3>Resizing an image</h3>
+    <demo-snippet>
+      <template>
+        <bwt-uploader target="https://httpbin.org/post" method="POST" height="200"  resize="true">
+        </bwt-uploader>
+      </template>
+    </demo-snippet>
+    Both the resize and height fields are required for the image to be resized, the uploader will throw and error in case only one of the fields are missing.
+  </div>
+  <script>
+    (function () {
+      var scope = document.querySelector('#app');
+      document.addEventListener('WebComponentsReady', function () {
+        scope.body = {
+          userId: "123456",
+          username: "xyz"
+        };
+      });
+    })();
+  </script>
+</body>
+
+</html>
