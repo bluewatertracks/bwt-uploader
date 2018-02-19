@@ -14,10 +14,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="bwt-progress.html">
-<link rel="import" href="bwt-image-preview.html">
-<link rel="import" href="bwt-upload-behavior.html">
-
+<!-- <link rel="import" href="bwt-progress.html"> -->
+<!-- <link rel="import" href="bwt-image-preview.html"> -->
+<link rel="import" href="bwt-upload-mixin.html">
+<!-- <link rel="import" href="bwt-camera-module.html"> -->
 
 <!--
 
@@ -54,8 +54,7 @@ If you want to save it in bower.json file, remember to add flag --save
 -->
 
 
-<dom-module id="bwt-uploader">
-  <template>
+<template>
     <style type="text/css" is="custom-style">
     :host {
         display: flex;
@@ -100,7 +99,7 @@ If you want to save it in bower.json file, remember to add flag --save
          </div>
      </paper-dialog>
     <div id="UploadBorder">
-          <bwt-image-preview id="preview"
+          <!-- <bwt-image-preview id="preview"
                   error="{{error}}"
                   placeholder="[[placeholder]]"
                   theme="[[theme]]"
@@ -109,222 +108,247 @@ If you want to save it in bower.json file, remember to add flag --save
                   file="[[file]]"
                   custom-class="[[customClass]]"
           >
-          </bwt-image-preview>
+          </bwt-image-preview> -->
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
+              <span on-click="_takePhoto" class="template-span-button"> or Take photo </span>
               <div  id="delete-button" class="template-div-delete" on-click="_deleteItem" hidden="[[_hideDelete]]">
                   <iron-icon icon="icons:clear" title="Remove Item"></iron-icon>
                   <span> Delete Item</span>
               </div>
-              <bwt-progress-bar file="[[file]]" error="[[error]]"></bwt-progress-bar>
+              <!-- <bwt-progress-bar file="[[file]]" error="[[error]]"></bwt-progress-bar> -->
           </div>
           <input type="file" id="fileInput" on-change="_fileChange" hidden accept="[[acceptedFileTypes]]">
     </div>
+    <bwt-camera-module on-click="_activateCamera"></bwt-camera-module>
   </template>
 
-  <script>
-    Polymer({
-      is: 'bwt-uploader',
-
-      /**
-     * Fired when a response is received.
-     *
-     * @event bwt-uploader-response
-     */
-
-     /**
-    * Fired when the confirm button is clicked on delete
-    *
-    * @event bwt-uploader-delete
-    */
-
-    /**
-   * Fired when the whole component is reset to initial state
-   *
-   * @event bwt-uploader-reset
-   */
-
-
-      properties: {
+<script>
+    class BWTUploader extends Polymer.Element { //BWTUploadMixin(Polymer.Element)
         /**
-         * Ajax end point where the file should upload to eg: /api/image/upload
-         **/
-        target: {
-          type:String,
-          value: ''
-        },
-        /**
-        * Request type, PUT Method can be placed instead of POST
-        **/
-        method: {
-          type:String,
-          value: 'POST',
-          reflectToAttribute:true
-        },
-        /**
-        * Additional Headers, empty by default
-        **/
-        headers: {
-          type:Object,
-          value: {},
-          notify:true,
-          reflectToAttribute:true
-        },
-         // Object which contains the response as well as any other properties to be passed on to the api
-        body:{
-          type:Object,
-          value:{},
-          notify:true
-        },
-        /** Plceholder text, not a lot to do but we thought it might be nice to have something just in case **/
-        uploadText: {
-          type:String,
-          value:'Drag your file to this area',
-          notify:true
-        },
-        /**Accepted File Types, The uploader is meant only for images and documents */
-        acceptedFileTypes: {
-          type:String,
-          value:'image/jpg,image/jpeg,image/png,image/bmp'
-        },
-        /** Maximum accepted File size in Kilo Bytes **/
-        maxFileSize: {
-          type:Number,
-          value:1000
-        },
-        /**
-        *  Set to true if the image uploaded is to be resized if the height is found to be greater than the height property below
-        **/
-        resize : {
-            type:Boolean,
-            value:false,
-            notify:true
-        },
-        /**
-        *
-          Height of resized image in pixels, width will be adjusted proptionally
-        **/
-        height: {
-          type:Number,
-          value: null
-        },
-        /**
-        * a value that the uploader expects to be data binded to
-        **/
-        value: {
-          type:Object,
-          value: {}
-        },
+         * Fired when a response is received.
+         *
+         * @event bwt-uploader-response
+         */
 
-        _hideDelete: {
-          type:Boolean,
-          reflectToAttribute:true,
-          notify:true,
-          value:true
+        /**
+         * Fired when the confirm button is clicked on delete
+         *
+         * @event bwt-uploader-delete
+         */
+
+        /**
+         * Fired when the whole component is reset to initial state
+         *
+         * @event bwt-uploader-reset
+         */
+
+        /**
+         * Fired when the camera captures image 
+         *
+         * @event bwt-camera-image-captured
+         */
+
+        static get is() {
+            return 'bwt-uploader';
         }
-     },
-     behaviors: [BwtUploadBehavior],
-     ready:function() {
-       var uploadBorder = this.$.UploadBorder;
-       this._hideDelete = true;
-       this.toggleClass('enabled', true, uploadBorder);
-       this.ondragover = function(e) {
-           e.stopPropagation();
-           e.preventDefault();
-           this.toggleClass('hover', true, uploadBorder);
-           // Workaround for allowgin drop from Chome's download footer on OSX
-           // See https://bugs.chromium.org/p/chromium/issues/detail?id=234931
-           var effect = e.dataTransfer && e.dataTransfer.dropEffect;
-           var effectAllowed = e.dataTransfer && e.dataTransfer.effectAllowed;
-           if (effect === 'none' && effectAllowed !== 'none') {
-               e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy'
-           }
-           // end of workaround
-           return false;
-       }
+        static get properties() {
+            return {
+                /**
+                 * Ajax end point where the file should upload to eg: /api/image/upload
+                 **/
+                target: {
+                    type: String,
+                    value: ''
+                },
+                /**
+                 * Request type, PUT Method can be placed instead of POST
+                 **/
+                method: {
+                    type: String,
+                    value: 'POST',
+                    reflectToAttribute: true
+                },
+                /**
+                 * Additional Headers, empty by default
+                 **/
+                headers: {
+                    type: Object,
+                    value: {},
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                // Object which contains the response as well as any other properties to be passed on to the api
+                body: {
+                    type: Object,
+                    value: {},
+                    notify: true
+                },
+                /** Placeholder text, not a lot to do but we thought it might be nice to have something just in case **/
+                uploadText: {
+                    type: String,
+                    value: 'Drag your file to this area',
+                    notify: true
+                },
+                /**Accepted File Types, The uploader is meant only for images and documents */
+                acceptedFileTypes: {
+                    type: String,
+                    value: 'image/jpg,image/jpeg,image/png,image/bmp'
+                },
+                /** Maximum accepted File size in Kilo Bytes **/
+                maxFileSize: {
+                    type: Number,
+                    value: 1000
+                },
+                /**
+                 *  Set to true if the image uploaded is to be resized if the height is found to be greater than the height property below
+                 **/
+                resize: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                /**
+                *
+                Height of resized image in pixels, width will be adjusted proptionally
+                **/
+                height: {
+                    type: Number,
+                    value: null
+                },
+                /**
+                 * a value that the uploader expects to be data binded to
+                 **/
+                value: {
+                    type: Object,
+                    value: {}
+                },
 
-       this.ondragleave = function(e) {
-           this.toggleClass('hover', false, uploadBorder);
-           e.preventDefault();
-       }
-       this.ondrop = function(event) {
-           event.preventDefault();
-           this._removeImg();
-           this.toggleClass('hover', false, uploadBorder);
-           this._uploadFile(event.dataTransfer.files);
-       }
-     },
-     _fileClick: function(){
-       var elem = this.$.fileInput;
-       if (elem && document.createEvent) {
-           var evt = document.createEvent('MouseEvents');
-           evt.initEvent('click', true, false);
-           elem.dispatchEvent(evt);
-       }
-     },
-     _deleteItem: function(e){
-       window.document.body.appendChild(this.$.dialog);
-       this.$.dialog.open();
-     },
-     _confirmDelete: function(e){
-       this._removeImg();
-     },
-     _removeImg: function(e) {
-       this.$.preview.image="";
-       this.set('file',{});
-       this.set('error',{
-          val: false,
-          msg: ''
-       });
-       this.set('body',{});
-       this.notifyPath('file');
-       this.notifyPath('body');
-       this.notifyPath('error');
-       this._hideDelete = true;
-        this.fire('delete',{"deleted":true});
-     },
-     _fileChange: function(e) {
-       this._hideDelete = true;
-       var files = e.target.files;
-       this._removeImg();
-       if(files.length) this._uploadFile(files);
-       this.$.fileInput.value = "";
-     },
-     _handleResponse:function(e){
-        this.file.progress = 100;
-        this.notifyPath('file.progress');
-        this.set('body.response',e.detail.response);
-        this.notifyPath('body');
-        this.set('error', {
-            val: false,
-            msg: ''
-        });
-        this.set('file.complete', true);
-        this._hideDelete = false;
-        this.fire('bwt-uploader-response',e.detail.response);
-      },
-     _handleError:function(e){
-        this.file.progress = 80; // Means Error occured
-        this.notifyPath('file.progress');
-        this.file.error = true;
-        this.notifyPath('file.error');
-        this._hideDelete = false;
-        this.set('error',{
-          msg:e.detail.request.xhr.response ? e.detail.request.xhr.response.msg : "Error occured",
-          val:true
-        });
-        this.fire('bwt-uploader-error',e.detail.request.xhr.response);
-      },
-      reset: function(){
-        this._hideDelete = true;
-        this.set('file', {});
-        this.image = '';
-        this.set('error', {
-           val: false,
-           msg: ''
-        });
-        this.fire('bwt-uploader-reset',{ reset: true});
-      }
-    });
-  </script>
+                _hideDelete: {
+                    type: Boolean,
+                    reflectToAttribute: true,
+                    notify: true,
+                    value: true
+                }
+            }
+        }
+        constructor() {
+            super();
+        }
+
+        ready() {
+            super.ready();
+            console.log(this.$)
+        }
+        connectedCallback() {
+            super.connectedCallback(); /* ... */
+            console.log(this);
+            var uploadBorder = this.$.UploadBorder;
+            this._hideDelete = true;
+            this.toggleClass('enabled', true, uploadBorder);
+            this.ondragover = function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.toggleClass('hover', true, uploadBorder);
+                // Workaround for allowgin drop from Chome's download footer on OSX
+                // See https://bugs.chromium.org/p/chromium/issues/detail?id=234931
+                var effect = e.dataTransfer && e.dataTransfer.dropEffect;
+                var effectAllowed = e.dataTransfer && e.dataTransfer.effectAllowed;
+                if (effect === 'none' && effectAllowed !== 'none') {
+                    e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy'
+                }
+                // end of workaround
+                return false;
+            }
+
+            this.ondragleave = function(e) {
+                this.toggleClass('hover', false, uploadBorder);
+                e.preventDefault();
+            }
+            this.ondrop = function(event) {
+                event.preventDefault();
+                this._removeImg();
+                this.toggleClass('hover', false, uploadBorder);
+                this._uploadFile(event.dataTransfer.files);
+            }
+        }
+        _fileClick() {
+            var elem = this.$.fileInput;
+            if (elem && document.createEvent) {
+                var evt = document.createEvent('MouseEvents');
+                evt.initEvent('click', true, false);
+                elem.dispatchEvent(evt);
+            }
+        }
+        _deleteItem(e) {
+            window.document.body.appendChild(this.$.dialog);
+            this.$.dialog.open();
+        }
+        _confirmDelete(e) {
+            this._removeImg();
+        }
+        _removeImg(e) {
+            this.$.preview.image = "";
+            this.set('file', {});
+            this.set('error', {
+                val: false,
+                msg: ''
+            });
+            this.set('body', {});
+            this.notifyPath('file');
+            this.notifyPath('body');
+            this.notifyPath('error');
+            this._hideDelete = true;
+            this.fire('delete', {
+                "deleted": true
+            });
+        }
+        _fileChange(e) {
+            this._hideDelete = true;
+            var files = e.target.files;
+            this._removeImg();
+            if (files.length) this._uploadFile(files);
+            this.$.fileInput.value = "";
+        }
+        _handleResponse(e) {
+            this.file.progress = 100;
+            this.notifyPath('file.progress');
+            this.set('body.response', e.detail.response);
+            this.notifyPath('body');
+            this.set('error', {
+                val: false,
+                msg: ''
+            });
+            this.set('file.complete', true);
+            this._hideDelete = false;
+            this.fire('bwt-uploader-response', e.detail.response);
+        }
+        _handleError(e) {
+            this.file.progress = 80; // Means Error occured
+            this.notifyPath('file.progress');
+            this.file.error = true;
+            this.notifyPath('file.error');
+            this._hideDelete = false;
+            this.set('error', {
+                msg: e.detail.request.xhr.response ? e.detail.request.xhr.response.msg : "Error occured",
+                val: true
+            });
+            this.fire('bwt-uploader-error', e.detail.request.xhr.response);
+        }
+        reset() {
+            this._hideDelete = true;
+            this.set('file', {});
+            this.image = '';
+            this.set('error', {
+                val: false,
+                msg: ''
+            });
+            this.fire('bwt-uploader-reset', {
+                reset: true
+            });
+        }
+    };
+
+    customElements.define(BWTUploader.is, BWTUploader);
+</script>
 </dom-module>

@@ -1,0 +1,3213 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "",
+      "summary": "",
+      "path": "bwt-progress.html",
+      "properties": [
+        {
+          "name": "error",
+          "type": "Object",
+          "description": "private variable",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 48,
+              "column": 12
+            },
+            "end": {
+              "line": 56,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "file",
+          "type": "Object",
+          "description": "private variable",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 62,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "{}",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "theme",
+          "type": "string",
+          "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 66,
+              "column": 12
+            },
+            "end": {
+              "line": 71,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"circle\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 73,
+              "column": 12
+            },
+            "end": {
+              "line": 78,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "description": "location of the placeholder image",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 86,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"/bower_components/bwt-uploader/images/placeholder.png\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeHolderRemoved",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 87,
+              "column": 12
+            },
+            "end": {
+              "line": 91,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "customClass",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 12
+            },
+            "end": {
+              "line": 96,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false",
+          "inheritedFrom": "BwtUploadBehavior"
+        }
+      ],
+      "methods": [
+        {
+          "name": "_hasWrongMimeType",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 98,
+              "column": 8
+            },
+            "end": {
+              "line": 105,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "acceptedFileTypes"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_validateFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 106,
+              "column": 8
+            },
+            "end": {
+              "line": 115,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_hasExceededMaximumFileSize",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 116,
+              "column": 8
+            },
+            "end": {
+              "line": 122,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_uploadFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 123,
+              "column": 8
+            },
+            "end": {
+              "line": 133,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_startPreviewAndAjax",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 134,
+              "column": 8
+            },
+            "end": {
+              "line": 159,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_getDocumentPreview",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 160,
+              "column": 8
+            },
+            "end": {
+              "line": 200,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_createImageFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 201,
+              "column": 8
+            },
+            "end": {
+              "line": 207,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "image"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_createArrayBufferFie",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 208,
+              "column": 8
+            },
+            "end": {
+              "line": 216,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_upload",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 217,
+              "column": 8
+            },
+            "end": {
+              "line": 227,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "img"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_uploadPdf",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 228,
+              "column": 8
+            },
+            "end": {
+              "line": 236,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "img"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_showHideProgress",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 68,
+              "column": 6
+            },
+            "end": {
+              "line": 70,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "progress"
+            }
+          ]
+        },
+        {
+          "name": "_onError",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 71,
+              "column": 6
+            },
+            "end": {
+              "line": 73,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "error"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 64,
+          "column": 12
+        },
+        "end": {
+          "line": 75,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "error",
+          "description": "private variable",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 48,
+              "column": 12
+            },
+            "end": {
+              "line": 56,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "file",
+          "description": "private variable",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 62,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "theme",
+          "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 66,
+              "column": 12
+            },
+            "end": {
+              "line": 71,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "image",
+          "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 73,
+              "column": 12
+            },
+            "end": {
+              "line": 78,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeholder",
+          "description": "location of the placeholder image",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 86,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "place-holder-removed",
+          "description": "",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 87,
+              "column": 12
+            },
+            "end": {
+              "line": 91,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "custom-class",
+          "description": "",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 12
+            },
+            "end": {
+              "line": 96,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "BwtUploadBehavior"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "error-changed",
+          "description": "Fired when the `error` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "file-changed",
+          "description": "Fired when the `file` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "theme-changed",
+          "description": "Fired when the `theme` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "image-changed",
+          "description": "Fired when the `image` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "placeholder-changed",
+          "description": "Fired when the `placeholder` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "place-holder-removed-changed",
+          "description": "Fired when the `placeHolderRemoved` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "custom-class-changed",
+          "description": "Fired when the `customClass` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "bwt-progress-bar"
+    },
+    {
+      "description": "",
+      "summary": "",
+      "path": "bwt-image-preview.html",
+      "properties": [
+        {
+          "name": "error",
+          "type": "Object",
+          "description": "private variable",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 48,
+              "column": 12
+            },
+            "end": {
+              "line": 56,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "file",
+          "type": "Object",
+          "description": "private variable",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 62,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "{}",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "theme",
+          "type": "string",
+          "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 66,
+              "column": 12
+            },
+            "end": {
+              "line": 71,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"circle\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 73,
+              "column": 12
+            },
+            "end": {
+              "line": 78,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "description": "location of the placeholder image",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 86,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"/bower_components/bwt-uploader/images/placeholder.png\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeHolderRemoved",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 87,
+              "column": 12
+            },
+            "end": {
+              "line": 91,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "customClass",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 12
+            },
+            "end": {
+              "line": 96,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 80,
+              "column": 14
+            },
+            "end": {
+              "line": 83,
+              "column": 15
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_hasWrongMimeType",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 98,
+              "column": 8
+            },
+            "end": {
+              "line": 105,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "acceptedFileTypes"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_validateFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 106,
+              "column": 8
+            },
+            "end": {
+              "line": 115,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_hasExceededMaximumFileSize",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 116,
+              "column": 8
+            },
+            "end": {
+              "line": 122,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_uploadFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 123,
+              "column": 8
+            },
+            "end": {
+              "line": 133,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_startPreviewAndAjax",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 134,
+              "column": 8
+            },
+            "end": {
+              "line": 159,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_getDocumentPreview",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 160,
+              "column": 8
+            },
+            "end": {
+              "line": 200,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_createImageFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 201,
+              "column": 8
+            },
+            "end": {
+              "line": 207,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "image"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_createArrayBufferFie",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 208,
+              "column": 8
+            },
+            "end": {
+              "line": 216,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_upload",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 217,
+              "column": 8
+            },
+            "end": {
+              "line": 227,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "img"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_uploadPdf",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 228,
+              "column": 8
+            },
+            "end": {
+              "line": 236,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "img"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_checkTheme",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 90,
+              "column": 12
+            },
+            "end": {
+              "line": 92,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "theme"
+            },
+            {
+              "name": "shape"
+            }
+          ]
+        },
+        {
+          "name": "_generateClassNames",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 12
+            },
+            "end": {
+              "line": 104,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "theme"
+            },
+            {
+              "name": "image"
+            },
+            {
+              "name": "placeholder"
+            }
+          ]
+        },
+        {
+          "name": "_updateImage",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 105,
+              "column": 12
+            },
+            "end": {
+              "line": 109,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "placeholder"
+            },
+            {
+              "name": "image"
+            }
+          ]
+        },
+        {
+          "name": "_createImagePreview",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 110,
+              "column": 12
+            },
+            "end": {
+              "line": 122,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "b64"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 77,
+          "column": 16
+        },
+        "end": {
+          "line": 123,
+          "column": 9
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "error",
+          "description": "private variable",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 48,
+              "column": 12
+            },
+            "end": {
+              "line": 56,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "file",
+          "description": "private variable",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 62,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "theme",
+          "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 66,
+              "column": 12
+            },
+            "end": {
+              "line": 71,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "image",
+          "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 73,
+              "column": 12
+            },
+            "end": {
+              "line": 78,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeholder",
+          "description": "location of the placeholder image",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 86,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "place-holder-removed",
+          "description": "",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 87,
+              "column": 12
+            },
+            "end": {
+              "line": 91,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "custom-class",
+          "description": "",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 12
+            },
+            "end": {
+              "line": 96,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "class-name",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 80,
+              "column": 14
+            },
+            "end": {
+              "line": 83,
+              "column": 15
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "error-changed",
+          "description": "Fired when the `error` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "file-changed",
+          "description": "Fired when the `file` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "theme-changed",
+          "description": "Fired when the `theme` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "image-changed",
+          "description": "Fired when the `image` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "placeholder-changed",
+          "description": "Fired when the `placeholder` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "place-holder-removed-changed",
+          "description": "Fired when the `placeHolderRemoved` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "custom-class-changed",
+          "description": "Fired when the `customClass` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "class-name-changed",
+          "description": "Fired when the `className` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "bwt-image-preview"
+    },
+    {
+      "description": "`bwt-uploader` is a drag and drop upload component for images and pdfs file with support for preview of uploaded files.\n\n### Styling\n\nThe following custom properties are available for styling:\n\n\nCustom property | Description | Default\n----------------|-------------|----------\n`--preview-border` | Border of preview | `1px dahsed #dbdbdb`\n`--preview-width` | Width of preview area | `250px`\n`--preview-height` | Height of preview area | `250px`\n`--progress-bar-color` | Progress bar color | `#03a9f4`\n`--progress-bar-height` | Progress bar color | `5px`\n`--primary-text-color` | Description text color | `#9b9b9b`\n`--secondary-text-color`| Browse text color | `#1976d3`,\n`--progress-error-color` | Progress bar error and error text color | `#f40303`\n\n### Installation\n\nInstall with bower\n\n    bower install bwt-uploader\n\nIf you want to save it in bower.json file, remember to add flag --save\n\n    bower install --save bwt-uploader",
+      "summary": "",
+      "path": "bwt-uploader.html",
+      "properties": [
+        {
+          "name": "error",
+          "type": "Object",
+          "description": "private variable",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 48,
+              "column": 12
+            },
+            "end": {
+              "line": 56,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "file",
+          "type": "Object",
+          "description": "private variable",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 62,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "{}",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "theme",
+          "type": "string",
+          "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 66,
+              "column": 12
+            },
+            "end": {
+              "line": 71,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"circle\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 73,
+              "column": 12
+            },
+            "end": {
+              "line": 78,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "description": "location of the placeholder image",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 86,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"/bower_components/bwt-uploader/images/placeholder.png\"",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeHolderRemoved",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 87,
+              "column": 12
+            },
+            "end": {
+              "line": 91,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "customClass",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 12
+            },
+            "end": {
+              "line": 96,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "description": "Ajax end point where the file should upload to eg: /api/image/upload",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 151,
+              "column": 8
+            },
+            "end": {
+              "line": 154,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "method",
+          "type": "string",
+          "description": "Request type, PUT Method can be placed instead of POST",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 158,
+              "column": 8
+            },
+            "end": {
+              "line": 162,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"POST\""
+        },
+        {
+          "name": "headers",
+          "type": "Object",
+          "description": "Additional Headers, empty by default",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 166,
+              "column": 8
+            },
+            "end": {
+              "line": 171,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "{}"
+        },
+        {
+          "name": "body",
+          "type": "Object",
+          "description": "Object which contains the response as well as any other properties to be passed on to the api",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 173,
+              "column": 8
+            },
+            "end": {
+              "line": 177,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "{}"
+        },
+        {
+          "name": "uploadText",
+          "type": "string",
+          "description": "Plceholder text, not a lot to do but we thought it might be nice to have something just in case *",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 179,
+              "column": 8
+            },
+            "end": {
+              "line": 183,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "\"Drag your file to this area\""
+        },
+        {
+          "name": "acceptedFileTypes",
+          "type": "string",
+          "description": "Accepted File Types, The uploader is meant only for images and documents",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 185,
+              "column": 8
+            },
+            "end": {
+              "line": 188,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"image/jpg,image/jpeg,image/png,image/bmp\""
+        },
+        {
+          "name": "maxFileSize",
+          "type": "number",
+          "description": "Maximum accepted File size in Kilo Bytes *",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 190,
+              "column": 8
+            },
+            "end": {
+              "line": 193,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "1000"
+        },
+        {
+          "name": "resize",
+          "type": "boolean",
+          "description": "Set to true if the image uploaded is to be resized if the height is found to be greater than the height property below",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 197,
+              "column": 8
+            },
+            "end": {
+              "line": 201,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "description": "Height of resized image in pixels, width will be adjusted proptionally",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 206,
+              "column": 8
+            },
+            "end": {
+              "line": 209,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "null"
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": "a value that the uploader expects to be data binded to",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 213,
+              "column": 8
+            },
+            "end": {
+              "line": 216,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "{}"
+        },
+        {
+          "name": "_hideDelete",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 218,
+              "column": 8
+            },
+            "end": {
+              "line": 223,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "true"
+        }
+      ],
+      "methods": [
+        {
+          "name": "_hasWrongMimeType",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 98,
+              "column": 8
+            },
+            "end": {
+              "line": 105,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "acceptedFileTypes"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_validateFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 106,
+              "column": 8
+            },
+            "end": {
+              "line": 115,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_hasExceededMaximumFileSize",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 116,
+              "column": 8
+            },
+            "end": {
+              "line": 122,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_uploadFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 123,
+              "column": 8
+            },
+            "end": {
+              "line": 133,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_startPreviewAndAjax",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 134,
+              "column": 8
+            },
+            "end": {
+              "line": 159,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_getDocumentPreview",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 160,
+              "column": 8
+            },
+            "end": {
+              "line": 200,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_createImageFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 201,
+              "column": 8
+            },
+            "end": {
+              "line": 207,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "image"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_createArrayBufferFie",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 208,
+              "column": 8
+            },
+            "end": {
+              "line": 216,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_upload",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 217,
+              "column": 8
+            },
+            "end": {
+              "line": 227,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "img"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "_uploadPdf",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 228,
+              "column": 8
+            },
+            "end": {
+              "line": 236,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "img"
+            }
+          ],
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 226,
+              "column": 5
+            },
+            "end": {
+              "line": 255,
+              "column": 6
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_fileClick",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 256,
+              "column": 5
+            },
+            "end": {
+              "line": 263,
+              "column": 6
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_deleteItem",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 264,
+              "column": 5
+            },
+            "end": {
+              "line": 267,
+              "column": 6
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_confirmDelete",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 268,
+              "column": 5
+            },
+            "end": {
+              "line": 270,
+              "column": 6
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_removeImg",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 271,
+              "column": 5
+            },
+            "end": {
+              "line": 284,
+              "column": 6
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_fileChange",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 285,
+              "column": 5
+            },
+            "end": {
+              "line": 291,
+              "column": 6
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_handleResponse",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 292,
+              "column": 5
+            },
+            "end": {
+              "line": 304,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_handleError",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 305,
+              "column": 5
+            },
+            "end": {
+              "line": 316,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "reset",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 317,
+              "column": 6
+            },
+            "end": {
+              "line": 326,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 125,
+          "column": 12
+        },
+        "end": {
+          "line": 327,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "error",
+          "description": "private variable",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 48,
+              "column": 12
+            },
+            "end": {
+              "line": 56,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "file",
+          "description": "private variable",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 62,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "theme",
+          "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 66,
+              "column": 12
+            },
+            "end": {
+              "line": 71,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "image",
+          "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 73,
+              "column": 12
+            },
+            "end": {
+              "line": 78,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "placeholder",
+          "description": "location of the placeholder image",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 86,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "place-holder-removed",
+          "description": "",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 87,
+              "column": 12
+            },
+            "end": {
+              "line": 91,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "custom-class",
+          "description": "",
+          "sourceRange": {
+            "file": "bwt-upload-behavior.html",
+            "start": {
+              "line": 92,
+              "column": 12
+            },
+            "end": {
+              "line": 96,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "name": "target",
+          "description": "Ajax end point where the file should upload to eg: /api/image/upload",
+          "sourceRange": {
+            "start": {
+              "line": 151,
+              "column": 8
+            },
+            "end": {
+              "line": 154,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "method",
+          "description": "Request type, PUT Method can be placed instead of POST",
+          "sourceRange": {
+            "start": {
+              "line": 158,
+              "column": 8
+            },
+            "end": {
+              "line": 162,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "headers",
+          "description": "Additional Headers, empty by default",
+          "sourceRange": {
+            "start": {
+              "line": 166,
+              "column": 8
+            },
+            "end": {
+              "line": 171,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "body",
+          "description": "Object which contains the response as well as any other properties to be passed on to the api",
+          "sourceRange": {
+            "start": {
+              "line": 173,
+              "column": 8
+            },
+            "end": {
+              "line": 177,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "upload-text",
+          "description": "Plceholder text, not a lot to do but we thought it might be nice to have something just in case *",
+          "sourceRange": {
+            "start": {
+              "line": 179,
+              "column": 8
+            },
+            "end": {
+              "line": 183,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "accepted-file-types",
+          "description": "Accepted File Types, The uploader is meant only for images and documents",
+          "sourceRange": {
+            "start": {
+              "line": 185,
+              "column": 8
+            },
+            "end": {
+              "line": 188,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "max-file-size",
+          "description": "Maximum accepted File size in Kilo Bytes *",
+          "sourceRange": {
+            "start": {
+              "line": 190,
+              "column": 8
+            },
+            "end": {
+              "line": 193,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "resize",
+          "description": "Set to true if the image uploaded is to be resized if the height is found to be greater than the height property below",
+          "sourceRange": {
+            "start": {
+              "line": 197,
+              "column": 8
+            },
+            "end": {
+              "line": 201,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "height",
+          "description": "Height of resized image in pixels, width will be adjusted proptionally",
+          "sourceRange": {
+            "start": {
+              "line": 206,
+              "column": 8
+            },
+            "end": {
+              "line": 209,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "value",
+          "description": "a value that the uploader expects to be data binded to",
+          "sourceRange": {
+            "start": {
+              "line": 213,
+              "column": 8
+            },
+            "end": {
+              "line": 216,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "error-changed",
+          "description": "Fired when the `error` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "file-changed",
+          "description": "Fired when the `file` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "theme-changed",
+          "description": "Fired when the `theme` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "image-changed",
+          "description": "Fired when the `image` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "placeholder-changed",
+          "description": "Fired when the `placeholder` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "place-holder-removed-changed",
+          "description": "Fired when the `placeHolderRemoved` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "custom-class-changed",
+          "description": "Fired when the `customClass` property changes.",
+          "metadata": {},
+          "inheritedFrom": "BwtUploadBehavior"
+        },
+        {
+          "type": "CustomEvent",
+          "name": "bwt-uploader-delete",
+          "description": "bwt-uploader-delete",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "bwt-uploader-reset",
+          "description": "bwt-uploader-reset",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "bwt-uploader-response",
+          "description": "bwt-uploader-response",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "headers-changed",
+          "description": "Fired when the `headers` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "body-changed",
+          "description": "Fired when the `body` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-text-changed",
+          "description": "Fired when the `uploadText` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "resize-changed",
+          "description": "Fired when the `resize` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "bwt-uploader"
+    }
+  ],
+  "metadata": {
+    "polymer": {
+      "behaviors": [
+        {
+          "description": "",
+          "summary": "",
+          "path": "bwt-upload-behavior.html",
+          "properties": [
+            {
+              "name": "error",
+              "type": "Object",
+              "description": "private variable",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 48,
+                  "column": 12
+                },
+                "end": {
+                  "line": 56,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              }
+            },
+            {
+              "name": "file",
+              "type": "Object",
+              "description": "private variable",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 58,
+                  "column": 12
+                },
+                "end": {
+                  "line": 62,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "{}"
+            },
+            {
+              "name": "theme",
+              "type": "string",
+              "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 66,
+                  "column": 12
+                },
+                "end": {
+                  "line": 71,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "\"circle\""
+            },
+            {
+              "name": "image",
+              "type": "string",
+              "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 73,
+                  "column": 12
+                },
+                "end": {
+                  "line": 78,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "placeholder",
+              "type": "string",
+              "description": "location of the placeholder image",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 82,
+                  "column": 12
+                },
+                "end": {
+                  "line": 86,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "\"/bower_components/bwt-uploader/images/placeholder.png\""
+            },
+            {
+              "name": "placeHolderRemoved",
+              "type": "boolean",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 87,
+                  "column": 12
+                },
+                "end": {
+                  "line": 91,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "customClass",
+              "type": "boolean",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 92,
+                  "column": 12
+                },
+                "end": {
+                  "line": 96,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "false"
+            }
+          ],
+          "methods": [
+            {
+              "name": "_hasWrongMimeType",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 98,
+                  "column": 8
+                },
+                "end": {
+                  "line": 105,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "acceptedFileTypes"
+                }
+              ]
+            },
+            {
+              "name": "_validateFile",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 106,
+                  "column": 8
+                },
+                "end": {
+                  "line": 115,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "files"
+                }
+              ]
+            },
+            {
+              "name": "_hasExceededMaximumFileSize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 116,
+                  "column": 8
+                },
+                "end": {
+                  "line": 122,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                }
+              ]
+            },
+            {
+              "name": "_uploadFile",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 123,
+                  "column": 8
+                },
+                "end": {
+                  "line": 133,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "files"
+                }
+              ]
+            },
+            {
+              "name": "_startPreviewAndAjax",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 134,
+                  "column": 8
+                },
+                "end": {
+                  "line": 159,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                }
+              ]
+            },
+            {
+              "name": "_getDocumentPreview",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 160,
+                  "column": 8
+                },
+                "end": {
+                  "line": 200,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                }
+              ]
+            },
+            {
+              "name": "_createImageFile",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 201,
+                  "column": 8
+                },
+                "end": {
+                  "line": 207,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "image"
+                }
+              ]
+            },
+            {
+              "name": "_createArrayBufferFie",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 208,
+                  "column": 8
+                },
+                "end": {
+                  "line": 216,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                }
+              ]
+            },
+            {
+              "name": "_upload",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 217,
+                  "column": 8
+                },
+                "end": {
+                  "line": 227,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "img"
+                }
+              ]
+            },
+            {
+              "name": "_uploadPdf",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 228,
+                  "column": 8
+                },
+                "end": {
+                  "line": 236,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "img"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 45,
+              "column": 4
+            },
+            "end": {
+              "line": 237,
+              "column": 6
+            }
+          },
+          "privacy": "public",
+          "name": "BwtUploadBehavior",
+          "attributes": [
+            {
+              "name": "error",
+              "description": "private variable",
+              "sourceRange": {
+                "start": {
+                  "line": 48,
+                  "column": 12
+                },
+                "end": {
+                  "line": 56,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "Object"
+            },
+            {
+              "name": "file",
+              "description": "private variable",
+              "sourceRange": {
+                "start": {
+                  "line": 58,
+                  "column": 12
+                },
+                "end": {
+                  "line": 62,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "Object"
+            },
+            {
+              "name": "theme",
+              "description": "The type of placeholder, accepts either one of two arguments; square or circle",
+              "sourceRange": {
+                "start": {
+                  "line": 66,
+                  "column": 12
+                },
+                "end": {
+                  "line": 71,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "image",
+              "description": "url of the image to be displayed, this can be used mixed with the placeholder",
+              "sourceRange": {
+                "start": {
+                  "line": 73,
+                  "column": 12
+                },
+                "end": {
+                  "line": 78,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "placeholder",
+              "description": "location of the placeholder image",
+              "sourceRange": {
+                "start": {
+                  "line": 82,
+                  "column": 12
+                },
+                "end": {
+                  "line": 86,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "place-holder-removed",
+              "description": "",
+              "sourceRange": {
+                "start": {
+                  "line": 87,
+                  "column": 12
+                },
+                "end": {
+                  "line": 91,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "custom-class",
+              "description": "",
+              "sourceRange": {
+                "start": {
+                  "line": 92,
+                  "column": 12
+                },
+                "end": {
+                  "line": 96,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            }
+          ],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "error-changed",
+              "description": "Fired when the `error` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "file-changed",
+              "description": "Fired when the `file` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "theme-changed",
+              "description": "Fired when the `theme` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "image-changed",
+              "description": "Fired when the `image` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "placeholder-changed",
+              "description": "Fired when the `placeholder` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "place-holder-removed-changed",
+              "description": "Fired when the `placeHolderRemoved` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "custom-class-changed",
+              "description": "Fired when the `customClass` property changes.",
+              "metadata": {}
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": []
+        }
+      ]
+    }
+  }
+}

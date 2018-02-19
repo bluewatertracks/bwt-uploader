@@ -1,0 +1,67 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<dom-module id="bwt-camera">
+
+</dom-module>
+<script>
+    class BWTCameraModule extends Polymer.Element {
+        // private variable
+        static get is() {
+            return 'bwt-camera-module';
+        }
+
+        static get properties() {
+            return {
+                image: {
+                    type: 'Object',
+                    value: null,
+                    notify: true
+                }
+            }
+        }
+        _takePhoto() {
+            navigator.mediaDevices.getUserMedia.bind(this);
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            }).then(this.startCapture).catch(this.errorHandler)
+        }
+        startCapture(mediaStream) {
+            let _this = this;
+            console.log(this)
+            let videoDevice = mediaStream.getVideoTracks()[0];
+            // Check if this device supports a picture mode...
+            let captureDevice = new ImageCapture(videoDevice);
+            if (captureDevice) {
+                captureDevice.takePhoto().then(blob => {
+                    console.log(_this.$)
+                    let img = document.createElement('img')
+                    img.src = URL.createObjectURL(blob);
+                    img.onload = () => {
+                        URL.revokeObjectURL(this.src);
+                    }
+                    console.log(img);
+                }).catch(this.stopCamera);
+            }
+        }
+        _stopCamera(error) {
+            debugger;
+            if (videoDevice) videoDevice.stop(); // turn off the camera;
+        }
+        _processPhoto(blob) {
+            debugger;
+            let el = this.$.createElement('img');
+            el.src = window.URL.createObjectURL(blob);
+            document.getElementById('preview').appendChild(el);
+            this.emit('bwt-camera-image-captured', {
+                img: window.URL.createObjectURL(blob)
+            });
+        }
+
+        _errorHandler(error) {
+            debugger;
+            console.log(error)
+        }
+    }
+
+    customElements.define(BWTCameraModule.is, BWTCameraModule);
+</script>

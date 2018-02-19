@@ -1,9 +1,9 @@
 <!--
   @element bwt-progress-bar
 -->
-<link rel="import" href="bwt-upload-behavior.html">
+<link rel="import" href="bwt-upload-mixin.html">
 <dom-module id="bwt-progress-bar">
-  <template>
+    <template>
     <style is="custom-style">
        :host {
         display: block;
@@ -61,18 +61,65 @@
       </div>
     </div>
   </template>
-  <script>
-    Polymer({
-      is: 'bwt-progress-bar',
-      behaviors: [BwtUploadBehavior],
-      observers:['_onError(file.error)'],
-      _showHideProgress: function (progress) {
-        return (progress < 100) ? false : true;
-      },
-      _onError:function(error){
-         this.$.paperProgress.updateStyles();
-      }
-    
-    });
-  </script>
+    <script>
+        /**
+         * `LowerCaseDashedName` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class BWTProgress extends Polymer.Element {
+            //[BWTUploadMixin],
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'bwt-progress-bar';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+
+                };
+            }
+
+            static get observers() {
+                return ['_onError(file.error)'];
+            }
+
+
+            /**
+             * Instance of the element is created/upgraded. Use: initializing state,
+             * set up event listeners, create shadow dom.
+             * @constructor
+             */
+            constructor() {
+                super();
+            }
+
+            /**
+             * Use for one-time configuration of your component after local DOM is initialized. 
+             */
+            ready() {
+                super.ready();
+
+                Polymer.RenderStatus.afterNextRender(this, function() {
+
+                });
+            }
+            _showHideProgress(progress) {
+                return (progress < 100) ? false : true;
+            }
+            _onError(error) {
+                this.$.paperProgress.updateStyles();
+            }
+        }
+
+        window.customElements.define(BWTProgress.is, BWTProgress);
+    </script>
 </dom-module>

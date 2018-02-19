@@ -17,23 +17,24 @@
     "bwt-uploader",
     "image uploader",
     "pdf uploader",
-    "uploader"
+    "uploader",
+    "image capture"
   ],
   "license": "MIT",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0",
-    "iron-icon": "^1.0.12",
-    "pdfjs-dist": "^1.7.246",
-    "paper-progress": "^1.0.11",
-    "paper-dialog": "^1.1.0",
-    "iron-ajax": "^1.4.3",
-    "paper-button": "^1.0.14"
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-icon": "^2.0.1",
+    "pdfjs-dist": "^2.0.3",
+    "paper-progress": "^2.0.0",
+    "paper-dialog": "^2.0.0",
+    "iron-ajax": "^2.0.5",
+    "paper-button": "^2.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-    "polymer": "^1.7.1"
+    "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.19",
+    "polymer": "Polymer/polymer#^2.0.0"
   }
 }
