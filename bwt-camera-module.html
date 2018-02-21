@@ -1,10 +1,21 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <dom-module id="bwt-camera">
-
+    <paper-dialog id="dialog">
+        <h2>Dialog Title</h2>
+        <template is="dom-if" if="{{}}">
+            <img src$="[[]]" />        
+        </template>
+        <template is="dom-if" if="{{}}">
+            <img src$="[[]]" />
+        </template>
+        <div class="buttons">
+            <paper-button dialog-dismiss>Cancel</paper-button>
+            <paper-button dialog-confirm autofocus>OK</paper-button>
+        </div>
+    </paper-dialog>
 </dom-module>
 <script>
     class BWTCameraModule extends Polymer.Element {
-        // private variable
         static get is() {
             return 'bwt-camera-module';
         }

@@ -1,0 +1,70 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="bwt-delete-modal">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+        </style>
+        <paper-dialog id="dialog" modal>
+            <h2>Are you sure ?</h2>
+            <div class="buttons">
+                <paper-button id="trueButton" on-tap="_confirmDelete" dialog-confirm autofocus>Yes</paper-button>
+                <paper-button dialog-dismiss on-tap="_cancelDelete">No</paper-button>
+            </div>
+       </paper-dialog>
+    </template>
+
+    <script>
+        /**
+         * `LowerCaseDashedName` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class BWTDeleteModal extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'bw-delete-modal';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+
+                };
+            }
+
+            /**
+             * Instance of the element is created/upgraded. Use: initializing state,
+             * set up event listeners, create shadow dom.
+             * @constructor
+             */
+            constructor() {
+                super();
+            }
+
+            _confirmDelete(e) {
+                this.emit('bwt-confirm-delete');
+            }
+
+            _cancelDelete(e) {
+                this.emit('bwt-cancel-delete');
+            }
+
+            open() {
+                this.$.dialog.open();
+            }
+        }
+
+        window.customElements.define(BWTDeleteModal.is, BWTDeleteModal);
+    </script>
+</dom-module>

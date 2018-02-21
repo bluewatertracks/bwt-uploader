@@ -101,17 +101,6 @@
             constructor() {
                 super();
             }
-
-            /**
-             * Use for one-time configuration of your component after local DOM is initialized. 
-             */
-            ready() {
-                super.ready();
-
-                Polymer.RenderStatus.afterNextRender(this, function() {
-
-                });
-            }
             _showHideProgress(progress) {
                 return (progress < 100) ? false : true;
             }
