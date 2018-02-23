@@ -106,7 +106,7 @@ If you want to save it in bower.json file, remember to add flag --save
           </bwt-image-preview>
           <div class="template-div-droptext">
               <span class="placeholder-text"> [[uploadText]] or <span class="template-span-button" on-click="_fileClick" alt="Upload" title="upload file" raised>Browse</span> it from your computer</span>
-              <span on-click="_takePhoto" class="template-span-button"> or Take photo </span>
+              <span on-click="_activateCamera" class="template-span-button"> Take photo </span>
               <div  id="delete-button" class="template-div-delete" on-click="_deleteItem" hidden="[[_hideDelete]]">
                   <iron-icon icon="icons:clear" title="Remove Item"></iron-icon>
                   <span> Delete Item</span>
@@ -114,10 +114,10 @@ If you want to save it in bower.json file, remember to add flag --save
               <bwt-progress-bar file="[[file]]" error="[[error]]"></bwt-progress-bar>
           </div>
           <input type="file" id="fileInput" on-change="_fileChange" hidden accept="[[acceptedFileTypes]]">
+         <bwt-camera-module id="cameraModule"></bwt-camera-module>
+         <bwt-delete-modal id="dialog" on-bwt-confirm-delete="_removeImg"></bwt-delete-modal> 
+            <!-- on-bwt-cancel-delete - also availabe for hooking into  -->
     </div>
-    <bwt-camera-module on-click="_activateCamera"></bwt-camera-module>
-    <bwt-delete-modal id="dialog" on-bwt-confirm-delete="_removeImg"></bwt-delete-modal> 
-    <!-- on-bwt-cancel-delete - also availabe for hooking into  -->
   </template>
 
     <script>
@@ -342,6 +342,9 @@ If you want to save it in bower.json file, remember to add flag --save
                 this.fire('bwt-uploader-reset', {
                     reset: true
                 });
+            }
+            _activateCamera() {
+                this.$.cameraModule.start();
             }
         };
         customElements.define(BWTUploader.is, BWTUploader);

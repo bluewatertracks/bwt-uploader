@@ -1,78 +1,89 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<dom-module id="bwt-camera">
-    <paper-dialog id="dialog">
-        <h2>Dialog Title</h2>
-        <template is="dom-if" if="{{}}">
-            <img src$="[[]]" />        
-        </template>
-        <template is="dom-if" if="{{}}">
-            <img src$="[[]]" />
-        </template>
-        <div class="buttons">
-            <paper-button dialog-dismiss>Cancel</paper-button>
-            <paper-button dialog-confirm autofocus>OK</paper-button>
-        </div>
-    </paper-dialog>
-</dom-module>
-<script>
-    class BWTCameraModule extends Polymer.Element {
-        static get is() {
-            return 'bwt-camera-module';
-        }
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<dom-module id="bwt-camera-module">
+    <template>
+        <paper-dialog id="dialog" dynamic-align="true" horizontal-align="center" vertical-align="center">            
+            <div id="buttons" class="buttons">
+                <paper-button dialog-dismiss on-tap="_stopCamera">Cancel</paper-button>
+                <paper-button autofocus on-tap="_takePhoto">OK</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+        class BWTCameraModule extends Polymer.Element {
+            static get is() {
+                return 'bwt-camera-module';
+            }
 
-        static get properties() {
-            return {
-                image: {
-                    type: 'Object',
-                    value: null,
-                    notify: true
+            ready() {
+                super.ready();
+            }
+
+            static get properties() {
+                return {
+                    image: {
+                        type: 'Object',
+                        value: null,
+                        notify: true
+                    },
+                    stream: Object,
+                    videoEl: Object
                 }
             }
-        }
-        _takePhoto() {
-            navigator.mediaDevices.getUserMedia.bind(this);
-            navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            }).then(this.startCapture).catch(this.errorHandler)
-        }
-        startCapture(mediaStream) {
-            let _this = this;
-            console.log(this)
-            let videoDevice = mediaStream.getVideoTracks()[0];
-            // Check if this device supports a picture mode...
-            let captureDevice = new ImageCapture(videoDevice);
-            if (captureDevice) {
-                captureDevice.takePhoto().then(blob => {
-                    console.log(_this.$)
-                    let img = document.createElement('img')
-                    img.src = URL.createObjectURL(blob);
-                    img.onload = () => {
-                        URL.revokeObjectURL(this.src);
-                    }
-                    console.log(img);
-                }).catch(this.stopCamera);
+            start() {
+                this.$.dialog.open();
+                let video = document.createElement('video');
+                video.setAttribute('height', 200);
+                video.setAttribute('width', 200);
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    // Not adding `{ audio: true }` since we only want video now
+                    navigator.mediaDevices.getUserMedia({
+                        video: true
+                    }).then((stream) => {
+                        video.src = window.URL.createObjectURL(stream);
+                        video.play();
+                        this.stream = stream;
+                    });
+                }
+                this.videoEl = video;
+                this.$.dialog.insertBefore(video, this.$.buttons);
+
+            }
+            _takePhoto() {
+                const imgEl = document.createElement('img');
+                const stream = this.stream.getVideoTracks()[0];
+                const imageCapture = new ImageCapture(stream);
+                imageCapture.takePhoto()
+                    .then((blob) => {
+                        imgEl.src = window.URL.createObjectURL(blob);;
+                        this.$.dialog.removeChild(this.videoEl);
+                        this.$.dialog.insertBefore(imgEl, this.$.buttons);
+                    });
+            }
+            _stopCamera(e) {
+                let track = this.stream.getTracks()[0];
+                this.emit('bwt-camera-stream-stopped');
+                track.stop();
+            }
+            _processPhoto(blob) {
+                debugger;
+                let el = this.$.createElement('img');
+                el.src = window.URL.createObjectURL(blob);
+                document.getElementById('preview').appendChild(el);
+                this.emit('bwt-camera-image-captured', {
+                    img: window.URL.createObjectURL(blob)
+                });
+            }
+
+            _errorHandler(error) {
+                debugger;
+                console.log(error)
             }
         }
-        _stopCamera(error) {
-            debugger;
-            if (videoDevice) videoDevice.stop(); // turn off the camera;
-        }
-        _processPhoto(blob) {
-            debugger;
-            let el = this.$.createElement('img');
-            el.src = window.URL.createObjectURL(blob);
-            document.getElementById('preview').appendChild(el);
-            this.emit('bwt-camera-image-captured', {
-                img: window.URL.createObjectURL(blob)
-            });
-        }
 
-        _errorHandler(error) {
-            debugger;
-            console.log(error)
-        }
-    }
+        customElements.define(BWTCameraModule.is, BWTCameraModule);
+    </script>
+</dom-module>
 
-    customElements.define(BWTCameraModule.is, BWTCameraModule);
-</script>
+
+p-e

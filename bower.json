@@ -26,7 +26,7 @@
     "iron-icon": "^2.0.1",
     "pdfjs-dist": "^2.0.3",
     "paper-progress": "^2.0.0",
-    "paper-dialog": "^2.0.0",
+    "paper-dialog": "^2.1.0",
     "iron-ajax": "^2.0.5",
     "paper-button": "^2.0.0"
   },
