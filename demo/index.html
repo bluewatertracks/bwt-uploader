@@ -22,13 +22,8 @@
   <div class="vertical-section-container centered">
     <h3>Basic uploader with config for uploading an image</h3>
     <demo-snippet>
-      <template is="dom-bind" id="app">
-        <bwt-uploader id="imgUploader" target="https://httpbin.org/post"
-                                       body="[[body]]"
-                                       header="[[header]]"
-                                       method="POST"
-        >
-        </bwt-uploader>
+      <template>
+        <bwt-uploader id="imgUploader" target="https://httpbin.org/post" body="[[body]]" header="[[header]]" method="POST"></bwt-uploader>
       </template>
     </demo-snippet>
     The header and method fields are optional, If the method field is not placed, the method would default to post. Also the header field is expected to be an object and is for authorization purposes.
@@ -80,7 +75,7 @@
   </div>
   <script>
     (function () {
-      var scope = document.querySelector('#app');
+      var scope = document.querySelector('#imgUploader');
       document.addEventListener('WebComponentsReady', function () {
         scope.body = {
           userId: "123456",
