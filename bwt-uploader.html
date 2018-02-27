@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="bwt-progress.html">
 <link rel="import" href="bwt-image-preview.html">
 <link rel="import" href="bwt-upload-mixin.html">
-<link rel="import" href="bwt-delete-dialog.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="bwt-camera-module.html">
 
 <!--
@@ -115,13 +115,18 @@ If you want to save it in bower.json file, remember to add flag --save
           </div>
           <input type="file" id="fileInput" on-change="_fileChange" hidden accept="[[acceptedFileTypes]]">
          <bwt-camera-module id="cameraModule"></bwt-camera-module>
-         <bwt-delete-modal id="dialog" on-bwt-confirm-delete="_removeImg"></bwt-delete-modal> 
-            <!-- on-bwt-cancel-delete - also availabe for hooking into  -->
+         <paper-dialog id="dialog" modal>
+            <h2>Are you sure ?</h2>
+            <div class="buttons">
+                <paper-button id="trueButton" on-tap="_removeImg" dialog-confirm autofocus>Yes</paper-button>
+                <paper-button dialog-dismiss>No</paper-button>
+            </div>
+        </paper-dialog>
     </div>
   </template>
 
     <script>
-        class BWTUploader extends Polymer.Element { //BWTUploadMixin(Polymer.Element)
+        class BWTUploader extends BWTUploadMixin(Polymer.Element) {
             /**
              * Fired when a response is received.
              *
@@ -272,7 +277,6 @@ If you want to save it in bower.json file, remember to add flag --save
                 }
             }
             _deleteItem(e) {
-                window.document.body.appendChild(this.$.dialog);
                 this.$.dialog.open();
             }
             _removeImg(e) {
@@ -287,9 +291,6 @@ If you want to save it in bower.json file, remember to add flag --save
                 this.notifyPath('body');
                 this.notifyPath('error');
                 this._hideDelete = true;
-                this.fire('delete', {
-                    "deleted": true
-                });
             }
             _fileChange(e) {
                 this._hideDelete = true;
@@ -309,7 +310,11 @@ If you want to save it in bower.json file, remember to add flag --save
                 });
                 this.set('file.complete', true);
                 this._hideDelete = false;
-                this.fire('bwt-uploader-response', e.detail.response);
+                this.dispatchEvent(new CustomEvent('bwt-uploader-response',{
+                    detail:e.detail.response,
+                    bubbles:true,
+                    composed:true
+                }));
             }
             _handleError(e) {
                 this.file.progress = 80; // Means Error occured

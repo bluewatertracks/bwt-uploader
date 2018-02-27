@@ -40,7 +40,7 @@
         };
         return {
             scaleImage: applyScale
-        }
+        };
     })();
     /* @polymerMixin */
     BWTUploadMixin = function(superClass) {
@@ -96,6 +96,10 @@
                         type: Boolean,
                         value: false,
                         notify: true
+                    },
+                    outputType:{
+                        type:String,
+                        value:'dataURL'
                     }
                 }
             }
@@ -117,8 +121,19 @@
                 this._hasWrongMimeType(files[0], this.acceptedFileTypes);
                 this._hasExceededMaximumFileSize(files[0]);
             }
-            _hasExceededMaximumFileSize(file) {
-                if (file.size > (this.maxFileSize * 1024))
+            
+            // Only applies images that are captured or lessthan minute
+            _isRecentImage(file){
+                if(file && file.lastModifiedDate){
+                    var diiference = Math.round(new Date() - file.lastModifiedDate)/60000;
+                    if(diiference <=1)return true;
+                    else return false;
+                }                
+            }
+
+            _hasExceededMaximumFileSize(file) {    
+                var _isRecentImage = this._isRecentImage(file);
+                if (file.size > (this.maxFileSize * 1024) && !_isRecentImage)
                     this.error = {
                         msg: 'The uploaded file exceeds ' + this.maxFileSize + ' KB',
                         val: true
@@ -127,7 +142,6 @@
             _uploadFile(files) {
                 this._validateFile(files);
                 if (this.error.val) return;
-
                 this.set('file', files[0]);
                 this.set('file.progress', 20);
                 this.notifyPath('file.progress');
@@ -222,7 +236,6 @@
                 this.set('file.progress', 80);
                 this.notifyPath('file.progress');
                 var ajax = this.$.ajaxElement;
-
                 ajax.contentType = "application/json";
                 ajax.body = this.body;
                 ajax.body.file = file;

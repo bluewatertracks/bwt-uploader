@@ -1,171 +1,161 @@
 <link rel="import" href="bwt-upload-mixin.html">
 <dom-module id="bwt-image-preview">
-    <template>
+  <template>
     <style is="custom-style">
-    :host {
-      display: block;
-    }
+      :host {
+        display: block;
+      }
 
-    .template-div-droptext>span {
+      .template-div-droptext>span {
         text-align: center;
-    }
+      }
 
-    .template-div-droptext .template-span-button,.template-div-delete, iron-icon  {
-      color: #1976d3;
-      cursor: pointer;
-    }
+      .template-div-droptext span:nth-child(2) {
+        text-align: left;
+        font-weight: 400;
+      }
 
-    .template-div-delete, .template-div-delete iron-icon{
-      height: 42px;
-      line-height: 43px;
-      color: #9b9b9b;
-    }
+      .imageCircleContainer,
+      .imageSquareContainer {
+        order: 1;
+        flex: wrap;
+        border: var(--preview-border, 1px dashed #dbdbdb);
+        overflow: hidden;
+        width: var(--preview-width, 250px);
+        height: var(--preview-height, 250px);
+      }
 
-    .template-div-droptext span:nth-child(2){
-      text-align: left;
-      font-weight: 400;
-    }
+      .img {
+        height: inherit;
+        width: inherit;
+        display: block;
+      }
 
-     .imageCircleContainer, .imageSquareContainer{
-      order: 1;
-      flex: wrap;
-      border:  var(--preview-border,1px dashed #dbdbdb);
-      overflow: hidden;
-      width: var(--preview-width, 250px);
-      height: var(--preview-height, 250px);
-    }
+      .imageCircleContainer {
+        border-radius: 100%;
+      }
 
-    .img {
-      height:inherit;
-      width:inherit;
-      display: block;
-    }
+      .imageCircleContainer>div {
+        background-size: cover !important;
+      }
 
-    .imageCircleContainer {
-      border-radius: 100%;
-    }
-
-    .imageCircleContainer>div {
-      background-size:cover !important;
-    }
-
-    .customContainer {
+      .customContainer {
         width: var(--preview-width-custom-class, 250px);
         height: var(--preview-height-custom-class, 250px);
         order: 1;
         flex: wrap;
-        border:  var(--preview-border,1px dashed #dbdbdb);
+        border: var(--preview-border, 1px dashed #dbdbdb);
         overflow: hidden;
-    }
+      }
 
-    .customContainer > .img {
-      width: var(--preview-width-custom-class, 250px);
-      height: var(--preview-height-custom-class, 250px);
-    }
+      .customContainer>.img {
+        width: var(--preview-width-custom-class, 250px);
+        height: var(--preview-height-custom-class, 250px);
+      }
     </style>
-    <template is="dom-if" if="{{ _checkTheme(theme,'circle') }}">
-      <div class$="[[className]]">
-         <div class="img" style$="background: url('[[image]]') no-repeat center center;"></div>
-      </div>
-    </template>
-    <template is="dom-if" if="{{ _checkTheme(theme,'square') }}">
-      <div class$="[[className]]">
-         <div class="img" style$="background: url('[[image]]') no-repeat center center;"></div>
-      </div>
-    </template>
-    </template>
-    <script>
-        /**
-         * `LowerCaseDashedName` Description
-         *
-         * @summary ShortDescription.
-         * @customElement
-         * @polymer
-         * @extends {Polymer.Element}
-         */
-        class BWTImagePreview extends Polymer.Element { //BWTUploadMixin
-            /**
-             * String providing the tag name to register the element under.
-             */
-            static get is() {
-                return 'bwt-image-preview';
-            }
 
-            /**
-             * Object describing property-related metadata used by Polymer features
-             */
-            static get properties() {
-                return {
-                    className: {
-                        type: String,
-                        notify: true
-                    }
-                };
-            }
+    <div class$="[[className]]">
+      <div class="img" style$="background: url('[[image]]') no-repeat center center;"></div>
+    </div>
+  </template>
+  <script>
+    /**
+     * `LowerCaseDashedName` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class BWTImagePreview extends Polymer.Element { //BWTUploadMixin
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'bwt-image-preview';
+      }
 
-            static get observers() {
-                return [
-                    '_updateImage(placeholder,image)',
-                    '_generateClassNames(theme,image,placeholder)'
-                ];
-            }
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          className: {
+            type: String,
+            notify: true
+          },
+          theme: {
+            type: String,
+            value: 'cricle'
+          },
+          placeholder: {
+            type: String,
+            value: '/images/placeholder.png'
+          }
+        };
+      }
 
-            /**
-             * Instance of the element is created/upgraded. Use: initializing state,
-             * set up event listeners, create shadow dom.
-             * @constructor
-             */
-            constructor() {
-                super();
-            }
+      static get observers() {
+        return [
+          '_updateImage(placeholder,image)',
+          '_generateClassNames(theme,image,placeholder)'
+        ];
+      }
 
-            /**
-             * Use for one-time configuration of your component after local DOM is initialized. 
-             */
-            ready() {
-                super.ready();
+      /**
+       * Instance of the element is created/upgraded. Use: initializing state,
+       * set up event listeners, create shadow dom.
+       * @constructor
+       */
+      constructor() {
+        super();
+      }
 
-                Polymer.RenderStatus.afterNextRender(this, function() {
+      /**
+       * Use for one-time configuration of your component after local DOM is initialized. 
+       */
+      ready() {
+        super.ready();
 
-                });
-            }
-            _checkTheme(theme, shape) {
-                return (theme === shape) ? true : false;
-            }
-            _generateClassNames(theme, image, placeholder) {
-                if (image.length === placeholder.length) {
-                    if (theme === 'square') this.className = 'imageSquareContainer';
-                    else this.className = 'imageCircleContainer';
-                } else if (image == '') {
-                    if (theme == 'square') this.className = 'imageSquareContainer';
-                    else this.className = 'imageCircleContainer';
-                } else if (this.customClass) {
-                    this.className = 'customContainer';
-                }
-            }
-            _updateImage(placeholder, image) {
-                this.image = (placeholder && image) ? image : placeholder;
-                this.set('error', {
-                    val: false,
-                    msg: ''
-                });
-                this.notifyPath('error');
-            }
-            _createImagePreview(file, b64) {
-                file.progress = 40;
-                this.notifyPath('file.progress');
-                var fr = new FileReader();
-                return new Promise(function(resolve, reject) {
-                    fr.onload = function(e) {
-                        var image = e.target.result;
-                        this.image = image;
-                        resolve(image);
-                    }.bind(this);
-                    fr.readAsDataURL(file);
-                }.bind(this));
-            }
+        Polymer.RenderStatus.afterNextRender(this, function () {
+
+        });
+      }
+      
+      _generateClassNames(theme, image, placeholder) {
+        if (image && (image.length === placeholder.length)) {
+          if (theme === 'square') this.className = 'imageSquareContainer';
+          else this.className = 'imageCircleContainer';
+        } else if (image == '') {
+          if (theme == 'square') this.className = 'imageSquareContainer';
+          else this.className = 'imageCircleContainer';
+        } else if (this.customClass) {
+          this.className = 'customContainer';
         }
+      }
+      _updateImage(placeholder, image) {
+        this.image = (placeholder && image) ? image : placeholder;
+        this.set('error', {
+          val: false,
+          msg: ''
+        });
+        this.notifyPath('error');
+      }
+      _createImagePreview(file, b64) {
+        file.progress = 40;
+        this.notifyPath('file.progress');
+        var fr = new FileReader();
+        return new Promise(function (resolve, reject) {
+          fr.onload = function (e) {
+            var image = e.target.result;
+            this.image = image;
+            resolve(image);
+          }.bind(this);
+          fr.readAsDataURL(file);
+        }.bind(this));
+      }
+    }
 
-        window.customElements.define(BWTImagePreview.is, BWTImagePreview);
-    </script>
+    window.customElements.define(BWTImagePreview.is, BWTImagePreview);
+  </script>
 </dom-module>
