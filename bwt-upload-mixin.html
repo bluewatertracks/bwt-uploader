@@ -9,12 +9,7 @@
         //   cib:  true,
         //   ww:   true
         // };
-        constructor(opts = {
-                js: true,
-                ww: true,
-                cib: true,
-                wasm: true
-            }) {
+        constructor(opts = ['js', 'wasm', 'ww', 'cib']) {
                 this.image = image;
                 this.resizer = pica({
                     features: opts
@@ -29,7 +24,18 @@
                     .then(final => {
                         resolve(finalImage);
                     });
-            })
+            });
+        }
+        scaleImage(img, height) {
+            let canvas = document.createElement('canvas');
+            canvas.setAttribute('height', height);
+            canvas.setAttribute('width', (height / img.height) * img.width);
+            scale = (height / img.height).toFixed(2);
+            var ctx = canvas.getContext('2d');
+            scaledData = scaleDown(img, scale);
+            ctx.scale(scaledData.remainingScale, scaledData.remainingScale);
+            ctx.drawImage(scaledData.image, 2, 2);
+            return canvas.toDataURL();
         }
     }
     /* @polymerMixin */
