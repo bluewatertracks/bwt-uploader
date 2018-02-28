@@ -94,25 +94,26 @@
                 }
             }
             _hasWrongMimeType(file, acceptedFileTypes) {
-                acceptedFileTypes = acceptedFileTypes.split(',');
-                if (acceptedFileTypes.indexOf(file.type) <= -1)
-                    this.error = {
-                        msg: 'Invalid file type, please upload an accepted file type',
-                        val: true
-                    };
+                // new es6 method
+                if (!acceptedFileTypes.includes(file.type)) {
+                    throw new Error('Invalid file type, please upload an accepted file type');
+                }
+
             }
             _validateFile(files) {
-                if (files.length > 1) {
-                    this.error = {
-                        msg: 'You can only upload one file at a time',
-                        val: true
-                    };
+                try {
+                    this._isMultipleFiles(files);
+                    this._hasWrongMimeType(files[0], this.acceptedFileTypes);
+                    this._hasExceededMaximumFileSize(files[0]);
+                } catch (e) {
+                    this.error = e;
                 }
-                this._hasWrongMimeType(files[0], this.acceptedFileTypes);
-                this._hasExceededMaximumFileSize(files[0]);
             }
-
-            // Only applies images that are captured or lessthan minute
+            _isMultipleFiles() {
+                    if (files.length > 1)
+                        throw new Error('You can only upload one file at a time');
+                }
+                // Only applies images that are captured or lessthan minute
             _isRecentImage(file) {
                 if (file && file.lastModifiedDate) {
                     var diiference = Math.round(new Date() - file.lastModifiedDate) / 60000;
@@ -124,10 +125,7 @@
             _hasExceededMaximumFileSize(file) {
                 var _isRecentImage = this._isRecentImage(file);
                 if (file.size > (this.maxFileSize * 1024) && !_isRecentImage)
-                    this.error = {
-                        msg: 'The uploaded file exceeds ' + this.maxFileSize + ' KB',
-                        val: true
-                    };
+                    throw new Error('The uploaded file exceeds ' + this.maxFileSize + ' KB');
             }
             _uploadFile(files) {
                 this._validateFile(files);
