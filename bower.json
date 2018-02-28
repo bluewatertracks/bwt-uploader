@@ -28,7 +28,8 @@
     "paper-progress": "^2.0.0",
     "paper-dialog": "^2.1.0",
     "iron-ajax": "^2.0.5",
-    "paper-button": "^2.0.0"
+    "paper-button": "^2.0.0",
+    "pica": "^4.0.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",

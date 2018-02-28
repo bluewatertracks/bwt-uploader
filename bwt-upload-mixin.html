@@ -1,47 +1,37 @@
 <script src="../pdfjs-dist/build/pdf.min.js"></script>
+<script src="../pica/dist/pica.min.js"></script>
 <script>
-    var resizer = (function() {
-        var applyScale, scaleDown, stepDown, stepScale, scaleData;
-        var preview, ctx;
-        var scaledData;
-        stepScale = 0.9;
-        scaleDown = function(image, targetScale) {
-            var currentScale = 1;
-            while (currentScale * stepScale > targetScale) {
-                currentScale *= stepScale;
-                image = stepDown(image);
+    class Resizer {
+        // Accepts the following options
+        // {
+        //   js:   true,
+        //   wasm: true,
+        //   cib:  true,
+        //   ww:   true
+        // };
+        constructor(opts = {
+                js: true,
+                ww: true,
+                cib: true,
+                wasm: true
+            }) {
+                this.image = image;
+                this.resizer = pica({
+                    features: opts
+                })
             }
-            return {
-                image: image,
-                remainingScale: targetScale / currentScale
-            };
-        };
-        stepDown = function(image) {
-            var temp;
-            temp = {};
-            temp.canvas = document.createElement('canvas');
-            temp.ctx = temp.canvas.getContext('2d');
-            temp.canvas.width = image.width * stepScale + 1;
-            temp.canvas.height = image.height * stepScale + 1;
-            temp.ctx.scale(stepScale, stepScale);
-            temp.ctx.drawImage(image, 0, 0);
-            return temp.canvas;
-        };
-        applyScale = function(img, canvas, height) {
-            var canvas = document.createElement('canvas');
-            canvas.setAttribute('height', height);
-            canvas.setAttribute('width', (height / img.height) * img.width);
-            scale = (height / img.height).toFixed(2);
-            var ctx = canvas.getContext('2d');
-            scaledData = scaleDown(img, scale);
-            ctx.scale(scaledData.remainingScale, scaledData.remainingScale);
-            ctx.drawImage(scaledData.image, 2, 2);
-            return canvas.toDataURL();
-        };
-        return {
-            scaleImage: applyScale
-        };
-    })();
+            // accepts only blob image type 
+        resize(image) {
+            return new Promise((resolve, reject) => {
+                let finalImage = null;
+                this.resizer.from(image, finalImage)
+                    .then(result => pica.toBlob(result, 'image/jpeg', 0.90))
+                    .then(final => {
+                        resolve(finalImage);
+                    });
+            })
+        }
+    }
     /* @polymerMixin */
     BWTUploadMixin = function(superClass) {
         return class extends superClass {
@@ -97,9 +87,9 @@
                         value: false,
                         notify: true
                     },
-                    outputType:{
-                        type:String,
-                        value:'dataURL'
+                    outputType: {
+                        type: String,
+                        value: 'dataURL'
                     }
                 }
             }
@@ -121,17 +111,17 @@
                 this._hasWrongMimeType(files[0], this.acceptedFileTypes);
                 this._hasExceededMaximumFileSize(files[0]);
             }
-            
+
             // Only applies images that are captured or lessthan minute
-            _isRecentImage(file){
-                if(file && file.lastModifiedDate){
-                    var diiference = Math.round(new Date() - file.lastModifiedDate)/60000;
-                    if(diiference <=1)return true;
+            _isRecentImage(file) {
+                if (file && file.lastModifiedDate) {
+                    var diiference = Math.round(new Date() - file.lastModifiedDate) / 60000;
+                    if (diiference <= 1) return true;
                     else return false;
-                }                
+                }
             }
 
-            _hasExceededMaximumFileSize(file) {    
+            _hasExceededMaximumFileSize(file) {
                 var _isRecentImage = this._isRecentImage(file);
                 if (file.size > (this.maxFileSize * 1024) && !_isRecentImage)
                     this.error = {
