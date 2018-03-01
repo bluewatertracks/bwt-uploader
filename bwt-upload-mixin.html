@@ -12,22 +12,18 @@
             },
             photo: function(file, maxSize) {
                 var reader = new FileReader();
+                reader.readAsDataURL(file);
                 return new Promise((resolve, reject) => {
                     reader.onload = (readerEvent) => {
-                        console.log('resizer on load')
                         this.resize(readerEvent.target.result, maxSize)
-                            .then((image) => {
-                                resolve(image);
-                            })
-                            .then((error) => {
-                                reject(error);
-                            });
+                            .then((image) => { resolve(image);})
+                            .then((error) => {reject(error);});
                     }
                 })
-                reader.readAsDataURL(file);
             },
             resize: function(dataURL, maxSize) {
                 var image = new Image();
+                image.src = dataURL;
                 var canvas = document.createElement('canvas'),
                     width, height;
                 return new Promise((resolve, reject) => {
@@ -51,7 +47,7 @@
                         resolve(canvas.toDataURL('image/jpeg', 0.8));
                     }
                 })
-                image.src = dataURL;
+                
             }
         };
         return Resize;
@@ -124,7 +120,7 @@
                     try {
                         this._hasMoreThanOneFile(files);
                         this._hasWrongMimeType(files[0], this.acceptedFileTypes);
-                        //this._hasExceededMaximumFileSize(files[0]);
+                        this._hasExceededMaximumFileSize(files[0]);
                     } catch (e) {
                         this.error = e;
                     }
@@ -163,14 +159,11 @@
                     } else {
                         let image = await this.$.preview._createImagePreview(file);
                         let imageFile = await this._createImageFile(image);
-                        console.log(file)
                         let newImage = imageFile.src;
-                        console.log(this.resize && imageFile.height > this.height);
                         if (this.resize && imageFile.height > this.height) {
                             var resize = new resizer();
                             resize.init();
-                            console.log('resize init')
-                            newImage = await resize.photo(newImage, this.height, 'dataURL');
+                            newImage = await resize.photo(file, this.height);
                         }
                         this.set('file.progress', 60);
                         this.notifyPath('file.progress');
