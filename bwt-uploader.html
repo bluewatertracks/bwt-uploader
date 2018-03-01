@@ -310,10 +310,10 @@ If you want to save it in bower.json file, remember to add flag --save
                 });
                 this.set('file.complete', true);
                 this._hideDelete = false;
-                this.dispatchEvent(new CustomEvent('bwt-uploader-response',{
-                    detail:e.detail.response,
-                    bubbles:true,
-                    composed:true
+                this.dispatchEvent(new CustomEvent('bwt-uploader-response', {
+                    detail: e.detail.response,
+                    bubbles: true,
+                    composed: true
                 }));
             }
             _handleError(e) {
