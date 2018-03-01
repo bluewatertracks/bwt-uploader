@@ -202,7 +202,7 @@
                 this.file.complete = false;
                 this._startPreviewAndAjax(this.file);
             }
-            _startPreviewAndAjax(file) {
+            async _startPreviewAndAjax(file) {
                 // switch (file.type) {
                 //   case :
 
@@ -211,75 +211,72 @@
                 //   default:
                 //     break;
                 // }
-                if (file.type === 'application/pdf') {
-                    this.set('file.progress', 40);
-                    this.notifyPath('file.progress');
-                    this._getDocumentPreview(file)
-                        .then(function(image) {
-                            this._uploadPdf(file, image);
-                        }.bind(this));
-                } else {
-                    this.$.preview._createImagePreview(file)
-                        .then(function(img) {
-                            return this._createImageFile(img);
-                        }.bind(this))
-                        .then(function(image) {
-                            var newImage = image.src;
-                            if (this.resize && image.height > this.height) {
-                                var resize = new resizer();
-                                resize.init();
-                                var _this = this;
-                                newImage = resize.photo(file, this.height, 'dataURL', function(dataURL) {
-                                    _this.set('file.progress', 60);
-                                    _this.notifyPath('file.progress');
-                                    _this._upload(dataURL);
-                                });
-                                // checking if file size of new image is bigger than the original
-                            } else {
-                                this.set('file.progress', 60);
-                                this.notifyPath('file.progress');
-                                this._upload(newImage);
-                            }
-                        }.bind(this));
+                try {
+                    if (file.type === 'application/pdf') {
+                        this.set('file.progress', 40);
+                        this.notifyPath('file.progress');
+                        let image = await this._getDocumentPreview(file);
+                        this._uploadPdf(file, image);
+                    } else {
+                        this.$.preview._createImagePreview(file)
+                            .then(function(img) {
+                                return this._createImageFile(img);
+                            }.bind(this))
+                            .then(function(image) {
+                                var newImage = image.src;
+                                if (this.resize && image.height > this.height) {
+                                    var resize = new resizer();
+                                    resize.init();
+                                    var _this = this;
+                                    newImage = resize.photo(file, this.height, 'dataURL', function(dataURL) {
+                                        _this.set('file.progress', 60);
+                                        _this.notifyPath('file.progress');
+                                        _this._upload(dataURL);
+                                    });
+                                    // checking if file size of new image is bigger than the original
+                                } else {
+                                    this.set('file.progress', 60);
+                                    this.notifyPath('file.progress');
+                                    this._upload(newImage);
+                                }
+                            }.bind(this));
+                    }
+                } catch (e) {
+                    console.log(e);
                 }
             }
-            _getDocumentPreview(file) {
-                this.set('file.progress', 60);
-                this.notifyPath('file.progress');
-                PDFJS.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.7.246/pdf.worker.min.js'; // there is no proper way to load this thing other than a cdn
-                return new Promise(function(resolve, reject) {
-                    this._createArrayBufferFie(file)
-                        .then(function(buffer) {
-                            PDFJS.getDocument(buffer).then(function(pdf) {
+            async _getDocumentPreview(file) {
+                try {
+                    this.set('file.progress', 60);
+                    this.notifyPath('file.progress');
+                    PDFJS.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.7.246/pdf.worker.min.js';
+                    // there is no proper way to load this thing other than a cdn
+                    let buffer = await this._createArrayBufferFie(file);
+                    let pdf = await PDFJS.getDocument(buffer);
+                    let page = await pdf.getPage(1);
+                    var scale = 0.36;
+                    var viewport = page.getViewport(scale);
+                    var canvas = document.createElement('canvas');
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
 
-                                pdf.getPage(1).then(function(page) {
-                                    var scale = 0.36;
-                                    var viewport = page.getViewport(scale);
-                                    var canvas = document.createElement('canvas');
-                                    var context = canvas.getContext('2d');
-                                    canvas.height = viewport.height;
-                                    canvas.width = viewport.width;
+                    var task = page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    });
 
-                                    var task = page.render({
-                                        canvasContext: context,
-                                        viewport: viewport
-                                    });
-
-                                    task.promise.then(function() {
-                                        this.image = canvas.toDataURL("image/jpeg");
-                                        this.$.preview._updateImage(this.placeholder, this.image); // hacky but it works, need to figure out why image wont update on binding
-                                        return resolve(this.image);
-                                    }.bind(this));
-                                }.bind(this))
-                            }.bind(this));
-                        }.bind(this))
-                        .catch(function(error) {
-                            this.set('file.error', true);
-                            this.notifyPath('file.error');
-                            this.error = 'File Couldn\'t be uploaded';
-                            this.notifyPath('error');
-                        }.bind(this));
-                }.bind(this));
+                    let response = task.promise();
+                    this.image = canvas.toDataURL("image/jpeg");
+                    this.$.preview._updateImage(this.placeholder, this.image);
+                    // hacky but it works, need to figure out why image wont update on binding
+                } catch (error) {
+                    console.log(error);
+                    this.set('file.error', true);
+                    this.notifyPath('file.error');
+                    this.error = 'File Couldn\'t be uploaded';
+                    // this.notifyPath('error');
+                }
             }
             _createImageFile(image) {
                 var img = new Image();
