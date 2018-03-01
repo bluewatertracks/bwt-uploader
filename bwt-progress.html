@@ -46,21 +46,23 @@
       }
     </style>
     <div class="progress-bars">
-      <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
-      <div class="file">
+      <template is="dom-if" if="_showError()">
+          <div class="error">[[error]]</div>
+      </template>
+    <div class="file">
         <div class="progress-details">
-          <div class="commands">
-            <iron-icon icon="file-upload-icons:autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="[[!file.error]]"></iron-icon>
-            <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
-          </div>
+            <div class="commands">
+                <iron-icon icon="file-upload-icons:autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="[[!file.error]]"></iron-icon>
+                <iron-icon icon="file-upload-icons:check-circle" title="Image uploaded successfuly" hidden$="[[!file.complete]]"></iron-icon>
+            </div>
         </div>
         <div class="progress-bar" id="progressbar" hidden$="[[_showHideProgress(file.progress)]]">
-          <paper-progress  value$="[[file.progress]]" id="paperProgress" error$="[[file.error]]"></paper-progress>
+            <paper-progress value$="[[file.progress]]" id="paperProgress" error$="[[file.error]]"></paper-progress>
         </div>
 
-      </div>
     </div>
-  </template>
+    </div>
+    </template>
     <script>
         /**
          * `LowerCaseDashedName` Description
@@ -106,6 +108,9 @@
             }
             _onError(error) {
                 this.$.paperProgress.updateStyles();
+            }
+            _showError() {
+                return !this.error.length > 1;
             }
         }
 

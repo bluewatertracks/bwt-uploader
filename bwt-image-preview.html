@@ -1,6 +1,6 @@
 <link rel="import" href="bwt-upload-mixin.html">
 <dom-module id="bwt-image-preview">
-  <template>
+    <template>
     <style is="custom-style">
       :host {
         display: block;
@@ -58,104 +58,100 @@
       <div class="img" style$="background: url('[[image]]') no-repeat center center;"></div>
     </div>
   </template>
-  <script>
-    /**
-     * `LowerCaseDashedName` Description
-     *
-     * @summary ShortDescription.
-     * @customElement
-     * @polymer
-     * @extends {Polymer.Element}
-     */
-    class BWTImagePreview extends Polymer.Element { //BWTUploadMixin
-      /**
-       * String providing the tag name to register the element under.
-       */
-      static get is() {
-        return 'bwt-image-preview';
-      }
+    <script>
+        /**
+         * `LowerCaseDashedName` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class BWTImagePreview extends Polymer.Element { //BWTUploadMixin
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'bwt-image-preview';
+            }
 
-      /**
-       * Object describing property-related metadata used by Polymer features
-       */
-      static get properties() {
-        return {
-          className: {
-            type: String,
-            notify: true
-          },
-          theme: {
-            type: String,
-            value: 'cricle'
-          },
-          placeholder: {
-            type: String,
-            value: '/images/placeholder.png'
-          }
-        };
-      }
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    className: {
+                        type: String,
+                        notify: true
+                    },
+                    theme: {
+                        type: String,
+                        value: 'cricle'
+                    },
+                    placeholder: {
+                        type: String,
+                        value: '/images/placeholder.png'
+                    }
+                };
+            }
 
-      static get observers() {
-        return [
-          '_updateImage(placeholder,image)',
-          '_generateClassNames(theme,image,placeholder)'
-        ];
-      }
+            static get observers() {
+                return [
+                    '_updateImage(placeholder,image)',
+                    '_generateClassNames(theme,image,placeholder)'
+                ];
+            }
 
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
+            /**
+             * Instance of the element is created/upgraded. Use: initializing state,
+             * set up event listeners, create shadow dom.
+             * @constructor
+             */
+            constructor() {
+                super();
+            }
 
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
-       */
-      ready() {
-        super.ready();
+            /**
+             * Use for one-time configuration of your component after local DOM is initialized. 
+             */
+            ready() {
+                super.ready();
 
-        Polymer.RenderStatus.afterNextRender(this, function () {
+                Polymer.RenderStatus.afterNextRender(this, function() {
 
-        });
-      }
-      
-      _generateClassNames(theme, image, placeholder) {
-        if (image && (image.length === placeholder.length)) {
-          if (theme === 'square') this.className = 'imageSquareContainer';
-          else this.className = 'imageCircleContainer';
-        } else if (image == '') {
-          if (theme == 'square') this.className = 'imageSquareContainer';
-          else this.className = 'imageCircleContainer';
-        } else if (this.customClass) {
-          this.className = 'customContainer';
+                });
+            }
+
+            _generateClassNames(theme, image, placeholder) {
+                if (image && (image.length === placeholder.length)) {
+                    if (theme === 'square') this.className = 'imageSquareContainer';
+                    else this.className = 'imageCircleContainer';
+                } else if (image == '') {
+                    if (theme == 'square') this.className = 'imageSquareContainer';
+                    else this.className = 'imageCircleContainer';
+                } else if (this.customClass) {
+                    this.className = 'customContainer';
+                }
+            }
+            _updateImage(placeholder, image) {
+                this.image = (placeholder && image) ? image : placeholder;
+                this.error = null;
+            }
+            _createImagePreview(file, b64) {
+                file.progress = 40;
+                this.notifyPath('file.progress');
+                var fr = new FileReader();
+                return new Promise(function(resolve, reject) {
+                    fr.onload = function(e) {
+                        var image = e.target.result;
+                        this.image = image;
+                        resolve(image);
+                    }.bind(this);
+                    fr.readAsDataURL(file);
+                }.bind(this));
+            }
         }
-      }
-      _updateImage(placeholder, image) {
-        this.image = (placeholder && image) ? image : placeholder;
-        this.set('error', {
-          val: false,
-          msg: ''
-        });
-        this.notifyPath('error');
-      }
-      _createImagePreview(file, b64) {
-        file.progress = 40;
-        this.notifyPath('file.progress');
-        var fr = new FileReader();
-        return new Promise(function (resolve, reject) {
-          fr.onload = function (e) {
-            var image = e.target.result;
-            this.image = image;
-            resolve(image);
-          }.bind(this);
-          fr.readAsDataURL(file);
-        }.bind(this));
-      }
-    }
 
-    window.customElements.define(BWTImagePreview.is, BWTImagePreview);
-  </script>
+        window.customElements.define(BWTImagePreview.is, BWTImagePreview);
+    </script>
 </dom-module>
