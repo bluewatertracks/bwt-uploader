@@ -10,18 +10,24 @@
             init: function(outputQuality) {
                 this.outputQuality = (outputQuality === 'undefined' ? 0.8 : outputQuality);
             },
-            photo: function(file, maxSize, outputType, callback) {
+            photo: function(file, maxSize) {
                 var reader = new FileReader();
                 return new Promise((resolve, reject) => {
-                    reader.onload = (readerEvent) => resolve(this.resize(readerEvent.target.result, maxSize, outputType));
+                    reader.onload = (readerEvent) => {
+                        this.resize(readerEvent.target.result, maxSize)
+                            .then((image) => {
+                                resolve(image);
+                            });
+                    }
                 })
                 reader.readAsDataURL(file);
             },
-            resize: function(dataURL, maxSize, outputType) {                
+            resize: function(dataURL, maxSize) {
                 var image = new Image();
-                var canvas = document.createElement('canvas'),width, height;
+                var canvas = document.createElement('canvas'),
+                    width, height;
                 return new Promise((resolve, reject) => {
-                    image.onload = (imageEvent) =>  {
+                    image.onload = (imageEvent) => {
                         width = image.width;
                         height = image.height;
                         if (width > height) {
