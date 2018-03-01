@@ -242,7 +242,10 @@
                             }.bind(this));
                     }
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
+                    this.set('file.error', true);
+                    this.notifyPath('file.error');
+                    this.error = 'File Couldn\'t be uploaded';
                 }
             }
             async _getDocumentPreview(file) {
@@ -265,17 +268,13 @@
                         canvasContext: context,
                         viewport: viewport
                     });
-
-                    let response = task.promise();
+                    let response = await task.promise;
                     this.image = canvas.toDataURL("image/jpeg");
                     this.$.preview._updateImage(this.placeholder, this.image);
                     // hacky but it works, need to figure out why image wont update on binding
                 } catch (error) {
-                    console.log(error);
-                    this.set('file.error', true);
-                    this.notifyPath('file.error');
-                    this.error = 'File Couldn\'t be uploaded';
-                    // this.notifyPath('error');
+                    console.error(error);
+                    throw new Error('Code Error');
                 }
             }
             _createImageFile(image) {
