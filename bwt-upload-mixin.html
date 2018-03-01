@@ -1,42 +1,5 @@
 <script src="../pdfjs-dist/build/pdf.min.js"></script>
 <script>
-    // class Resizer {
-    //     // Accepts the following options
-    //     // {
-    //     //   js:   true,
-    //     //   wasm: true,
-    //     //   cib:  true,
-    //     //   ww:   true
-    //     // };
-    //     constructor(opts = ['js', 'wasm', 'ww', 'cib']) {
-    //             this.image = image;
-    //             this.resizer = pica({
-    //                 features: opts
-    //             })
-    //         }
-    //         // accepts only blob image type 
-    //     resize(image) {
-    //         return new Promise((resolve, reject) => {
-    //             let finalImage = null;
-    //             this.resizer.from(image, finalImage)
-    //                 .then(result => pica.toBlob(result, 'image/jpeg', 0.90))
-    //                 .then(final => {
-    //                     resolve(finalImage);
-    //                 });
-    //         });
-    //     }
-    //     scaleImage(img, height) {
-    //         let canvas = document.createElement('canvas');
-    //         canvas.setAttribute('height', height);
-    //         canvas.setAttribute('width', (height / img.height) * img.width);
-    //         scale = (height / img.height).toFixed(2);
-    //         var ctx = canvas.getContext('2d');
-    //         scaledData = scaleDown(img, scale);
-    //         ctx.scale(scaledData.remainingScale, scaledData.remainingScale);
-    //         ctx.drawImage(scaledData.image, 2, 2);
-    //         return canvas.toDataURL();
-    //     }
-    // }
     var resizer = (function() {
         'use strict';
 
@@ -50,50 +13,52 @@
             photo: function(file, maxSize, outputType, callback) {
                 var _this = this;
                 var reader = new FileReader();
-                reader.onload = function(readerEvent) {
-                    _this.resize(readerEvent.target.result, maxSize, outputType, callback);
-                }
+                return new Promise((resolve, reject) => {
+                  reader.onload = (readerEvent) =>  reslove(_this.resize(readerEvent.target.result, maxSize, outputType));
+                })
                 reader.readAsDataURL(file);
             },
-            resize: function(dataURL, maxSize, outputType, callback) {
+            resize: function(dataURL, maxSize, outputType) {
                 var _this = this;
                 var image = new Image();
-                image.onload = function(imageEvent) {
-                    // Resize image
-                    var canvas = document.createElement('canvas'),
-                        width = image.width,
+
+                var canvas = document.createElement('canvas'),width,height;
+                return new Promise((resolve,reject)=>{
+                    image.onload = (imageEvent) => resolve(function(){
+                        width = image.width;
                         height = image.height;
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height *= maxSize / width;
-                            width = maxSize;
+                        if (width > height) {
+                            if (width > maxSize) {
+                                height *= maxSize / width;
+                                width = maxSize;
+                            }
+                        } else {
+                            if (height > maxSize) {
+                                width *= maxSize / height;
+                                height = maxSize;
+                            }
                         }
-                    } else {
-                        if (height > maxSize) {
-                            width *= maxSize / height;
-                            height = maxSize;
-                        }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-
-                    _this.output(canvas, outputType, callback);
-
-                }
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                        return _this.output(canvas, outputType);
+                    })
+                })
                 image.src = dataURL;
             },
             output: function(canvas, outputType, callback) {
-                switch (outputType) {
+                return new Promise (function(reslove,reject){
+                    switch (outputType) {
                     case 'file':
                         canvas.toBlob(function(blob) {
-                            callback(blob);
+                            reslove(blob);
                         }, 'image/jpeg', 0.8);
                         break;
                     case 'dataURL':
-                        callback(canvas.toDataURL('image/jpeg', 0.8));
+                        reslove(canvas.toDataURL('image/jpeg', 0.8));
                         break;
-                }
+                    }
+                });
             }
         };
         return Resize;
@@ -197,50 +162,34 @@
                 this._startPreviewAndAjax(this.file);
             }
             async _startPreviewAndAjax(file) {
-                // switch (file.type) {
-                //   case :
-
-                //     break;
-
-                //   default:
-                //     break;
-                // }
                 try {
                     if (file.type === 'application/pdf') {
                         this.set('file.progress', 40);
                         this.notifyPath('file.progress');
                         let image = await this._getDocumentPreview(file);
                         this._uploadPdf(file, image);
-                    } else {
-                        this.$.preview._createImagePreview(file)
-                            .then(function(img) {
-                                return this._createImageFile(img);
-                            }.bind(this))
-                            .then(function(image) {
-                                var newImage = image.src;
-                                if (this.resize && image.height > this.height) {
-                                    var resize = new resizer();
-                                    resize.init();
-                                    var _this = this;
-                                    newImage = resize.photo(file, this.height, 'dataURL', function(dataURL) {
-                                        _this.set('file.progress', 60);
-                                        _this.notifyPath('file.progress');
-                                        _this._upload(dataURL);
-                                    });
-                                    // checking if file size of new image is bigger than the original
-                                } else {
-                                    this.set('file.progress', 60);
-                                    this.notifyPath('file.progress');
-                                    this._upload(newImage);
-                                }
-                            }.bind(this));
                     }
-                } catch (e) {
+                    else {
+                        let image = await this.$.preview._createImagePreview(file);
+                        let imageFile = await this._createImageFile(image);    
+                        let newImage = imageFile.src;
+                        if (this.resize && imageFile.height > this.height) {
+                            var resize = new resizer();
+                            resize.init();
+                            var _this = this;
+                            newImage = await resize.photo(file, this.height, 'dataURL');
+                        } 
+                        this.set('file.progress', 60);
+                        this.notifyPath('file.progress');
+                        this._upload(newImage); 
+                    }
+                }          
+                catch (e) {
                     console.error(e);
                     this.set('file.error', true);
                     this.notifyPath('file.error');
                     this.error = 'File Couldn\'t be uploaded';
-                }
+                }                           
             }
             async _getDocumentPreview(file) {
                 try {
