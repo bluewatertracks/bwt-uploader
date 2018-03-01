@@ -11,21 +11,17 @@
                 this.outputQuality = (outputQuality === 'undefined' ? 0.8 : outputQuality);
             },
             photo: function(file, maxSize, outputType, callback) {
-                var _this = this;
                 var reader = new FileReader();
                 return new Promise((resolve, reject) => {
-                    reader.onload = (readerEvent) => resolve(_this.resize(readerEvent.target.result, maxSize, outputType));
+                    reader.onload = (readerEvent) => resolve(this.resize(readerEvent.target.result, maxSize, outputType));
                 })
                 reader.readAsDataURL(file);
             },
-            resize: function(dataURL, maxSize, outputType) {
-                var _this = this;
+            resize: function(dataURL, maxSize, outputType) {                
                 var image = new Image();
-
-                var canvas = document.createElement('canvas'),
-                    width, height;
+                var canvas = document.createElement('canvas'),width, height;
                 return new Promise((resolve, reject) => {
-                    image.onload = (imageEvent) => resolve(function() {
+                    image.onload = (imageEvent) =>  {
                         width = image.width;
                         height = image.height;
                         if (width > height) {
@@ -42,83 +38,14 @@
                         canvas.width = width;
                         canvas.height = height;
                         canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-                        return _this.output(canvas, outputType);
-                    })
+                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                    }
                 })
                 image.src = dataURL;
-            },
-            output: function(canvas, outputType, callback) {
-                return new Promise(function(reslove, reject) {
-                    switch (outputType) {
-                        case 'file':
-                            canvas.toBlob(function(blob) {
-                                resolve(blob);
-                            }, 'image/jpeg', 0.8);
-                            break;
-                        case 'dataURL':
-                            resolve(canvas.toDataURL('image/jpeg', 0.8));
-                            break;
-                    }
-                });
             }
         };
         return Resize;
     }());
-
-    // class resizer {
-    //     init(outputQuality) {
-    //         this.outputQuality = (outputQuality === 'undefined' ? 0.8 : outputQuality);
-    //     }
-    //     photo(file, maxSize, outputType) {
-    //         var _this = this;
-    //         var reader = new FileReader();
-    //         reader.onload = async(readerEvent) => {
-    //             await _this.resize(readerEvent.target.result, maxSize, outputType);
-    //         }
-    //         reader.readAsDataURL(file);
-    //     }
-    //     resize(dataURL, maxSize, outputType) {
-    //         return new Promise((resolve, reject) => {
-    //             var image = new Image();
-
-    //             var canvas = document.createElement('canvas'),
-    //                 width, height;
-    //             image.onload = (imageEvent) => {
-    //                 width = image.width;
-    //                 height = image.height;
-    //                 if (width > height) {
-    //                     if (width > maxSize) {
-    //                         height *= maxSize / width;
-    //                         width = maxSize;
-    //                     }
-    //                 } else {
-    //                     if (height > maxSize) {
-    //                         width *= maxSize / height;
-    //                         height = maxSize;
-    //                     }
-    //                 }
-    //                 canvas.width = width;
-    //                 canvas.height = height;
-    //                 canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-    //                 return this.output(canvas, outputType);
-    //             }
-    //             image.src = dataURL;
-    //         });
-    //     }
-    //     output(canvas, outputType) {
-    //         let output;
-    //         switch (outputType) {
-    //             case 'file':
-    //                 output = canvas.toBlob('image/jpeg', 0.8);
-    //                 break;
-    //             case 'dataURL':
-    //                 output = canvas.toDataURL('image/jpeg', 0.8);
-    //                 break;
-    //         }
-    //         return output;
-    //     }
-    // }
-    // }
     /* @polymerMixin */
     BWTUploadMixin = function(superClass) {
         return class extends superClass {
@@ -230,7 +157,6 @@
                         if (this.resize && imageFile.height > this.height) {
                             var resize = new resizer();
                             resize.init();
-                            var _this = this;
                             newImage = await resize.photo(file, this.height, 'dataURL');
                         }
                         this.set('file.progress', 60);
