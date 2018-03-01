@@ -282,10 +282,7 @@ If you want to save it in bower.json file, remember to add flag --save
             _removeImg(e) {
                 this.$.preview.image = "";
                 this.set('file', {});
-                this.set('error', {
-                    val: false,
-                    msg: ''
-                });
+                this.error = '';
                 this.set('body', {});
                 this.notifyPath('file');
                 this.notifyPath('body');
@@ -304,10 +301,7 @@ If you want to save it in bower.json file, remember to add flag --save
                 this.notifyPath('file.progress');
                 this.set('body.response', e.detail.response);
                 this.notifyPath('body');
-                this.set('error', {
-                    val: false,
-                    msg: ''
-                });
+                this.error = '';
                 this.set('file.complete', true);
                 this._hideDelete = false;
                 this.dispatchEvent(new CustomEvent('bwt-uploader-response', {
@@ -322,10 +316,7 @@ If you want to save it in bower.json file, remember to add flag --save
                 this.file.error = true;
                 this.notifyPath('file.error');
                 this._hideDelete = false;
-                this.set('error', {
-                    msg: e.detail.request.xhr.response ? e.detail.request.xhr.response.msg : "Error occured",
-                    val: true
-                });
+                this.error = e.detail.request.xhr.response ? e.detail.request.xhr.response.msg : "Error occured";
                 this.fire('bwt-uploader-error', e.detail.request.xhr.response);
             }
             _toggleClass(name, bool, node) {
@@ -340,10 +331,7 @@ If you want to save it in bower.json file, remember to add flag --save
                 this._hideDelete = true;
                 this.set('file', {});
                 this.image = '';
-                this.set('error', {
-                    val: false,
-                    msg: ''
-                });
+                this.error = '';
                 this.fire('bwt-uploader-reset', {
                     reset: true
                 });
