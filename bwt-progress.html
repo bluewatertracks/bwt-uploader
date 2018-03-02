@@ -5,7 +5,7 @@
 <dom-module id="bwt-progress-bar">
   <template>
     <style is="custom-style">
-       :host {
+      :host {
         display: block;
       }
 
@@ -28,12 +28,13 @@
         margin-top: 8px;
       }
 
-       paper-progress {
+      paper-progress {
         --paper-progress-active-color: var(--progress-bar-color, #03a9f4);
         --paper-progress-height: var(--progress-bar-height, 4px);
         --paper-progress-indeterminate-cycle-duration: 3s;
         @apply(--bwt-progress-bar-file-progress);
       }
+
       paper-progress[error] {
         --paper-progress-active-color: var(--progress-error-color, #f40303);
         --paper-progress-height: var(--progress-bar-height, 4px);
@@ -46,7 +47,9 @@
       }
     </style>
     <div class="progress-bars">
-      <div hidden$="[[!error.val]]" class="error">[[error.msg]]</div>
+      <template is="dom-if" if="[[error]]">
+        <div class="error">[[error]]</div>
+      </template>
       <div class="file">
         <div class="progress-details">
           <div class="commands">
@@ -55,9 +58,8 @@
           </div>
         </div>
         <div class="progress-bar" id="progressbar" hidden$="[[_showHideProgress(file.progress)]]">
-          <paper-progress  value$="[[file.progress]]" id="paperProgress" error$="[[file.error]]"></paper-progress>
+          <paper-progress value$="[[file.progress]]" id="paperProgress" error$="[[file.error]]"></paper-progress>
         </div>
-
       </div>
     </div>
   </template>
@@ -65,14 +67,13 @@
     Polymer({
       is: 'bwt-progress-bar',
       behaviors: [BwtUploadBehavior],
-      observers:['_onError(file.error)'],
-      _showHideProgress: function (progress) {
+      observers: ['_onError(file.error)'],
+      _showHideProgress(progress) {
         return (progress < 100) ? false : true;
       },
-      _onError:function(error){
-         this.$.paperProgress.updateStyles();
+      _onError(error) {
+        this.$.paperProgress.updateStyles();
       }
-    
     });
   </script>
 </dom-module>

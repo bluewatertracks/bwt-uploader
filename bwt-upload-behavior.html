@@ -1,59 +1,70 @@
 <script src="../pdfjs-dist/build/pdf.min.js"></script>
 <script>
-    var resizer = (function() {
-        var applyScale, scaleDown, stepDown, stepScale, scaleData;
-        var preview, ctx;
-        var scaledData;
-        stepScale = 0.9;
-        scaleDown = function(image, targetScale) {
-            var currentScale = 1;
-            while (currentScale * stepScale > targetScale) {
-                currentScale *= stepScale;
-                image = stepDown(image);
-            }
-            return {
-                image: image,
-                remainingScale: targetScale / currentScale
-            };
-        };
-        stepDown = function(image) {
-            var temp;
-            temp = {};
-            temp.canvas = document.createElement('canvas');
-            temp.ctx = temp.canvas.getContext('2d');
-            temp.canvas.width = image.width * stepScale + 1;
-            temp.canvas.height = image.height * stepScale + 1;
-            temp.ctx.scale(stepScale, stepScale);
-            temp.ctx.drawImage(image, 0, 0);
-            return temp.canvas;
-        };
-        applyScale = function(img, canvas, height) {
-            var canvas = document.createElement('canvas');
-            canvas.setAttribute('height', height);
-            canvas.setAttribute('width', (height / img.height) * img.width);
-            scale = (height / img.height).toFixed(2);
-            var ctx = canvas.getContext('2d');
-            scaledData = scaleDown(img, scale);
-            ctx.scale(scaledData.remainingScale, scaledData.remainingScale);
-            ctx.drawImage(scaledData.image, 2, 2);
-            return canvas.toDataURL();
-        };
-        return {
-            scaleImage: applyScale
+    var resizer = (function () {
+        'use strict';
+
+        function Resize() {
+            //
         }
-    })();
-    /** @polymerBehavior BwtUploadBehavior */
+        Resize.prototype = {
+            init: function (outputQuality) {
+                this.outputQuality = (outputQuality === 'undefined' ? 0.8 : outputQuality);
+            },
+            photo: function (file, maxSize, type) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                return new Promise((resolve, reject) => {
+                    reader.onload = (readerEvent) => {
+                        this.resize(readerEvent.target.result, maxSize, type)
+                            .then((image) => {
+                                resolve(image);
+                            })
+                            .then((error) => {
+                                reject(error);
+                            });
+                    }
+                })
+            },
+            resize: function (dataURL, maxSize, type) {
+                var image = new Image();
+                image.src = dataURL;
+                var canvas = document.createElement('canvas'),
+                    width, height;
+                return new Promise((resolve, reject) => {
+                    image.onload = (imageEvent) => {
+                        width = image.width;
+                        height = image.height;
+                        if (width > height) {
+                            if (width > maxSize) {
+                                height *= maxSize / width;
+                                width = maxSize;
+                            }
+                        } else {
+                            if (height > maxSize) {
+                                width *= maxSize / height;
+                                height = maxSize;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                        if (type == 'file') canvas.toBlob(function (blob) {
+                            resolve(blob)
+                        }, 'image/jpeg', 0.8);
+                        else if (type == 'dataURL') resolve(canvas.toDataURL('image/jpeg',
+                            0.8));
+                    }
+                })
+            }
+        }
+        return Resize;
+    }());
+    /*@polymerBehavior BwtUploadBehavior*/
     BwtUploadBehavior = {
         properties: {
-            // private variable
             error: {
-                type: Object,
-                value: {
-                    val: false,
-                    msg: ''
-                },
+                type: String,
                 notify: true,
-                reflectToAttribute: true
             },
             // private variable
             file: {
@@ -68,14 +79,14 @@
                 type: String,
                 value: 'circle',
                 notify: true,
-                reflectToAttribute:true
+                reflectToAttribute: true
             },
             // url of the image to be displayed, this can be used mixed with the placeholder
             image: {
                 type: String,
                 value: '',
                 notify: true,
-                reflectToAttribute:true
+                reflectToAttribute: true
             },
             /**
              * location of the placeholder image
@@ -86,45 +97,49 @@
                 notify: true
             },
             placeHolderRemoved: {
-              type:Boolean,
-              value: false,
-              notify:true
+                type: Boolean,
+                value: false,
+                notify: true
             },
             customClass: {
-              type:Boolean,
-              value:false,
-              notify:true
+                type: Boolean,
+                value: false,
+                notify: true
             }
         },
-        _hasWrongMimeType: function(file, acceptedFileTypes) {
-            acceptedFileTypes = acceptedFileTypes.split(',');
-            if (acceptedFileTypes.indexOf(file.type) <= -1)
-                this.error = {
-                    msg: 'Invalid file type, please upload an accepted file type',
-                    val: true
-                };
+        _hasWrongMimeType(file, acceptedFileTypes) {
+            if (!acceptedFileTypes.includes(file.type))
+                throw new Error('Invalid file type, please upload an accepted file type');
         },
-        _validateFile: function(files) {
-            if (files.length > 1) {
-                this.error = {
-                    msg: 'You can only upload one file at a time',
-                    val: true
-                };
+        _hasMoreThanOneFile(files) {
+            if (files.length > 1)
+                throw new Error('You can only upload one file at a time');
+        },
+        _validateFile(files) {
+            try {
+                this._hasMoreThanOneFile(files);
+                this._hasWrongMimeType(files[0], this.acceptedFileTypes);
+                if (!this.height) this._hasExceededMaximumFileSize(files[0]);
+            } catch (e) {
+                this.error = e.message;
             }
-            this._hasWrongMimeType(files[0], this.acceptedFileTypes);
-            this._hasExceededMaximumFileSize(files[0]);
         },
-        _hasExceededMaximumFileSize: function(file) {
-            if ( file.size > (this.maxFileSize*1024) )
-                this.error = {
-                    msg: 'The uploaded file exceeds ' + this.maxFileSize + ' KB',
-                    val: true
-                };
+        // Only applies images that are captured or less than minute
+        _isRecentImage(file) {
+            if (file && file.lastModifiedDate) {
+                var diiference = Math.round(new Date() - file.lastModifiedDate) / 60000;
+                if (diiference <= 1) return true;
+                else return false;
+            }
         },
-        _uploadFile: function(files) {
+        _hasExceededMaximumFileSize(file) {
+            var _isRecentImage = this._isRecentImage(file);
+            if (file.size > (this.maxFileSize * 1024) && !_isRecentImage)
+                throw new Error('The uploaded file exceeds ' + this.maxFileSize + ' KB')
+        },
+        _uploadFile(files) {
             this._validateFile(files);
-            if (this.error.val) return;
-
+            if (this.error) return;
             this.set('file', files[0]);
             this.set('file.progress', 20);
             this.notifyPath('file.progress');
@@ -132,108 +147,99 @@
             this.file.complete = false;
             this._startPreviewAndAjax(this.file);
         },
-        _startPreviewAndAjax: function(file) {
-            if (file.type === 'application/pdf') {
-                this.set('file.progress', 40);
-                this.notifyPath('file.progress');
-                this._getDocumentPreview(file)
-                    .then( function(image){
-                      this._uploadPdf(file,image);
-                    }.bind(this));
-            } else {
-                this.$.preview._createImagePreview(file)
-                    .then(function(img) {
-                        return this._createImageFile(img);
-                    }.bind(this))
-                    .then(function(image) {
-                        var newImage = image.src;
-                        if (this.resize && image.height > this.height) {
-                            newImage = resizer.scaleImage(image, this.height);
-                            // checking if file size of new image is bigger than the original
-                            newImage = (newImage.length > image.length) ? image.src : newImage;
-                        }
-                        this.set('file.progress',60);
-                        this.notifyPath('file.progress');
-                        this._upload(newImage);
-                    }.bind(this));
+        async _startPreviewAndAjax(file) {
+            try {
+                if (file.type === 'application/pdf') {
+                    this.set('file.progress', 40);
+                    this.notifyPath('file.progress');
+                    let image = await this._getDocumentPreview(file);
+                    this._uploadPdf(file, image);
+                } else {
+                    let image = await this.$.preview._createImagePreview(file);
+                    let imageFile = await this._createImageFile(image);
+                    let newImage = imageFile.src;
+                    if (this.resize && imageFile.height > this.height) {
+                        var resize = new resizer();
+                        resize.init();
+                        newImage = await resize.photo(file, this.height, 'file');
+                        newImage.lastModifiedDate = file.lastModifiedDate;
+                        this._hasExceededMaximumFileSize(newImage);
+                        newImage = await resize.photo(file, this.height, 'dataURL');
+                    }
+                    this.set('file.progress', 60);
+                    this.notifyPath('file.progress');
+                    this._upload(newImage);
+                }
+            } catch (e) {
+                console.error(e);
+                this.set('file.error', true);
+                this.notifyPath('file.error');
+                this.error = e.message || 'File Couldn\'t be uploaded';
             }
         },
-        _getDocumentPreview: function(file) {
-            this.set('file.progress',60);
-            this.notifyPath('file.progress');
-            PDFJS.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.7.246/pdf.worker.min.js'; // there is no proper way to load this thing other than a cdn
-            return new Promise( function(resolve,reject){
-                this._createArrayBufferFie(file)
-                    .then(function (buffer) {
-                      PDFJS.getDocument(buffer).then(function(pdf) {
+        async _getDocumentPreview(file) {
+            try {
+                this.set('file.progress', 60);
+                this.notifyPath('file.progress');
+                PDFJS.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.7.246/pdf.worker.min.js';
+                // there is no proper way to load this thing other than a cdn
+                let buffer = await this._createArrayBufferFie(file);
+                let pdf = await PDFJS.getDocument(buffer);
+                let page = await pdf.getPage(1);
+                var scale = 0.36;
+                var viewport = page.getViewport(scale);
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
 
-                          pdf.getPage(1).then(function(page) {
-                              var scale = 0.36;
-                              var viewport = page.getViewport(scale);
-                              var canvas = document.createElement('canvas');
-                              var context = canvas.getContext('2d');
-                              canvas.height = viewport.height;
-                              canvas.width = viewport.width;
-
-                              var task = page.render({
-                                  canvasContext: context,
-                                  viewport: viewport
-                              });
-
-                              task.promise.then(function() {
-                                    this.image = canvas.toDataURL("image/jpeg");
-                                    this.$.preview._updateImage(this.placeholder,this.image); // hacky but it works, need to figure out why image wont update on binding
-                                    return resolve(this.image);
-                              }.bind(this));
-                          }.bind(this))
-                      }.bind(this));
-                    }.bind(this))
-                    .catch( function(error) {
-                      this.set('file.error', true);
-                      this.notifyPath('file.error');
-                      this.error = {
-                        msg: 'File Couldn\'t be uploaded',
-                        val: true
-                      };
-                      this.notifyPath('error');
-                    }.bind(this));
-            }.bind(this));
+                var task = page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                });
+                let response = await task.promise;
+                this.image = canvas.toDataURL("image/jpeg");
+                this.$.preview._updateImage(this.placeholder, this.image);
+                // hacky but it works, need to figure out why image wont update on binding
+            } catch (error) {
+                console.error(error);
+                throw new Error('Code Error');
+            }
         },
-        _createImageFile: function(image) {
+        _createImageFile(image) {
             var img = new Image();
             img.src = image;
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 img.onload = resolve(img);
             });
         },
-        _createArrayBufferFie: function(file) {
-          var  fileReader = new FileReader();
-          return new Promise(function (resolve,reject) {
-            fileReader.onload = function(ev) {
-                resolve(fileReader.result);
-            }
-            fileReader.readAsArrayBuffer(file);
-          });
+        _createArrayBufferFie(file) {
+            var fileReader = new FileReader();
+            return new Promise(function (resolve, reject) {
+                fileReader.onload = function (ev) {
+                    resolve(fileReader.result);
+                }
+                fileReader.readAsArrayBuffer(file);
+            });
         },
-        _upload: function(file,img) {
-            this.set('file.progress',80);
+        _upload(file, img) {
+            this.set('file.progress', 80);
             this.notifyPath('file.progress');
             var ajax = this.$.ajaxElement;
-
-            ajax.contentType="application/json";
-            ajax.body=this.body;
+            ajax.contentType = "application/json";
+            ajax.body = this.body;
             ajax.body.file = file;
-            if(img) ajax.body.thumbnail = img;
+            if (img) ajax.body.thumbnail = img;
             this.$.ajaxElement.generateRequest();
         },
-        _uploadPdf: function(file, img) {
-          var  fileReader = new FileReader();
-            fileReader.onload = function(ev) {
-              this._upload(ev.target.result,img);
+        _uploadPdf(file, img) {
+            var fileReader = new FileReader();
+            fileReader.onload = function (ev) {
+                this._upload(ev.target.result, img);
             }.bind(this);
-          fileReader.readAsDataURL(file);
-          this.set('file.progress',80);
-          this.notifyPath('file.progress');
+            fileReader.readAsDataURL(file);
+            this.set('file.progress', 80);
+            this.notifyPath('file.progress');
         }
-    };
+    }
 </script>
