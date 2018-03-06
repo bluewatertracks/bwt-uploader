@@ -126,8 +126,8 @@
         },
         // Only applies images that are captured or less than minute
         _isRecentImage(file) {
-            if (file && file.lastModifiedDate) {
-                var diiference = Math.round(new Date() - file.lastModifiedDate) / 60000;
+            if (file && file.lastModified) {
+                var diiference = Math.round(new Date().getTime() - file.lastModified) / 60000;
                 if (diiference <= 1) return true;
                 else return false;
             }
@@ -162,7 +162,7 @@
                         var resize = new resizer();
                         resize.init();
                         newImage = await resize.photo(file, this.height, 'file');
-                        newImage.lastModifiedDate = file.lastModifiedDate;
+                        newImage.lastModified = file.lastModified;
                         this._hasExceededMaximumFileSize(newImage);
                         newImage = await resize.photo(file, this.height, 'dataURL');
                     }
