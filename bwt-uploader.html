@@ -247,11 +247,11 @@ If you want to save it in bower.json file, remember to add flag --save
            this.toggleClass('hover', false, uploadBorder);
            e.preventDefault();
        }
-       this.ondrop = function(event) {
+       this.ondrop = async function(event) {
            event.preventDefault();
            this._removeImg();
            this.toggleClass('hover', false, uploadBorder);
-           this._uploadFile(event.dataTransfer.files);
+           await this._uploadFile(event.dataTransfer.files);
        }
      },
      _fileClick: function(){
@@ -280,11 +280,11 @@ If you want to save it in bower.json file, remember to add flag --save
        this._hideDelete = true;
        this.fire('delete',{"deleted":true});
      },
-     _fileChange: function(e) {
+     _fileChange: async function(e) {
        this._hideDelete = true;
        var files = e.target.files;
        this._removeImg();
-       if(files.length) this._uploadFile(files);
+       if(files.length) await this._uploadFile(files);
        this.$.fileInput.value = "";
      },
      _handleResponse:function(e){

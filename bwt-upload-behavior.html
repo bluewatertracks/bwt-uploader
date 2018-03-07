@@ -137,7 +137,7 @@
             if (file.size > (this.maxFileSize * 1024) && !_isRecentImage)
                 throw new Error('The uploaded file exceeds ' + this.maxFileSize + ' KB')
         },
-        _uploadFile(files) {
+        async _uploadFile(files) {
             this._validateFile(files);
             if (this.error) return;
             this.set('file', files[0]);
@@ -145,7 +145,7 @@
             this.notifyPath('file.progress');
             this.file.error = false;
             this.file.complete = false;
-            this._startPreviewAndAjax(this.file);
+            await this._startPreviewAndAjax(this.file);
         },
         async _startPreviewAndAjax(file) {
             try {
