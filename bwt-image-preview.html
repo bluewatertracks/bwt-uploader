@@ -111,19 +111,11 @@
         this.error = '';
         this.notifyPath('error');
       },
-      _createImagePreview: function (file, b64) {
+      _createImagePreview:function(file, image) {
         file.progress = 40;
         this.notifyPath('file.progress');
-        var fr = new FileReader();
-        return new Promise(function (resolve, reject) {
-          fr.onload = function (e) {
-            var image = e.target.result;
-            this.image = image;
-            resolve(image);
-          }.bind(this);
-          fr.readAsDataURL(file);
-        }.bind(this));
-      },
+        this.image = image;
+      }
     });
   </script>
 </dom-module>
