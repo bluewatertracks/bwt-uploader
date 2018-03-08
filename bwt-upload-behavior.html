@@ -2,59 +2,61 @@
 <script>
     var resizer = (function () {
         'use strict';
+        function Resize() {}
 
-        function Resize() {
-            //
-        }
         Resize.prototype = {
+
             init: function (outputQuality) {
                 this.outputQuality = (outputQuality === 'undefined' ? 0.8 : outputQuality);
             },
-            photo: function (file, maxSize, type) {
+
+            photo: function (file, maxSize, outputType, callback) {
+                var _this = this;
                 var reader = new FileReader();
+                reader.onload = function (readerEvent) {
+                    _this.resize(readerEvent.target.result, maxSize, outputType, callback);
+                }
                 reader.readAsDataURL(file);
-                return new Promise((resolve, reject) => {
-                    reader.onload = (readerEvent) => {
-                        this.resize(readerEvent.target.result, maxSize, type)
-                            .then((image) => {
-                                resolve(image);
-                            })
-                            .then((error) => {
-                                reject(error);
-                            });
-                    }
-                })
             },
-            resize: function (dataURL, maxSize, type) {
+
+            resize: function (dataURL, maxSize, outputType, callback) {
+                var _this = this;
                 var image = new Image();
-                image.src = dataURL;
-                var canvas = document.createElement('canvas'),
-                    width, height;
-                return new Promise((resolve, reject) => {
-                    image.onload = (imageEvent) => {
-                        width = image.width;
+                image.onload = function (imageEvent) {
+                    // Resize image
+                    var canvas = document.createElement('canvas'),
+                        width = image.width,
                         height = image.height;
-                        if (width > height) {
-                            if (width > maxSize) {
-                                height *= maxSize / width;
-                                width = maxSize;
-                            }
-                        } else {
-                            if (height > maxSize) {
-                                width *= maxSize / height;
-                                height = maxSize;
-                            }
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
                         }
-                        canvas.width = width;
-                        canvas.height = height;
-                        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-                        if (type == 'file') canvas.toBlob(function (blob) {
-                            resolve(blob)
-                        }, 'image/jpeg', 0.8);
-                        else if (type == 'dataURL') resolve(canvas.toDataURL('image/jpeg',
-                            0.8));
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
                     }
-                })
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                    _this.output(canvas, outputType, callback);
+                }
+                image.src = dataURL;
+            },
+
+            output: function (canvas, outputType, callback) {
+                switch (outputType) {
+                    case 'file':
+                        canvas.toBlob(function (blob) {
+                            callback(blob);
+                        }, 'image/jpeg', 0.8);
+                        break;
+                    case 'dataURL':
+                        callback(canvas.toDataURL('image/jpeg', 0.8));
+                        break;
+                }
             }
         }
         return Resize;
@@ -147,28 +149,40 @@
             this.file.complete = false;
             await this._startPreviewAndAjax(this.file);
         },
-        async _startPreviewAndAjax(file) {
+        _startPreviewAndAjax(file) {
             try {
                 if (file.type === 'application/pdf') {
                     this.set('file.progress', 40);
                     this.notifyPath('file.progress');
-                    let image = await this._getDocumentPreview(file);
-                    this._uploadPdf(file, image);
+                    this._getDocumentPreview(file).then(function(image){
+                        this._uploadPdf(file, image);
+                    });
                 } else {
-                    let image = await this.$.preview._createImagePreview(file);
-                    let imageFile = await this._createImageFile(image);
-                    let newImage = imageFile.src;
-                    if (this.resize && imageFile.height > this.height) {
-                        var resize = new resizer();
-                        resize.init();
-                        newImage = await resize.photo(file, this.height, 'file');
-                        newImage.lastModified = file.lastModified;
-                        this._hasExceededMaximumFileSize(newImage);
-                        newImage = await resize.photo(file, this.height, 'dataURL');
-                    }
-                    this.set('file.progress', 60);
-                    this.notifyPath('file.progress');
-                    this._upload(newImage);
+                    console.log('orignal file size in MB', file.size/(1024*1024));
+                    this.toDataURL(file).then(function(image) {
+                        this.$.preview._createImagePreview(file, image);
+                        console.log('resize');
+                        if(this.resize && this.height){
+                            var resize = new resizer();
+                            resize.init();
+                            resize.photo(file, this.height, 'file',function(newFile){
+                                var newImage = newFile;
+                                newImage.lastModified = file.lastModified;
+                                console.log('new size in kb',newFile.size/1024);
+                                this._hasExceededMaximumFileSize(newImage);
+                                resize.photo(file, this.height, 'dataURL',function(newDataURL){
+                                    console.log(newDataURL);
+                                    this.set('file.progress', 60);
+                                    this.notifyPath('file.progress');
+                                    this._upload(newDataURL);            
+                                });
+                            });
+                        }else{
+                            this.set('file.progress', 60);
+                            this.notifyPath('file.progress');
+                            this._upload(image);   
+                        }
+                    }.bind(this));
                 }
             } catch (e) {
                 console.error(e);
@@ -205,13 +219,6 @@
                 console.error(error);
                 throw new Error('Code Error');
             }
-        },
-        _createImageFile(image) {
-            var img = new Image();
-            img.src = image;
-            return new Promise(function (resolve, reject) {
-                img.onload = resolve(img);
-            });
         },
         _createArrayBufferFie(file) {
             var fileReader = new FileReader();
