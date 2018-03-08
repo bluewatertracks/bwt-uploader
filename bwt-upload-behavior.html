@@ -2,32 +2,23 @@
 <script>
     var resizer = (function () {
         'use strict';
-        function Resize() {}
+        function Resize() {
+            
+        }
 
         Resize.prototype = {
 
             init: function (outputQuality) {
                 this.outputQuality = (outputQuality === 'undefined' ? 0.8 : outputQuality);
             },
-
-            photo: function (file, maxSize, outputType, callback) {
-                var _this = this;
-                var reader = new FileReader();
-                reader.onload = function (readerEvent) {
-                    _this.resize(readerEvent.target.result, maxSize, outputType, callback);
-                }
-                reader.readAsDataURL(file);
-
-            },
-
+            
             resize: function (dataURL, maxSize, outputType, callback) {
-
                 var _this = this;
                 var image = new Image();
                 image.crossOrigin = "anonymous";  // This enables CORS
                 image.onload = function (imageEvent) {
-
                     // Resize image
+                    debugger;
                     var canvas = document.createElement('canvas'),
                         width = image.width,
                         height = image.height;
@@ -44,10 +35,18 @@
                     }
                     canvas.width = width;
                     canvas.height = height;
-                    canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-
-                    _this.output(canvas, outputType, callback);
-
+                    
+                    if(_this.isiOSDevice()){
+                        var arrayBuffer = _this.base64ToArrayBuffer(dataURL);
+                        _this.getOrienataion(arrayBuffer,function(orientation){
+                            canvas = _this.transformContext(canvas,orientation,width,height);
+                            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                            _this.output(canvas, outputType, callback);
+                        });
+                    }else{
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                        _this.output(canvas, outputType, callback);
+                    }
                 }
                 image.src = dataURL;
 
@@ -65,6 +64,91 @@
                         callback(canvas.toDataURL('image/jpeg', 0.8));
                         break;
                 }
+            },
+            base64ToArrayBuffer:function(base64, contentType) {
+                contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
+                base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+                var binary = atob(base64);
+                var len = binary.length;
+                var buffer = new ArrayBuffer(len);
+                var view = new Uint8Array(buffer);
+                for (var i = 0; i < len; i++) {
+                    view[i] = binary.charCodeAt(i);
+                }
+                return buffer;
+            },
+            getOrienataion:function(arrayBuffer,callback){
+                var view = new DataView(arrayBuffer);
+                if (view.getUint16(0, false) != 0xFFD8)
+                {
+                    return callback(-2);
+                }
+                var length = view.byteLength, offset = 2;
+                while (offset < length) 
+                {
+                    var marker = view.getUint16(offset, false);
+                    offset += 2;
+                    if (marker == 0xFFE1) 
+                    {
+                        if (view.getUint32(offset += 2, false) != 0x45786966) 
+                        {
+                            return callback(-1);
+                        }
+
+                        var little = view.getUint16(offset += 6, false) == 0x4949;
+                        offset += view.getUint32(offset + 4, little);
+                        var tags = view.getUint16(offset, little);
+                        offset += 2;
+                        for (var i = 0; i < tags; i++)
+                        {
+                            if (view.getUint16(offset + (i * 12), little) == 0x0112)
+                            {
+                                return callback(view.getUint16(offset + (i * 12) + 8, little));
+                            }
+                        }
+                    }
+                    else if ((marker & 0xFF00) != 0xFF00)
+                    {
+                        break;
+                    }
+                    else
+                    { 
+                        offset += view.getUint16(offset, false);
+                    }
+                }
+            },
+            isiOSDevice:function(){
+                var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
+                return iOS ? true :false;
+            },
+            transformContext:function(canvas,orientation,width,height){
+                var ctx = canvas.getContext("2d");
+                switch (orientation) {
+                    case 2:
+                        ctx.transform(-1, 0, 0, 1, width, 0);
+                        break;
+                    case 3:
+                        ctx.transform(-1, 0, 0, -1, width, height);
+                        break;
+                    case 4:
+                        ctx.transform(1, 0, 0, -1, 0, height);
+                        break;
+                    case 5:
+                        ctx.transform(0, 1, 1, 0, 0, 0);
+                        break;
+                    case 6:
+                        ctx.transform(0, 1, -1, 0, height, 0);
+                        break;
+                    case 7:
+                        ctx.transform(0, -1, -1, 0, height, width);
+                        break;
+                    case 8:
+                        ctx.transform(0, -1, 1, 0, 0, width);
+                        break;
+                    default:
+                        ctx.transform(1, 0, 0, 1, 0, 0);
+                }
+                return canvas;
             }
         }
         return Resize;
@@ -149,6 +233,7 @@
         },
         _uploadFile(files) {
             this._validateFile(files);
+
             if (this.error) return;
             this.set('file', files[0]);
             this.set('file.progress', 20);
@@ -177,11 +262,12 @@
                         if(this.resize && this.height){
                             var resize = new resizer();
                             resize.init();
-                            resize.photo(file, this.height, 'file',function(newFile){
+                            resize.resize(image, this.height, 'file',function(newFile){
                                 var newImage = newFile;
                                 newImage.lastModified = file.lastModified;
                                 this._hasExceededMaximumFileSize(newImage);
-                                resize.photo(file, this.height, 'dataURL',function(newDataURL){
+                                resize.resize(image, this.height, 'dataURL',function(newDataURL){
+                                    this.$.preview._createImagePreview(file, newDataURL);
                                     this.set('file.progress', 60);
                                     this.notifyPath('file.progress');
                                     this._upload(newDataURL);            
@@ -242,6 +328,7 @@
             });
         },
         _upload(file, img) {
+            debugger;
             this.set('file.progress', 80);
             this.notifyPath('file.progress');
             var ajax = this.$.ajaxElement;
