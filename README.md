@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/bluewatertracksbwt-uploader)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/bluewatertracksbwt-uploader.svg)](https://vaadin.com/directory/component/bluewatertracksbwt-uploader)
+
 ## About
 `bwt-uploader` is a file uploader with support for pdf files, jpeg, png and bmp images written in Polymer. It follows a plug and play model with a few configurations needed to enable certain features. It is partially inspired by the vaadin uploader and came out as a result of a component we built at Blue Water Tracks. Images are converted to base64 images which might increase the size of the file by a small percentage.  
 
